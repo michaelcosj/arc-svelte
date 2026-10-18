@@ -1,0 +1,112 @@
+/* The track centers the card and measures the room it may grow into. */
+.arc-expandable-card__track {
+	display: flex;
+	width: 100%;
+	min-width: 0;
+	justify-content: center;
+}
+.arc-expandable-card {
+	width: 100%;
+	max-width: var(--expandable-card-width, 100%);
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-surface);
+	background: var(--surface);
+	box-shadow: var(--shadow-resting);
+}
+.arc-expandable-card[data-expanded='true'] {
+	max-width: var(--expandable-card-expanded-width, var(--expandable-card-width, 100%));
+}
+/* Once measured, the width is animated in px, so the CSS cap steps aside and never clamps the morph. */
+.arc-expandable-card[data-measured] {
+	max-width: 100%;
+}
+/* The card clips the header to its corners, so the header's hover fill never changes shape while the card opens or closes. */
+.arc-expandable-card__trigger {
+	display: flex;
+	width: 100%;
+	min-height: 64px;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-5);
+	border: 0;
+	padding: var(--space-4) var(--space-5);
+	background: transparent;
+	color: var(--foreground);
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition: background-color var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-expandable-card__trigger:hover {
+		background: var(--surface-muted);
+	}
+	.arc-expandable-card__trigger:hover .arc-expandable-card__arrow {
+		color: var(--foreground);
+	}
+}
+.arc-expandable-card__trigger:active {
+	background: var(--surface-muted);
+}
+.arc-expandable-card__copy {
+	min-width: 0;
+}
+.arc-expandable-card__copy strong {
+	display: block;
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+.arc-expandable-card__description {
+	display: block;
+	margin-top: 4px;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	font-variant-numeric: tabular-nums;
+}
+.arc-expandable-card__roll {
+	position: relative;
+	display: block;
+}
+.arc-expandable-card__word {
+	display: inline-block;
+	white-space: pre;
+}
+.arc-expandable-card__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.arc-expandable-card__arrow {
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-muted);
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.arc-expandable-card[data-expanded='true'] .arc-expandable-card__arrow {
+	color: var(--foreground);
+}
+/* The divider is an inset line rather than a border, so a collapsed panel is truly zero height and nothing pops at the end of the close. */
+.arc-expandable-card__panel {
+	overflow: hidden;
+	box-shadow: inset 0 1px 0 var(--border);
+	background: var(--surface-muted);
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+}
+.arc-expandable-card__panel-inner {
+	max-width: none;
+	padding: var(--space-4) var(--space-5) var(--space-5);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-expandable-card__trigger,
+	.arc-expandable-card__arrow {
+		transition: none;
+	}
+}

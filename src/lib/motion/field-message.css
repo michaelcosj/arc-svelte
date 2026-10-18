@@ -1,0 +1,39 @@
+/* Shared by Input, Textarea and PasswordField (each React module carries an identical copy). */
+
+/* The row's space is padding inside the clipped slot, so the height animates from a true zero. */
+.arc-field-message {
+	display: block;
+	overflow: hidden;
+}
+
+/* Words are measured against this box when they pop out to leave, so it must be the positioned parent. */
+.arc-motion-text__words {
+	position: relative;
+	display: block;
+}
+
+.arc-motion-text__word {
+	display: inline-block;
+	white-space: pre;
+}
+
+/* One column per character of a count. Tabular digits keep columns equal, so only a gained or lost digit changes the width. */
+.arc-rolling-number__column {
+	position: relative;
+	display: inline-flex;
+	justify-content: center;
+	font-variant-numeric: tabular-nums;
+}
+
+.arc-rolling-number__column > span {
+	display: inline-block;
+}
+
+.arc-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

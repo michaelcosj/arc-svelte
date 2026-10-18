@@ -1,0 +1,87 @@
+.arc-pagination {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-1);
+}
+.arc-pagination button {
+	position: relative;
+	display: grid;
+	width: var(--control-height-sm);
+	height: var(--control-height-sm);
+	place-items: center;
+	border: 1px solid transparent;
+	border-radius: var(--radius-control);
+	background: transparent;
+	color: var(--text-secondary);
+	font: inherit;
+	font-size: var(--text-xs);
+	font-variant-numeric: tabular-nums;
+	cursor: pointer;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+.arc-pagination button[aria-current='page'] {
+	color: var(--foreground);
+}
+/* One shared mark travels between pages. Before it has measured (server render), the button draws its own. */
+.arc-pagination__mark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: var(--control-height-sm);
+	height: var(--control-height-sm);
+	box-sizing: border-box;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-control);
+	background: var(--surface);
+	box-shadow: var(--shadow-resting);
+	opacity: 0;
+	pointer-events: none;
+}
+.arc-pagination[data-mark-ready] .arc-pagination__mark {
+	opacity: 1;
+}
+.arc-pagination:not([data-mark-ready]) button[aria-current='page'] {
+	border-color: var(--border);
+	background: var(--surface);
+	box-shadow: var(--shadow-resting);
+}
+/* Only the arrows press in. Page numbers move with Motion, so they keep CSS off transform and opacity. */
+.arc-pagination .arc-pagination__step {
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+.arc-pagination .arc-pagination__step:active:not(:disabled) {
+	transform: scale(0.96);
+	transition-duration: var(--duration-fast), var(--duration-fast), var(--duration-fast), 100ms;
+	transition-timing-function:
+		var(--ease-standard), var(--ease-standard), var(--ease-standard), ease-out;
+}
+.arc-pagination button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-pagination button:hover:not(:disabled) {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+	.arc-pagination[data-mark-ready] button[aria-current='page']:hover {
+		background: transparent;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-pagination button,
+	.arc-pagination .arc-pagination__step {
+		transition: none;
+	}
+	.arc-pagination .arc-pagination__step:active:not(:disabled) {
+		transform: none;
+	}
+}

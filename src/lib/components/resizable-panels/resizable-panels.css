@@ -1,0 +1,162 @@
+/* Panes share the width through flex-grow factors, so the layout is right on the server and stays proportional as the group resizes. */
+/* A size container, so each pane's floor can scale with the group when it is too narrow for every minimum (see --panel-min). */
+.arc-resizable-panels__group {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+	container-type: inline-size;
+}
+.arc-resizable-panels__group[data-resizing] {
+	cursor: col-resize;
+	user-select: none;
+	-webkit-user-select: none;
+}
+/* Content ignores the pointer while a divider moves, so hover states never flicker underneath it. */
+.arc-resizable-panels__group[data-resizing] .arc-resizable-panels__content {
+	pointer-events: none;
+}
+
+/* CSS enforces each pane's limits until an interaction frees it; JS hands them back once the pane settles inside them. */
+.arc-resizable-panels__panel {
+	position: relative;
+	display: flex;
+	min-width: var(--panel-min);
+	max-width: var(--panel-max);
+	min-height: 0;
+	flex: 0 1 0px;
+	overflow: hidden;
+}
+.arc-resizable-panels__panel[data-anchor='end'] {
+	justify-content: flex-end;
+}
+.arc-resizable-panels__panel[data-free],
+.arc-resizable-panels__panel[data-collapsed] {
+	min-width: 0;
+	max-width: none;
+}
+.arc-resizable-panels__content {
+	display: flex;
+	width: 100%;
+	flex: none;
+	flex-direction: column;
+	min-height: 0;
+}
+.arc-resizable-panels__panel[data-free] .arc-resizable-panels__content,
+.arc-resizable-panels__panel[data-collapsed] .arc-resizable-panels__content {
+	min-width: var(--panel-min);
+}
+
+/* The divider is a one pixel line with a 13px grab area, and a grip that forms while it is hovered, focused, or dragged. */
+.arc-resizable-panels__handle {
+	position: relative;
+	z-index: 2;
+	flex: 0 0 1px;
+	background: var(--border);
+	cursor: col-resize;
+	touch-action: none;
+	outline: none;
+	-webkit-tap-highlight-color: transparent;
+	transition: background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-resizable-panels__handle::before {
+	position: absolute;
+	inset: 0 -6px;
+	content: '';
+}
+.arc-resizable-panels__handle[data-collapsed] {
+	background: transparent;
+	cursor: pointer;
+}
+.arc-resizable-panels__grip {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 4px;
+	height: 32px;
+	border-radius: var(--radius-pill);
+	background: var(--border-strong);
+	opacity: 0;
+	pointer-events: none;
+	transform: translate(-50%, -50%) scaleY(0.6);
+	transition:
+		opacity var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-resizable-panels__handle:not([data-collapsed]):hover {
+		background: var(--border-strong);
+	}
+	.arc-resizable-panels__handle:not([data-collapsed]):hover .arc-resizable-panels__grip {
+		opacity: 1;
+		transform: translate(-50%, -50%) scaleY(1);
+	}
+	.arc-resizable-panels__handle[data-collapsed]:hover .arc-resizable-panels__restore {
+		border-color: var(--border-strong);
+		color: var(--foreground);
+	}
+}
+.arc-resizable-panels__handle[data-active] {
+	background: var(--border-strong);
+}
+.arc-resizable-panels__handle[data-active] .arc-resizable-panels__grip {
+	background: var(--foreground);
+	opacity: 1;
+	transform: translate(-50%, -50%) scaleY(1);
+}
+.arc-resizable-panels__handle:focus-visible:not([data-collapsed]) .arc-resizable-panels__grip {
+	opacity: 1;
+	transform: translate(-50%, -50%) scaleY(1);
+}
+.arc-resizable-panels__handle[data-collapsed]:focus-visible .arc-resizable-panels__restore {
+	border-color: var(--border-strong);
+	color: var(--foreground);
+}
+
+/* Once a neighbour is hidden, a tab on the divider points the way it will come back. */
+.arc-resizable-panels__restore {
+	position: absolute;
+	top: 50%;
+	display: grid;
+	width: 18px;
+	height: 40px;
+	margin-top: -20px;
+	place-items: center;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-pill);
+	background: var(--surface);
+	box-shadow: var(--shadow-resting);
+	color: var(--text-secondary);
+	pointer-events: none;
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+.arc-resizable-panels__restore[data-side='before'] {
+	left: 5px;
+	transform-origin: 0 50%;
+}
+.arc-resizable-panels__restore[data-side='after'] {
+	right: 5px;
+	transform-origin: 100% 50%;
+}
+.arc-resizable-panels__handle[data-collapsed]::before {
+	inset: 0 -30px;
+}
+.arc-resizable-panels__handle[data-collapsed='before']::before {
+	left: 0;
+}
+.arc-resizable-panels__handle[data-collapsed='after']::before {
+	right: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arc-resizable-panels__handle,
+	.arc-resizable-panels__grip,
+	.arc-resizable-panels__restore {
+		transition: none;
+	}
+}

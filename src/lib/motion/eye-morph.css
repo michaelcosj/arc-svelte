@@ -1,0 +1,20 @@
+.arc-eye-morph__slash {
+	stroke-dasharray: 1 1;
+	stroke-dashoffset: 1;
+	opacity: 0;
+	transition:
+		stroke-dashoffset var(--duration-standard) var(--ease-standard),
+		opacity var(--duration-instant) cubic-bezier(0.42, 0, 0.58, 1);
+}
+.arc-eye-morph[data-slashed='true'] .arc-eye-morph__slash {
+	stroke-dashoffset: 0;
+	opacity: 1;
+}
+.arc-eye-morph[data-reduced] .arc-eye-morph__slash {
+	transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-eye-morph__slash {
+		transition: none;
+	}
+}

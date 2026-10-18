@@ -1,0 +1,102 @@
+section.demo-countdown__card {
+	width: min(100%, 620px);
+}
+.demo-countdown__card {
+	display: grid;
+	min-width: 0px;
+	gap: var(--space-6);
+	padding: var(--space-6);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-surface);
+	background: var(--surface);
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+.demo-countdown__head {
+	display: grid;
+	gap: 2px;
+	min-width: 0px;
+}
+.demo-countdown__title {
+	margin: 0px;
+	color: var(--foreground);
+	font-size: var(--text-base);
+	font-weight: 500;
+	line-height: var(--leading-body);
+}
+.demo-countdown__meta {
+	margin: 0px;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+}
+.demo-countdown__hero {
+	min-height: 5.5rem;
+	padding-block: var(--space-2);
+}
+.demo-countdown__sessions {
+	display: grid;
+	margin: 0px;
+	padding: 0px;
+	border-top: 1px solid var(--border-subtle);
+	list-style: none;
+}
+.demo-countdown__session {
+	display: flex;
+	min-width: 0px;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	padding-block: 10px;
+	border-bottom: 1px solid var(--border-subtle);
+}
+.demo-countdown__session-title {
+	min-width: 0px;
+	overflow: hidden;
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.demo-countdown__actions {
+	display: flex;
+	min-width: 0px;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+}
+@media (max-width: 420px) {
+	.demo-countdown__card {
+		padding: var(--space-5) var(--space-4);
+	}
+}
+@media (max-width: 420px) {
+	.demo-countdown__session {
+		flex-wrap: wrap;
+		row-gap: 6px;
+	}
+}
+.demo-countdown__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.demo-countdown__canvas {
+	width: 100%;
+	min-width: 0;
+	max-width: 760px;
+	margin-inline: auto;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	place-items: center;
+	padding: 8px;
+	color: var(--foreground);
+}
+.demo-countdown__canvas > * {
+	width: 100%;
+	min-width: 0;
+}

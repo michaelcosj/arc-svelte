@@ -1,0 +1,16 @@
+.arc-number-field-demo {
+	display: grid;
+	width: min(100%, 232px);
+	gap: var(--space-6);
+	--number-field-width: 100%;
+}
+.arc-number-field-demo__preview {
+	display: grid;
+	justify-items: center;
+	gap: 16px;
+	width: 100%;
+}
+.arc-number-field-demo__preview::after {
+	content: '';
+	height: 18px;
+}

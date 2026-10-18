@@ -1,0 +1,68 @@
+.arc-progress {
+	width: 100%;
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+}
+.arc-progress__meta {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 8px;
+	line-height: var(--leading-body);
+}
+.arc-progress__label {
+	position: relative;
+	min-width: 0;
+}
+.arc-progress__line {
+	display: block;
+}
+.arc-progress__value {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	gap: 4px;
+	color: var(--text-muted);
+	font-variant-numeric: tabular-nums;
+}
+.arc-progress__count {
+	display: inline-grid;
+	justify-items: end;
+}
+/* A hidden "100%" row reserves the widest count, so the check never shifts as the number gains a digit. */
+.arc-progress__count::before {
+	content: '100%';
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+}
+.arc-progress__done {
+	display: grid;
+	place-items: center;
+	color: var(--success);
+}
+.arc-progress__track {
+	height: 7px;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: 99px;
+	background: var(--surface-muted);
+}
+.arc-progress__fill {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	background: var(--accent);
+	transition: background-color var(--duration-standard) var(--ease-standard);
+}
+.arc-progress[data-complete] .arc-progress__fill {
+	background: var(--success);
+	transition-delay: 200ms;
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-progress__fill,
+	.arc-progress[data-complete] .arc-progress__fill {
+		transition: none;
+	}
+}

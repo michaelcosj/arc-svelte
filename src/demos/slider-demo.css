@@ -1,0 +1,88 @@
+.arc-slider-demo__demo {
+	display: grid;
+	width: min(100%, 420px);
+	gap: var(--space-10);
+}
+.arc-slider-demo__section {
+	display: grid;
+	gap: var(--space-1);
+}
+.arc-slider-demo__result {
+	position: relative;
+	margin: 0;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+}
+.arc-slider-demo__count {
+	position: relative;
+	display: inline-flex;
+	min-width: 2ch;
+	justify-content: flex-end;
+	color: var(--text-secondary);
+	font-variant-numeric: tabular-nums;
+}
+.arc-slider-demo__countValue {
+	display: inline-block;
+}
+.arc-slider-demo__srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.arc-slider-demo__mute {
+	display: grid;
+	width: var(--control-height-sm);
+	height: var(--control-height-sm);
+	place-items: center;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-pill);
+	padding: 0;
+	background: var(--surface);
+	color: var(--text-secondary);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-slider-demo__mute:hover {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+}
+.arc-slider-demo__mute:active {
+	transform: scale(0.97);
+	transition: transform 0.1s var(--ease-standard);
+}
+.arc-slider-demo__mute[aria-pressed='true'] {
+	border-color: var(--border-strong);
+	color: var(--foreground);
+}
+.arc-slider-demo__icon {
+	display: grid;
+	grid-area: 1/1;
+	place-items: center;
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-slider-demo__mute,
+	.arc-slider-demo__mute:active {
+		transition: none;
+		transform: none;
+	}
+}
+
+.arc-slider-demo__frame {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	place-items: center;
+	width: 100%;
+	min-width: 0;
+	padding: 8px;
+}

@@ -1,0 +1,163 @@
+/* The button hugs its label: text morphs in place and the width follows on a spring, so no state ever snaps the layout. */
+.arc-action-button {
+	position: relative;
+	display: inline-flex;
+	min-height: var(--control-height-md);
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	padding: 0 var(--space-5);
+	border: 1px solid var(--foreground);
+	border-radius: var(--radius-control);
+	background: var(--foreground);
+	color: var(--background);
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-action-button:hover:not(:disabled) {
+		box-shadow: var(--shadow-resting);
+	}
+}
+.arc-action-button:disabled {
+	cursor: not-allowed;
+}
+.arc-action-button:disabled:not([data-state='pending']) {
+	opacity: 0.7;
+}
+.arc-action-button[data-state='pending'] {
+	cursor: progress;
+}
+.arc-action-button__content {
+	display: inline-flex;
+	min-height: 1.25rem;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	white-space: nowrap;
+}
+.arc-action-button__morph {
+	display: inline-flex;
+	min-width: 0;
+}
+.arc-action-button__morph[data-morphing] {
+	clip-path: inset(-0.6em 0 -0.6em -0.3em);
+}
+.arc-action-button__glyphs {
+	position: relative;
+	display: inline-flex;
+	flex: none;
+	white-space: pre;
+}
+.arc-action-button__glyph {
+	display: inline-block;
+}
+.arc-action-button__icon-slot {
+	display: grid;
+	width: 17px;
+	height: 17px;
+	flex: 0 0 17px;
+	place-items: center;
+}
+.arc-action-button__phase {
+	grid-area: 1 / 1;
+	display: grid;
+	width: 17px;
+	height: 17px;
+	place-items: center;
+}
+.arc-action-button__arrow {
+	flex: none;
+}
+.arc-action-button__status-icon {
+	color: currentColor;
+}
+.arc-action-button__spinner {
+	display: inline-block;
+	width: var(--space-4);
+	height: var(--space-4);
+	border: 1.5px solid currentColor;
+	border-right-color: transparent;
+	border-radius: var(--radius-pill);
+	animation: arc-action-button-spin 0.7s linear infinite;
+}
+.arc-action-button__visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+@keyframes arc-action-button-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-action-button {
+		transition: none;
+	}
+	.arc-action-button__spinner {
+		animation: none;
+	}
+}
+
+.arc-action-button {
+	transform: scale(1);
+	transition:
+		transform var(--spring-snappy-duration) var(--spring-snappy),
+		background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard);
+}
+.arc-action-button:active:not(:disabled):not([data-state='pending']) {
+	transform: scale(var(--arc-action-button-press, 0.97));
+	transition-duration: var(--duration-instant);
+	transition-timing-function: var(--ease-standard);
+}
+.arc-action-button__check {
+	stroke-dasharray: 1 1;
+	animation:
+		arc-action-button-check var(--duration-standard) var(--ease-enter) 50ms both,
+		arc-action-button-check-fade 50ms 50ms both;
+}
+@keyframes arc-action-button-check {
+	from {
+		stroke-dashoffset: 1;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+@keyframes arc-action-button-check-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-action-button {
+		transition: none;
+	}
+	.arc-action-button:active:not(:disabled):not([data-state='pending']) {
+		transform: none;
+	}
+	.arc-action-button__check {
+		animation: none;
+	}
+}

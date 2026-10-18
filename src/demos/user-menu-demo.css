@@ -1,0 +1,39 @@
+.arc-user-menu-demo__stage {
+	display: grid;
+	width: 100%;
+	min-height: 520px;
+	box-sizing: border-box;
+	align-content: start;
+	justify-items: center;
+	gap: var(--space-4);
+	padding: 56px var(--space-4) var(--space-6);
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+	line-height: var(--leading-body);
+}
+.arc-user-menu-demo__account {
+	position: relative;
+	display: flex;
+	min-height: var(--control-height-md);
+	align-items: center;
+	justify-content: center;
+}
+.arc-user-menu-demo__control {
+	display: inline-flex;
+}
+.arc-user-menu-demo__note {
+	position: relative;
+	display: grid;
+	min-height: 1.4em;
+	margin: 0;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+	text-align: center;
+}
+@media (max-width: 639px) {
+	.arc-user-menu-demo__stage {
+		min-height: 240px;
+		align-content: center;
+		padding-top: var(--space-6);
+	}
+}

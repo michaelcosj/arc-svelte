@@ -1,0 +1,171 @@
+.arc-scroll-area {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	min-height: 0;
+	flex-direction: column;
+	overflow: hidden;
+}
+.arc-scroll-area__viewport {
+	--fade-top: 0px;
+	--fade-bottom: 0px;
+	--fade-left: 0px;
+	--fade-right: 0px;
+	min-width: 0;
+	min-height: 0;
+	flex: 1 1 auto;
+	overscroll-behavior-x: contain;
+	scrollbar-width: none;
+	-webkit-overflow-scrolling: touch;
+}
+.arc-scroll-area__viewport::-webkit-scrollbar {
+	display: none;
+}
+.arc-scroll-area[data-orientation='vertical'] > .arc-scroll-area__viewport {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.arc-scroll-area[data-orientation='horizontal'] > .arc-scroll-area__viewport {
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+.arc-scroll-area[data-orientation='both'] > .arc-scroll-area__viewport {
+	overflow: auto;
+}
+.arc-scroll-area__viewport[data-fade='vertical'] {
+	mask-image: linear-gradient(
+		to bottom,
+		transparent,
+		#000 var(--fade-top),
+		#000 calc(100% - var(--fade-bottom)),
+		transparent
+	);
+}
+.arc-scroll-area__viewport[data-fade='horizontal'] {
+	mask-image: linear-gradient(
+		to right,
+		transparent,
+		#000 var(--fade-left),
+		#000 calc(100% - var(--fade-right)),
+		transparent
+	);
+}
+.arc-scroll-area__viewport[data-fade='both'] {
+	mask-image:
+		linear-gradient(
+			to bottom,
+			transparent,
+			#000 var(--fade-top),
+			#000 calc(100% - var(--fade-bottom)),
+			transparent
+		),
+		linear-gradient(
+			to right,
+			transparent,
+			#000 var(--fade-left),
+			#000 calc(100% - var(--fade-right)),
+			transparent
+		);
+	mask-composite: intersect;
+}
+.arc-scroll-area__track {
+	position: absolute;
+	z-index: 1;
+	opacity: 0;
+	pointer-events: none;
+	touch-action: none;
+	transition: opacity var(--duration-considered) var(--ease-standard);
+}
+.arc-scroll-area__track[data-axis='y'] {
+	top: 3px;
+	right: 1px;
+	bottom: 3px;
+	width: 11px;
+}
+.arc-scroll-area__track[data-axis='x'] {
+	right: 3px;
+	bottom: 1px;
+	left: 3px;
+	height: 11px;
+}
+.arc-scroll-area[data-orientation='both'] > .arc-scroll-area__track[data-axis='y'] {
+	bottom: 13px;
+}
+.arc-scroll-area[data-orientation='both'] > .arc-scroll-area__track[data-axis='x'] {
+	right: 13px;
+}
+.arc-scroll-area__track[data-hidden] {
+	display: none;
+}
+.arc-scroll-area__thumb {
+	position: absolute;
+	top: 0;
+	left: 0;
+	will-change: transform;
+}
+.arc-scroll-area__track[data-axis='y'] .arc-scroll-area__thumb {
+	width: 100%;
+}
+.arc-scroll-area__track[data-axis='x'] .arc-scroll-area__thumb {
+	height: 100%;
+}
+.arc-scroll-area__thumb::after {
+	content: '';
+	position: absolute;
+	border-radius: var(--radius-pill);
+	background: color-mix(in oklab, var(--foreground) 30%, transparent);
+	transition:
+		width var(--duration-fast) var(--ease-standard),
+		height var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-scroll-area__track[data-axis='y'] .arc-scroll-area__thumb::after {
+	top: 0;
+	right: 3px;
+	bottom: 0;
+	width: 5px;
+}
+.arc-scroll-area__track[data-axis='x'] .arc-scroll-area__thumb::after {
+	right: 0;
+	bottom: 3px;
+	left: 0;
+	height: 5px;
+}
+.arc-scroll-area[data-scrolling] > .arc-scroll-area__track,
+.arc-scroll-area[data-dragging] > .arc-scroll-area__track,
+.arc-scroll-area[data-scrollbars='always'] > .arc-scroll-area__track {
+	opacity: 1;
+	pointer-events: auto;
+	transition-duration: var(--duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-scroll-area:hover > .arc-scroll-area__track {
+		opacity: 1;
+		pointer-events: auto;
+		transition-duration: var(--duration-fast);
+	}
+	.arc-scroll-area__track:hover .arc-scroll-area__thumb::after,
+	.arc-scroll-area[data-dragging] .arc-scroll-area__thumb::after {
+		background: color-mix(in oklab, var(--foreground) 46%, transparent);
+	}
+	.arc-scroll-area__track[data-axis='y']:hover .arc-scroll-area__thumb::after,
+	.arc-scroll-area[data-dragging='y']
+		.arc-scroll-area__track[data-axis='y']
+		.arc-scroll-area__thumb::after {
+		width: 7px;
+		right: 2px;
+	}
+	.arc-scroll-area__track[data-axis='x']:hover .arc-scroll-area__thumb::after,
+	.arc-scroll-area[data-dragging='x']
+		.arc-scroll-area__track[data-axis='x']
+		.arc-scroll-area__thumb::after {
+		height: 7px;
+		bottom: 2px;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-scroll-area__track,
+	.arc-scroll-area__thumb::after {
+		transition: none;
+	}
+}

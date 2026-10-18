@@ -1,0 +1,329 @@
+.arc-stepper {
+	--marker: 1.75rem;
+	--halo: 4px;
+	min-width: 0;
+	color: var(--foreground);
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+/* A horizontal stepper spans its container, so it can safely measure itself and fold into markers when space runs out. */
+.arc-stepper--horizontal {
+	width: 100%;
+	container: stepper / inline-size;
+}
+.arc-stepper__list {
+	display: grid;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.arc-stepper__item {
+	position: relative;
+	min-width: 0;
+}
+.arc-stepper--horizontal .arc-stepper__item:not(:last-child) {
+	padding-inline-end: var(--space-4);
+}
+.arc-stepper--vertical .arc-stepper__item:not(:last-child) {
+	padding-bottom: var(--space-5);
+}
+.arc-stepper--compact.arc-stepper--vertical .arc-stepper__item:not(:last-child) {
+	padding-bottom: var(--space-6);
+}
+
+/* Buttons and spans share one head, so a chosen step keeps focus as it becomes the current one. */
+.arc-stepper__head {
+	display: grid;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: var(--space-2);
+	background: none;
+	color: inherit;
+	font: inherit;
+	letter-spacing: inherit;
+	text-align: start;
+	cursor: default;
+	-webkit-tap-highlight-color: transparent;
+}
+.arc-stepper__head[data-clickable] {
+	cursor: pointer;
+}
+.arc-stepper--horizontal .arc-stepper__head {
+	width: fit-content;
+	max-width: 100%;
+	justify-items: start;
+	row-gap: var(--space-3);
+}
+.arc-stepper--vertical .arc-stepper__head {
+	width: 100%;
+	grid-template-columns: var(--marker) minmax(0, 1fr);
+	column-gap: var(--space-3);
+	align-items: start;
+}
+.arc-stepper--compact.arc-stepper--vertical .arc-stepper__head {
+	grid-template-columns: var(--marker);
+	column-gap: 0;
+}
+.arc-stepper__head:focus-visible {
+	--focus-outline-offset: 4px;
+}
+.arc-stepper__head:focus:not(:focus-visible) {
+	outline: none;
+}
+
+/* The ring sits behind the disc and grows out of it; the disc carries the state color and the glyph. */
+.arc-stepper__marker {
+	position: relative;
+	display: grid;
+	width: var(--marker);
+	height: var(--marker);
+	flex: none;
+	place-items: center;
+}
+.arc-stepper__ring {
+	position: absolute;
+	inset: calc(var(--halo) * -1);
+	border-radius: var(--radius-pill);
+	background: var(--accent-subtle);
+	transition: background-color var(--duration-standard) var(--ease-standard);
+}
+.arc-stepper__disc {
+	position: relative;
+	display: grid;
+	width: 100%;
+	height: 100%;
+	place-items: center;
+	border-radius: var(--radius-pill);
+	background: var(--surface);
+	box-shadow: inset 0 0 0 1px var(--border-strong);
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+	transition:
+		background-color var(--duration-standard) var(--ease-standard),
+		box-shadow var(--duration-standard) var(--ease-standard),
+		color var(--duration-standard) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+.arc-stepper__glyph {
+	display: grid;
+	grid-area: 1 / 1;
+	place-items: center;
+}
+.arc-stepper__icon {
+	width: 0.875rem;
+	height: 0.875rem;
+}
+.arc-stepper__item[data-status='current'] .arc-stepper__disc {
+	box-shadow: inset 0 0 0 1.5px var(--accent);
+	color: var(--foreground);
+}
+.arc-stepper__item[data-status='complete'] .arc-stepper__disc {
+	background: var(--accent);
+	box-shadow: inset 0 0 0 1px var(--accent);
+	color: var(--accent-foreground);
+}
+.arc-stepper__item[data-status='error'] .arc-stepper__disc {
+	background: color-mix(in oklab, var(--danger) 10%, var(--surface));
+	box-shadow: inset 0 0 0 1.5px var(--danger);
+	color: var(--danger);
+}
+.arc-stepper__item[data-status='error'] .arc-stepper__ring {
+	background: color-mix(in oklab, var(--danger) 16%, transparent);
+}
+
+/* The track stays put; only the fill scales along it on a spring, from the step that was just finished. */
+.arc-stepper__connector {
+	position: absolute;
+	overflow: hidden;
+	border-radius: var(--radius-pill);
+	background: var(--border);
+	pointer-events: none;
+}
+.arc-stepper--horizontal .arc-stepper__connector {
+	top: calc(var(--marker) / 2 - 1px);
+	inset-inline: calc(var(--marker) + var(--halo) + var(--space-1))
+		calc(var(--halo) + var(--space-1));
+	height: 2px;
+}
+/* Both ends keep a clear gap from the markers, and from the current step's ring. */
+.arc-stepper--vertical .arc-stepper__connector {
+	top: calc(var(--marker) + var(--halo) + 2px);
+	bottom: calc(var(--halo) + 2px);
+	inset-inline-start: calc(var(--marker) / 2 - 1px);
+	width: 2px;
+}
+.arc-stepper__fill {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: var(--accent);
+}
+.arc-stepper--horizontal .arc-stepper__fill {
+	transform-origin: left center;
+}
+.arc-stepper--horizontal .arc-stepper__fill:dir(rtl) {
+	transform-origin: right center;
+}
+.arc-stepper--vertical .arc-stepper__fill {
+	transform-origin: center top;
+}
+
+.arc-stepper__text {
+	display: grid;
+	min-width: 0;
+}
+/* Centers the first line of the label on the marker. */
+.arc-stepper--vertical .arc-stepper__text {
+	padding-top: 0.25rem;
+}
+.arc-stepper__label {
+	display: block;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: 1.25rem;
+	overflow-wrap: break-word;
+	transition: color var(--duration-standard) var(--ease-standard);
+}
+.arc-stepper__item[data-status='complete'] .arc-stepper__label {
+	color: var(--text-secondary);
+}
+.arc-stepper__item[data-status='current'] .arc-stepper__label,
+.arc-stepper__item[data-status='error'] .arc-stepper__label {
+	color: var(--foreground);
+}
+/* Changing text pops out of flow against this box while it leaves, so it must be the positioned parent. */
+.arc-stepper__slot {
+	display: block;
+}
+.arc-stepper__slot-inner {
+	position: relative;
+	display: block;
+}
+.arc-stepper__description,
+.arc-stepper__error {
+	display: block;
+	padding-top: 2px;
+	font-size: var(--text-xs);
+	font-weight: 400;
+	line-height: var(--leading-body);
+	overflow-wrap: break-word;
+}
+.arc-stepper__description {
+	color: var(--text-muted);
+}
+.arc-stepper__error {
+	color: var(--danger);
+}
+
+.arc-stepper__caption {
+	display: none;
+	margin-top: var(--space-3);
+}
+.arc-stepper__caption-label {
+	display: block;
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: 1.25rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.arc-stepper__head[data-clickable]:hover .arc-stepper__label {
+		color: var(--foreground);
+	}
+	.arc-stepper__item[data-status='complete']
+		.arc-stepper__head[data-clickable]:hover
+		.arc-stepper__disc {
+		background: var(--accent-strong);
+		box-shadow: inset 0 0 0 1px var(--accent-strong);
+	}
+	.arc-stepper__item[data-status='error']
+		.arc-stepper__head[data-clickable]:hover
+		.arc-stepper__disc {
+		background: color-mix(in oklab, var(--danger) 18%, var(--surface));
+	}
+}
+.arc-stepper__head[data-clickable]:active .arc-stepper__disc {
+	transform: scale(0.92);
+}
+
+.arc-stepper__sr-only,
+.arc-stepper--compact .arc-stepper__text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.arc-stepper--compact.arc-stepper--horizontal .arc-stepper__caption {
+	display: grid;
+}
+/* Four labels no longer fit side by side: keep the markers and name the current step underneath. */
+@container stepper (max-width: 30rem) {
+	.arc-stepper--horizontal .arc-stepper__text {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+	.arc-stepper--horizontal .arc-stepper__caption {
+		display: grid;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arc-stepper__disc,
+	.arc-stepper__ring,
+	.arc-stepper__label {
+		transition: none;
+	}
+	.arc-stepper__head[data-clickable]:active .arc-stepper__disc {
+		transform: none;
+	}
+}
+.arc-stepper__draw {
+	stroke-dasharray: 1;
+	stroke-dashoffset: 0;
+	animation: arc-stepper-draw 240ms var(--ease-enter) var(--draw-delay) backwards;
+}
+.arc-stepper__dot {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: arc-stepper-dot var(--spring-snappy-duration) var(--spring-snappy) var(--dot-delay)
+		backwards;
+}
+@keyframes arc-stepper-draw {
+	from {
+		stroke-dashoffset: 1;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+@keyframes arc-stepper-dot {
+	from {
+		scale: 0;
+	}
+	to {
+		scale: 1;
+	}
+}
+[data-still='true'] > .arc-stepper__draw,
+[data-still='true'] > .arc-stepper__dot {
+	animation: none;
+}
+.arc-stepper__icon {
+	transform-origin: center;
+}

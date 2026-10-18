@@ -1,0 +1,98 @@
+.arc-alert__presence {
+	min-width: 0;
+}
+.arc-alert {
+	display: flex;
+	align-items: start;
+	gap: var(--space-3);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-control);
+	padding: var(--space-4);
+	background: var(--surface);
+	box-shadow: var(--shadow-resting);
+}
+.arc-alert__icon,
+.arc-alert__glyph {
+	position: relative;
+	display: grid;
+	flex: 0 0 auto;
+	place-items: center;
+}
+.arc-alert__icon {
+	width: 18px;
+	height: 18px;
+	margin-top: 1px;
+}
+.arc-alert__icon svg {
+	display: block;
+}
+.arc-alert__copy {
+	flex: 1;
+	min-width: 0;
+}
+.arc-alert__content {
+	position: relative;
+}
+.arc-alert__title {
+	position: relative;
+	display: block;
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+.arc-alert__line {
+	display: block;
+}
+.arc-alert__description {
+	position: relative;
+	margin: var(--space-1) 0 0;
+	color: var(--text-secondary);
+	font-size: var(--text-xs);
+}
+.arc-alert--info .arc-alert__icon {
+	color: var(--accent);
+}
+.arc-alert--success .arc-alert__icon {
+	color: var(--success);
+}
+.arc-alert--warning .arc-alert__icon {
+	color: var(--warning);
+}
+.arc-alert--danger .arc-alert__icon {
+	color: var(--danger);
+}
+.arc-alert__dismiss {
+	display: grid;
+	width: 28px;
+	height: 28px;
+	flex: 0 0 auto;
+	place-items: center;
+	margin: -5px -6px -5px 0;
+	border: 0;
+	border-radius: var(--radius-pill);
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	transition:
+		transform var(--duration-spring) var(--ease-spring),
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+.arc-alert__dismiss:active {
+	transform: scale(0.96);
+	transition-duration: var(--duration-instant);
+	transition-timing-function: var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-alert__dismiss:hover {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-alert__dismiss {
+		transition: none;
+	}
+	.arc-alert__dismiss:active {
+		transform: none;
+	}
+}

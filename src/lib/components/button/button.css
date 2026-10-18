@@ -1,0 +1,192 @@
+/* The press (motion's whileTap) is CSS: :active scales in on a short ease and the release springs back on the snappy spring. */
+.arc-button {
+	position: relative;
+	display: inline-flex;
+	min-height: var(--control-height-md);
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	border: 1px solid transparent;
+	border-radius: var(--radius-control);
+	padding: 0 var(--space-4);
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+	white-space: nowrap;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-fast) var(--ease-standard),
+		transform var(--spring-snappy-duration) var(--spring-snappy);
+}
+.arc-button:active:not(:disabled, [aria-disabled='true']) {
+	transform: scale(var(--arc-button-press, 0.97));
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-fast) var(--ease-standard),
+		transform var(--duration-instant) var(--ease-standard);
+}
+.arc-button:disabled {
+	cursor: not-allowed;
+	opacity: 0.52;
+}
+.arc-button[aria-busy='true'] {
+	cursor: progress;
+}
+/* Anchors of floating layers never scale: Radix opens on pointerdown and would measure a shrunken trigger. */
+.arc-button:is([aria-haspopup]:not([aria-haspopup='false']), [data-state], [role='combobox']) {
+	transform: none !important;
+}
+/* The slot's width follows the incoming label on a spring. The label stays centered and may overflow evenly while the slot catches up;
+   the outgoing label pops out of flow against the slot itself, so it keeps its place instead of following the new content box. */
+.arc-button__label-slot {
+	position: relative;
+	display: inline-flex;
+	min-width: 0;
+	align-items: center;
+	justify-content: center;
+	transition: opacity var(--duration-fast) var(--ease-standard);
+}
+.arc-button__label-slot[data-morphing] {
+	clip-path: inset(-50% calc(var(--space-3) * -1));
+}
+.arc-button__label-content {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+}
+.arc-button__label-phase {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	white-space: nowrap;
+}
+.arc-button__label-phase svg {
+	flex: none;
+}
+.arc-button--primary {
+	color: var(--background);
+	background: var(--foreground);
+	border-color: var(--foreground);
+}
+.arc-button--secondary {
+	color: var(--foreground);
+	background: var(--surface);
+	border-color: var(--border);
+}
+.arc-button--ghost {
+	color: var(--text-secondary);
+	background: transparent;
+	border-color: transparent;
+}
+.arc-button--danger {
+	color: var(--danger);
+	background: var(--surface);
+	border-color: var(--border);
+}
+/* A disabled outlined button keeps its shape and fades only its label, so it still reads as a button that is off, not as plain text. */
+.arc-button--secondary:disabled,
+.arc-button--danger:disabled {
+	opacity: 1;
+	color: var(--text-muted);
+	background: var(--surface-muted);
+	border-color: var(--border);
+}
+.arc-button--danger:disabled {
+	color: color-mix(in oklab, var(--danger) 55%, var(--surface-muted));
+}
+.arc-button--ghost:disabled {
+	opacity: 1;
+	color: var(--text-muted);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-button--primary:hover:not(:disabled) {
+		opacity: 0.91;
+		box-shadow: var(--shadow-resting);
+	}
+	.arc-button--secondary:hover:not(:disabled) {
+		background: var(--surface-muted);
+		box-shadow: var(--shadow-resting);
+	}
+	.arc-button--ghost:hover:not(:disabled) {
+		color: var(--foreground);
+		background: var(--surface-muted);
+	}
+	.arc-button--danger:hover:not(:disabled) {
+		border-color: var(--danger);
+		background: var(--surface-muted);
+	}
+}
+/* Color feedback on press, so touch and menu triggers (which never scale) still answer the finger. */
+.arc-button--primary:active:not(:disabled) {
+	opacity: 0.84;
+}
+.arc-button--secondary:active:not(:disabled),
+.arc-button--ghost:active:not(:disabled) {
+	color: var(--foreground);
+	background: var(--surface-muted);
+}
+.arc-button--danger:active:not(:disabled) {
+	border-color: var(--danger);
+	background: var(--surface-muted);
+}
+.arc-button--sm {
+	min-height: var(--control-height-sm);
+	padding-inline: var(--space-3);
+	font-size: var(--text-sm);
+}
+.arc-button--md {
+	min-height: var(--control-height-md);
+}
+.arc-button--lg {
+	min-height: var(--control-height-lg);
+	padding-inline: var(--space-5);
+	font-size: var(--text-sm);
+}
+.arc-button__loader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	display: grid;
+	width: var(--space-4);
+	height: var(--space-4);
+	margin: calc(var(--space-4) / -2);
+}
+.arc-button__spinner {
+	border: 1.5px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: arc-button-spin 0.7s linear infinite;
+}
+.arc-button__loading-label {
+	opacity: 0;
+}
+@keyframes arc-button-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-button {
+		transition: none;
+	}
+	.arc-button:active {
+		transform: none !important;
+	}
+	.arc-button__label-slot {
+		transition: opacity var(--duration-instant) linear;
+	}
+	.arc-button__spinner {
+		animation-duration: 0.01ms;
+		animation-iteration-count: 1;
+	}
+}

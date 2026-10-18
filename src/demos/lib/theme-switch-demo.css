@@ -1,0 +1,62 @@
+/* The gallery's page transitions for the theme switcher (site CSS, not part of the component). */
+html[data-theme-motion]::view-transition-old(root) {
+	animation: none;
+}
+html[data-theme-motion]::view-transition-new(root) {
+	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	animation-fill-mode: both;
+}
+html[data-theme-motion='reveal']::view-transition-new(root) {
+	animation-name: theme-reveal;
+	animation-duration: 0.38s;
+}
+html[data-theme-motion='eclipse']::view-transition-new(root) {
+	animation-name: theme-eclipse;
+	animation-duration: 0.43s;
+}
+html[data-theme-motion='split']::view-transition-new(root) {
+	animation-name: theme-split;
+	animation-duration: 0.39s;
+}
+html[data-theme-motion='rise']::view-transition-new(root) {
+	animation-name: theme-rise;
+	animation-duration: 0.36s;
+}
+@media (prefers-reduced-motion: reduce) {
+	html[data-theme-motion]::view-transition-old(root),
+	html[data-theme-motion]::view-transition-new(root) {
+		animation-duration: 0.01ms !important;
+	}
+}
+@keyframes theme-reveal {
+	0% {
+		clip-path: inset(0 100% 0 0);
+	}
+	100% {
+		clip-path: inset(0);
+	}
+}
+@keyframes theme-eclipse {
+	0% {
+		clip-path: ellipse(0 110%);
+	}
+	100% {
+		clip-path: ellipse(80% 110%);
+	}
+}
+@keyframes theme-split {
+	0% {
+		clip-path: inset(50% 0);
+	}
+	100% {
+		clip-path: inset(0);
+	}
+}
+@keyframes theme-rise {
+	0% {
+		clip-path: inset(100% 0 0);
+	}
+	100% {
+		clip-path: inset(0);
+	}
+}

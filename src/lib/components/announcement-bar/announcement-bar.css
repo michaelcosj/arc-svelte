@@ -1,0 +1,255 @@
+/* The outer section animates its height to zero on dismiss, so whatever sits below eases up with it. */
+.arc-announcement-bar {
+	overflow: hidden;
+	container-type: inline-size;
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+
+/* The side column mirrors the controls, so the message stays centered on the page rather than in the leftover space. */
+.arc-announcement-bar__bar {
+	--icon: 32px;
+	--control-gap: 2px;
+	--muted: var(--text-secondary);
+	display: grid;
+	grid-template-columns: calc(
+			var(--controls, 0) * var(--icon) + max(var(--controls, 0) - 1, 0) * var(--control-gap)
+		) minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--space-3);
+	padding: 6px 8px 6px 16px;
+	border-bottom: 1px solid var(--border);
+	background: var(--surface-muted);
+	color: var(--foreground);
+}
+.arc-announcement-bar__bar[data-tone='inverted'] {
+	--muted: color-mix(in oklab, var(--background) 66%, transparent);
+	border-bottom-color: transparent;
+	background: var(--foreground);
+	color: var(--background);
+}
+
+.arc-announcement-bar__side {
+	min-width: 0;
+}
+.arc-announcement-bar__viewport {
+	position: relative;
+	min-height: 32px;
+	overflow: hidden;
+}
+
+/* Faces overlap in place; the entering one reports its height and the viewport springs to it. */
+.arc-announcement-bar__face {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	display: flex;
+	min-height: 32px;
+	align-items: center;
+	justify-content: center;
+}
+.arc-announcement-bar__message {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: center;
+	gap: 2px 12px;
+	margin: 0;
+	padding: 6px 0;
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+	text-align: center;
+	text-wrap: balance;
+}
+.arc-announcement-bar__text {
+	min-width: 0;
+}
+
+/* The countdown is one run of text: every cell shares the line box, so digits, colons, and the day mark sit on the message baseline. */
+.arc-announcement-bar__countdown {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 6px;
+	color: var(--muted);
+	white-space: nowrap;
+}
+.arc-announcement-bar__countdown-label {
+	color: inherit;
+}
+.arc-announcement-bar__time {
+	display: inline-flex;
+	align-items: baseline;
+	color: var(--foreground);
+	font-variant-numeric: tabular-nums;
+	font-weight: 500;
+	line-height: inherit;
+}
+.arc-announcement-bar__time[data-pending] {
+	opacity: 0;
+}
+.arc-announcement-bar__bar[data-tone='inverted'] .arc-announcement-bar__time {
+	color: var(--background);
+}
+.arc-announcement-bar__digit {
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	overflow: clip;
+	text-align: center;
+}
+.arc-announcement-bar__digit-sizer {
+	visibility: hidden;
+}
+.arc-announcement-bar__digit-face {
+	position: absolute;
+	inset: 0;
+	display: block;
+}
+.arc-announcement-bar__unit {
+	display: inline-flex;
+	align-items: baseline;
+}
+.arc-announcement-bar__unit-mark {
+	margin-left: 1px;
+	color: var(--muted);
+	font-weight: 400;
+}
+/* "case" lifts the colon to the middle of the figures, which it loses once the digits are split into cells. */
+.arc-announcement-bar__sep {
+	display: inline-block;
+	padding-inline: 1px;
+	color: var(--muted);
+	font-feature-settings: 'case';
+	font-weight: 400;
+}
+.arc-announcement-bar__gap {
+	display: inline-block;
+	width: 0.4em;
+}
+
+.arc-announcement-bar__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	font-weight: 500;
+	text-decoration: none;
+	white-space: nowrap;
+	-webkit-tap-highlight-color: transparent;
+}
+.arc-announcement-bar__cta svg {
+	transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.arc-announcement-bar__controls {
+	display: flex;
+	align-items: center;
+	gap: var(--control-gap);
+}
+.arc-announcement-bar__icon,
+.arc-announcement-bar__ring {
+	position: relative;
+	display: grid;
+	width: var(--icon);
+	height: var(--icon);
+	flex: none;
+	place-items: center;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--muted);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-announcement-bar__icon:active,
+.arc-announcement-bar__ring:active {
+	background: color-mix(in oklab, currentColor 12%, transparent);
+	color: inherit;
+}
+.arc-announcement-bar__ring svg {
+	width: 20px;
+	height: 20px;
+	overflow: visible;
+	transform: rotate(-90deg);
+}
+.arc-announcement-bar__ring-track {
+	fill: none;
+	stroke: currentColor;
+	stroke-opacity: 0.22;
+	stroke-width: 1.75;
+}
+.arc-announcement-bar__ring-fill {
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-width: 1.75;
+}
+.arc-announcement-bar__ring-icon {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+}
+.arc-announcement-bar__ring-icon svg {
+	width: 9px;
+	height: 9px;
+	transform: none;
+	fill: currentColor;
+}
+.arc-announcement-bar__bar[data-tone='inverted'] .arc-announcement-bar__icon,
+.arc-announcement-bar__bar[data-tone='inverted'] .arc-announcement-bar__ring {
+	color: var(--muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.arc-announcement-bar__icon:hover,
+	.arc-announcement-bar__ring:hover {
+		background: color-mix(in oklab, currentColor 10%, transparent);
+	}
+	.arc-announcement-bar__bar .arc-announcement-bar__icon:hover,
+	.arc-announcement-bar__bar .arc-announcement-bar__ring:hover {
+		color: var(--foreground);
+	}
+	.arc-announcement-bar__bar[data-tone='inverted'] .arc-announcement-bar__icon:hover,
+	.arc-announcement-bar__bar[data-tone='inverted'] .arc-announcement-bar__ring:hover {
+		color: var(--background);
+	}
+	.arc-announcement-bar__cta:hover svg {
+		transform: translateX(2px);
+	}
+}
+
+/* Narrow bars drop the mirror column and read from the start edge. */
+@container (max-width: 560px) {
+	.arc-announcement-bar__bar {
+		grid-template-columns: 0 minmax(0, 1fr) auto;
+		gap: 0 var(--space-2);
+		padding-left: 14px;
+	}
+	.arc-announcement-bar__face {
+		justify-content: flex-start;
+	}
+	.arc-announcement-bar__message {
+		justify-content: flex-start;
+		column-gap: 10px;
+		text-align: left;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arc-announcement-bar__icon,
+	.arc-announcement-bar__ring,
+	.arc-announcement-bar__cta svg {
+		transition: none;
+	}
+}

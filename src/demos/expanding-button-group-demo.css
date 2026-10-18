@@ -1,0 +1,16 @@
+.arc-expanding-button-group-demo__demo {
+	display: grid;
+	width: min(calc(100% - 16px), 21rem);
+	grid-template-columns: minmax(0px, 1fr);
+	gap: var(--space-5);
+}
+.arc-expanding-button-group-demo__row {
+	display: flex;
+	height: 44px;
+	min-width: 0px;
+	align-items: center;
+	justify-content: flex-start;
+}
+.arc-expanding-button-group-demo__rowSm {
+	height: 36px;
+}

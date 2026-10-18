@@ -1,0 +1,141 @@
+/* The inverted face changes text color exactly at the moving fill edge. */
+.arc-hold-to-confirm__button {
+	--hold-ink: var(--foreground);
+	--hold-fill: var(--accent);
+	--hold-on-fill: var(--accent-foreground);
+	--hold-border: var(--border-strong);
+	position: relative;
+	display: inline-flex;
+	min-height: var(--control-height-md);
+	align-items: center;
+	justify-content: center;
+	padding: 0 var(--space-5);
+	border: 1px solid var(--hold-border);
+	border-radius: var(--radius-control);
+	background: var(--surface);
+	color: var(--hold-ink);
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard);
+}
+.arc-hold-to-confirm__button[data-tone='danger'] {
+	--hold-ink: var(--danger);
+	--hold-fill: var(--danger);
+	--hold-on-fill: var(--background);
+	--hold-border: color-mix(in oklab, var(--danger) 32%, var(--border));
+}
+.arc-hold-to-confirm__button[data-tone='neutral'] {
+	--hold-ink: var(--foreground);
+	--hold-fill: var(--foreground);
+	--hold-on-fill: var(--background);
+	--hold-border: var(--border-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-hold-to-confirm__button:not(:disabled):not([aria-disabled='true']):hover {
+		background: color-mix(in oklab, var(--hold-fill) 6%, var(--surface));
+	}
+}
+.arc-hold-to-confirm__button[aria-disabled='true'] {
+	cursor: default;
+}
+.arc-hold-to-confirm__button:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+.arc-hold-to-confirm__face {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-2);
+	white-space: nowrap;
+}
+.arc-hold-to-confirm__fill {
+	position: absolute;
+	inset: -1px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: var(--radius-control);
+	background: var(--hold-fill);
+	color: var(--hold-on-fill);
+	pointer-events: none;
+}
+.arc-hold-to-confirm__iconSlot {
+	display: grid;
+	width: 18px;
+	height: 18px;
+	flex: none;
+	place-items: center;
+}
+.arc-hold-to-confirm__iconPhase {
+	display: grid;
+	grid-area: 1 / 1;
+	place-items: center;
+}
+.arc-hold-to-confirm__iconPhase svg {
+	width: 18px;
+	height: 18px;
+}
+.arc-hold-to-confirm__labelFrame {
+	position: relative;
+	display: inline-flex;
+	min-width: 0;
+	clip-path: inset(-0.6em -3px);
+}
+.arc-hold-to-confirm__label {
+	display: block;
+	white-space: nowrap;
+}
+.arc-hold-to-confirm__measure {
+	position: absolute;
+	top: 0;
+	left: 0;
+	visibility: hidden;
+	white-space: nowrap;
+	pointer-events: none;
+}
+.arc-hold-to-confirm__srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+.arc-hold-to-confirm__check:not([data-reduced='true']) {
+	stroke-dasharray: 1;
+	animation:
+		arc-hold-check-draw 320ms var(--ease-enter) 80ms both,
+		arc-hold-check-fade 50ms ease-in-out 80ms both;
+}
+@keyframes arc-hold-check-draw {
+	from {
+		stroke-dashoffset: 1;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+@keyframes arc-hold-check-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-hold-to-confirm__button {
+		transition: none;
+	}
+}

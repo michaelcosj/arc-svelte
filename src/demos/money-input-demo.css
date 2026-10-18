@@ -1,0 +1,95 @@
+.arc-money-input-demo__demo {
+	display: grid;
+	justify-items: center;
+	width: min(100%, 460px);
+	min-height: 460px;
+	align-content: start;
+	margin-inline: auto;
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+.arc-money-input-demo__card {
+	display: grid;
+	width: 100%;
+	box-sizing: border-box;
+	gap: var(--space-5);
+	padding: var(--space-6);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-surface);
+	background: var(--surface);
+}
+.arc-money-input-demo__header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-3);
+}
+.arc-money-input-demo__avatar {
+	width: 40px;
+	height: 40px;
+	flex: 0 0 auto;
+	border-radius: 50%;
+	object-fit: cover;
+}
+.arc-money-input-demo__who {
+	display: grid;
+	min-width: 0px;
+	gap: 2px;
+}
+.arc-money-input-demo__title {
+	margin: 0px;
+	overflow: hidden;
+	color: var(--foreground);
+	font-size: var(--text-lg);
+	font-weight: 500;
+	line-height: 1.3;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.arc-money-input-demo__meta {
+	margin: 0px;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+}
+.arc-money-input-demo__footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	padding-top: var(--space-4);
+	border-top: 1px solid var(--border-subtle);
+}
+.arc-money-input-demo__balance {
+	margin: 0px;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+}
+.arc-money-input-demo__figure {
+	color: var(--foreground);
+	font-variant-numeric: tabular-nums;
+}
+.arc-money-input-demo__sent {
+	overflow: hidden;
+	margin: calc(var(--space-5) * -1) 0 0;
+}
+.arc-money-input-demo__sentInner {
+	display: block;
+	padding-top: var(--space-3);
+	color: var(--success);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+}
+@media (max-width: 420px) {
+	.arc-money-input-demo__card {
+		padding: var(--space-4);
+		border-radius: var(--radius-panel);
+	}
+}
+
+.arc-money-input-demo__canvas {
+	display: grid;
+	place-items: center;
+	width: 100%;
+	min-width: 0;
+	padding: 8px;
+}

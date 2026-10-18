@@ -1,0 +1,44 @@
+.arc-toast-stack-demo__desk {
+	position: relative;
+	display: flex;
+	width: min(100%, 45rem);
+	height: 22.5rem;
+	flex-direction: column;
+	gap: var(--space-5);
+	color: var(--foreground);
+}
+.arc-toast-stack-demo__intro {
+	display: grid;
+	max-width: 30rem;
+	gap: var(--space-1);
+}
+.arc-toast-stack-demo__heading {
+	margin: 0;
+	font-size: var(--text-base);
+	font-weight: 500;
+	letter-spacing: var(--tracking-body);
+	line-height: var(--leading-body);
+}
+.arc-toast-stack-demo__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+}
+.arc-toast-stack-demo__desk {
+	container-type: inline-size;
+}
+@container (min-width:40rem) {
+	.arc-toast-stack-demo__actions,
+	.arc-toast-stack-demo__intro {
+		max-width: calc(100% - 22.5rem - var(--space-8));
+	}
+}
+@media (max-width: 30rem) {
+	.arc-toast-stack-demo__desk {
+		height: 25rem;
+	}
+	.arc-toast-stack-demo__actions {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}

@@ -1,0 +1,163 @@
+/* Each row carries its own space so a closed message slot has zero height. */
+.arc-tag-input__field {
+	display: grid;
+	width: 100%;
+	min-width: 0;
+}
+.arc-tag-input__field label {
+	margin-bottom: var(--space-2);
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+.arc-tag-input__control {
+	box-sizing: content-box;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-control);
+	background: var(--surface);
+	box-shadow: 0 0 0 6px transparent;
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-standard) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-tag-input__control:hover:not(:focus-within) {
+		border-color: var(--border-strong);
+	}
+}
+.arc-tag-input__control:focus-within {
+	border-color: var(--foreground);
+	box-shadow: 0 0 0 3px var(--focus-ring);
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+}
+.arc-tag-input__content {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: flex-start;
+	gap: 6px;
+	min-height: calc(var(--control-height-md) - 2px);
+	box-sizing: border-box;
+	padding: 7px;
+	cursor: text;
+}
+.arc-tag-input__tag {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	min-height: 28px;
+	box-sizing: border-box;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-pill);
+	padding: 0 4px 0 9px;
+	background: var(--surface-muted);
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	white-space: nowrap;
+	cursor: default;
+}
+.arc-tag-input__tag button {
+	display: grid;
+	width: 22px;
+	height: 22px;
+	place-items: center;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--text-secondary);
+	cursor: pointer;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-tag-input__tag button:hover {
+		background: var(--surface);
+		color: var(--foreground);
+	}
+}
+.arc-tag-input__tag button:focus-visible {
+	background: var(--surface);
+	color: var(--foreground);
+	outline: none;
+	box-shadow: inset 0 0 0 1.5px var(--focus-ring);
+}
+.arc-tag-input__tag button:active {
+	transform: scale(0.96);
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-instant) var(--ease-standard);
+}
+.arc-tag-input__content input {
+	flex: 1 1 100px;
+	min-width: 80px;
+	min-height: 28px;
+	box-sizing: border-box;
+	border: 0;
+	padding: 0 5px;
+	background: transparent;
+	color: var(--foreground);
+	font: inherit;
+	font-size: var(--text-sm);
+}
+.arc-tag-input__content input:focus,
+.arc-tag-input__content input:focus-visible {
+	outline: none;
+}
+.arc-tag-input__content input::placeholder {
+	color: transparent;
+}
+.arc-tag-input__placeholder {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	padding: 0 12px;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+	white-space: nowrap;
+	pointer-events: none;
+}
+.arc-tag-input__ring {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	box-sizing: border-box;
+	border: 1px solid var(--accent);
+	border-radius: var(--radius-pill);
+	background: var(--accent-subtle);
+	opacity: 0;
+	pointer-events: none;
+}
+/* Labels sit above the ring; resting pills have no filter or transform stacking context. */
+.arc-tag-input__tag-label,
+.arc-tag-input__tag button {
+	position: relative;
+	z-index: 2;
+}
+.arc-tag-input__tag[data-picked] button {
+	color: var(--foreground);
+}
+.arc-tag-input__hint {
+	display: block;
+	padding-top: var(--space-2);
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-tag-input__control,
+	.arc-tag-input__tag button {
+		transition: none;
+	}
+	.arc-tag-input__tag button:active {
+		transform: none;
+	}
+}

@@ -1,0 +1,136 @@
+.arc-tree-view__tree {
+	position: relative;
+	display: block;
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	padding: 6px 8px 8px;
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	background: var(--surface);
+	color: var(--foreground);
+	overflow: hidden;
+}
+.arc-tree-view__row {
+	position: relative;
+	display: flow-root;
+	min-width: 0;
+	height: 38px;
+}
+.arc-tree-view__item {
+	position: relative;
+	display: flex;
+	width: 100%;
+	min-width: 0;
+	height: 36px;
+	margin-top: 2px;
+	align-items: center;
+	gap: 8px;
+	padding: 0 10px;
+	padding-left: calc(10px + (var(--tree-depth) - 1) * 18px);
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
+	color: var(--text-secondary);
+	font: inherit;
+	font-size: var(--text-sm);
+	line-height: 1;
+	text-align: left;
+	cursor: pointer;
+	outline: none;
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-tree-view__item[aria-selected='true'] {
+	color: var(--foreground);
+}
+.arc-tree-view__selection {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	border-radius: 10px;
+	background: var(--surface-muted);
+	pointer-events: none;
+}
+.arc-tree-view__branch {
+	position: absolute;
+	top: 4px;
+	bottom: 4px;
+	left: calc(16.5px + (var(--tree-depth) - 2) * 18px);
+	z-index: 1;
+	width: 1px;
+	background: var(--border);
+	transform-origin: top;
+	pointer-events: none;
+}
+.arc-tree-view__disclosure,
+.arc-tree-view__icon,
+.arc-tree-view__label {
+	position: relative;
+	z-index: 1;
+}
+.arc-tree-view__disclosure {
+	display: grid;
+	width: 14px;
+	height: 16px;
+	flex: 0 0 14px;
+	place-items: center;
+	color: var(--text-muted);
+	transition: rotate var(--spring-snappy-duration) var(--spring-snappy);
+}
+.arc-tree-view__icon {
+	display: grid;
+	width: 16px;
+	height: 16px;
+	flex: 0 0 16px;
+	place-items: center;
+	color: var(--text-muted);
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.arc-tree-view__folder {
+	color: var(--text-secondary);
+}
+.arc-tree-view__item[aria-expanded='true'] .arc-tree-view__folder,
+.arc-tree-view__item[aria-selected='true'] .arc-tree-view__folder {
+	color: var(--foreground);
+}
+.arc-tree-view__folder-glyph {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+}
+.arc-tree-view__typescript {
+	color: color-mix(in oklab, #3178c6 78%, var(--foreground));
+}
+.arc-tree-view__stylesheet {
+	color: color-mix(in oklab, #8b6ace 73%, var(--foreground));
+}
+.arc-tree-view__markdown {
+	color: color-mix(in oklab, #38896b 74%, var(--foreground));
+}
+.arc-tree-view__json {
+	color: color-mix(in oklab, #c48637 78%, var(--foreground));
+}
+.arc-tree-view__label {
+	min-width: 0;
+	overflow: hidden;
+	line-height: 1.45;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-tree-view__item:hover {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-tree-view__item,
+	.arc-tree-view__icon,
+	.arc-tree-view__disclosure {
+		transition: none;
+	}
+}

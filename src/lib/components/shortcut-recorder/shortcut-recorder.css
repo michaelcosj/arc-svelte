@@ -1,0 +1,449 @@
+/* ---------------------------------------------- Kbd ---------------------------------------------- */
+
+/* A key cap: a one pixel edge with a slightly heavier bottom, so it reads as a key without a shadow. Held, it drops a pixel and takes the accent. */
+.arc-shortcut-recorder__kbd {
+	display: inline-grid;
+	min-width: 26px;
+	height: 26px;
+	box-sizing: border-box;
+	place-items: center;
+	padding: 0 7px 1px;
+	border: 1px solid var(--border-strong);
+	border-bottom-width: 2px;
+	border-radius: 8px;
+	background: var(--surface-raised);
+	color: var(--foreground);
+	font-family: var(--font-body);
+	font-size: var(--text-xs);
+	font-weight: 500;
+	line-height: 1;
+	letter-spacing: 0;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+	transition:
+		transform var(--duration-spring) var(--ease-spring),
+		border-color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		border-bottom-width var(--duration-fast) var(--ease-standard);
+}
+.arc-shortcut-recorder__kbd[data-size='sm'] {
+	min-width: 22px;
+	height: 22px;
+	padding: 0 5px 1px;
+	border-radius: 7px;
+	font-size: var(--text-xs);
+}
+.arc-shortcut-recorder__kbd[data-pressed] {
+	transform: translateY(1px);
+	border-color: color-mix(in oklab, var(--accent) 55%, var(--border-strong));
+	border-bottom-width: 1px;
+	background: var(--accent-subtle);
+	color: var(--accent-strong);
+	transition-duration: 90ms;
+}
+.arc-shortcut-recorder__kbd[data-tone='warning'] {
+	border-color: color-mix(in oklab, var(--warning) 55%, var(--border-strong));
+	background: color-mix(in oklab, var(--warning) 12%, var(--surface-raised));
+	color: var(--foreground);
+}
+.arc-shortcut-recorder__keys {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	gap: 4px;
+}
+
+/* ---------------------------------------------- Recorder ---------------------------------------------- */
+
+.arc-shortcut-recorder__field {
+	display: grid;
+	min-width: 0;
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+.arc-shortcut-recorder__label {
+	justify-self: start;
+	margin-bottom: var(--space-2);
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+}
+
+.arc-shortcut-recorder__control {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	height: var(--control-height-md);
+	box-sizing: border-box;
+	align-items: center;
+	border: 1px solid var(--border-strong);
+	border-radius: var(--radius-control);
+	background: var(--surface);
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-shortcut-recorder__control[data-state='idle']:hover {
+		border-color: var(--foreground);
+	}
+}
+.arc-shortcut-recorder__control:has(.arc-shortcut-recorder__recorder:focus-visible) {
+	border-color: var(--foreground);
+}
+.arc-shortcut-recorder__control[data-state='recording'] {
+	border-color: var(--accent);
+	background: color-mix(in oklab, var(--accent) 4%, var(--surface));
+}
+.arc-shortcut-recorder__control[data-state='conflict'] {
+	border-color: var(--warning);
+}
+.arc-shortcut-recorder__field[data-disabled] .arc-shortcut-recorder__control {
+	opacity: 0.5;
+	background: var(--surface-muted);
+}
+
+.arc-shortcut-recorder__recorder {
+	display: flex;
+	min-width: 0;
+	height: 100%;
+	flex: 1;
+	align-items: center;
+	padding: 0 6px 0 9px;
+	border: 0;
+	border-radius: var(--radius-control);
+	background: transparent;
+	color: var(--foreground);
+	cursor: pointer;
+	font: inherit;
+	text-align: left;
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+	outline: none;
+}
+.arc-shortcut-recorder__recorder:disabled {
+	cursor: not-allowed;
+}
+.arc-shortcut-recorder__row {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	align-items: center;
+	gap: 4px;
+}
+.arc-shortcut-recorder__chip-slot {
+	display: inline-flex;
+}
+.arc-shortcut-recorder__placeholder {
+	padding-left: 3px;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+	white-space: nowrap;
+}
+.arc-shortcut-recorder__placeholder[data-recording] {
+	color: var(--text-secondary);
+}
+/* A recording light: steady in reduced motion, a slow breath otherwise. */
+.arc-shortcut-recorder__dot {
+	width: 7px;
+	height: 7px;
+	flex: none;
+	margin: 0 6px 0 3px;
+	border-radius: 50%;
+	background: var(--accent);
+	animation: arc-shortcut-recorder-breathe 1.4s var(--ease-in-out) infinite;
+}
+.arc-shortcut-recorder__dot[data-reduced] {
+	animation: none;
+}
+@keyframes arc-shortcut-recorder-breathe {
+	50% {
+		opacity: 0.35;
+	}
+}
+
+.arc-shortcut-recorder__actions {
+	display: flex;
+	flex: none;
+	align-items: center;
+	gap: 2px;
+	padding-right: 4px;
+}
+.arc-shortcut-recorder__action {
+	display: grid;
+	width: 32px;
+	height: 32px;
+	place-items: center;
+	padding: 0;
+	border: 0;
+	border-radius: calc(var(--radius-control) - 5px);
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-shortcut-recorder__action:hover {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+}
+.arc-shortcut-recorder__action:active,
+.arc-shortcut-recorder__action:focus-visible {
+	background: var(--surface-muted);
+	color: var(--foreground);
+	outline: none;
+}
+
+.arc-shortcut-recorder__message-slot {
+	position: relative;
+	overflow: hidden;
+}
+.arc-shortcut-recorder__message {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 2px var(--space-3);
+	padding-top: var(--space-2);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+}
+.arc-shortcut-recorder__message[data-tone='hint'] {
+	color: var(--text-muted);
+}
+.arc-shortcut-recorder__message[data-tone='warning'] {
+	color: var(--text-secondary);
+}
+.arc-shortcut-recorder__message[data-tone='warning'] .arc-shortcut-recorder__message-text::before {
+	content: '';
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	margin: 0 7px 1px 1px;
+	border-radius: 50%;
+	background: var(--warning);
+	vertical-align: middle;
+}
+.arc-shortcut-recorder__strong {
+	color: var(--foreground);
+	font-weight: 500;
+}
+.arc-shortcut-recorder__message-actions {
+	display: inline-flex;
+	gap: var(--space-3);
+}
+.arc-shortcut-recorder__link {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--foreground);
+	cursor: pointer;
+	font: inherit;
+	font-weight: 500;
+	text-decoration: underline;
+	text-decoration-color: var(--border-strong);
+	text-underline-offset: 3px;
+	transition:
+		text-decoration-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+.arc-shortcut-recorder__link:focus-visible {
+	text-decoration-color: currentColor;
+	outline: none;
+}
+.arc-shortcut-recorder__link[data-quiet] {
+	color: var(--text-muted);
+	font-weight: 400;
+	text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-shortcut-recorder__link:hover {
+		text-decoration-color: currentColor;
+	}
+	.arc-shortcut-recorder__link[data-quiet]:hover {
+		color: var(--foreground);
+	}
+}
+
+/* ---------------------------------------------- Cheatsheet ---------------------------------------------- */
+
+.arc-shortcut-recorder__list {
+	container-type: inline-size;
+	display: grid;
+	min-width: 0;
+	gap: var(--space-3);
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+.arc-shortcut-recorder__search-row {
+	display: flex;
+	height: var(--control-height-sm);
+	box-sizing: border-box;
+	align-items: center;
+	gap: var(--space-2);
+	padding: 0 6px 0 12px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-control);
+	background: var(--surface);
+	transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.arc-shortcut-recorder__search-row:focus-within {
+	border-color: var(--foreground);
+}
+.arc-shortcut-recorder__search-icon {
+	flex: none;
+	color: var(--text-muted);
+}
+.arc-shortcut-recorder__search {
+	min-width: 0;
+	height: 100%;
+	flex: 1;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--foreground);
+	font: inherit;
+	font-size: var(--text-sm);
+	outline: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+.arc-shortcut-recorder__search::placeholder {
+	color: var(--text-muted);
+}
+.arc-shortcut-recorder__search::-webkit-search-cancel-button {
+	display: none;
+}
+.arc-shortcut-recorder__count {
+	flex: none;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	font-variant-numeric: tabular-nums;
+}
+.arc-shortcut-recorder__clear {
+	display: grid;
+	width: 24px;
+	height: 24px;
+	flex: none;
+	place-items: center;
+	padding: 0;
+	border: 0;
+	border-radius: var(--radius-pill);
+	background: color-mix(in oklab, var(--foreground) 8%, transparent);
+	color: var(--text-secondary);
+	cursor: pointer;
+}
+.arc-shortcut-recorder__clear:focus-visible {
+	background: color-mix(in oklab, var(--foreground) 14%, transparent);
+	color: var(--foreground);
+	outline: none;
+}
+
+.arc-shortcut-recorder__groups {
+	display: grid;
+	align-items: start;
+	gap: 0 var(--space-6);
+}
+@container (min-width: 520px) {
+	.arc-shortcut-recorder__groups {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+.arc-shortcut-recorder__group {
+	overflow: hidden;
+	margin-inline: -8px;
+	padding-inline: 8px;
+}
+.arc-shortcut-recorder__group-label {
+	margin: 0;
+	padding: var(--space-3) 0 var(--space-1);
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	font-weight: 400;
+}
+.arc-shortcut-recorder__rows {
+	display: grid;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.arc-shortcut-recorder__item {
+	overflow: hidden;
+	margin-inline: -8px;
+}
+/* Rows fade when a held modifier is not in them, and light when their whole combination is down. */
+.arc-shortcut-recorder__item-inner {
+	display: flex;
+	min-height: 36px;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	padding: 0 8px;
+	border-radius: 10px;
+	transition:
+		opacity var(--duration-standard) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-shortcut-recorder__item + .arc-shortcut-recorder__item .arc-shortcut-recorder__item-inner {
+	box-shadow: inset 0 1px 0 var(--border-subtle);
+}
+.arc-shortcut-recorder__item[data-dim] .arc-shortcut-recorder__item-inner {
+	opacity: 0.38;
+}
+.arc-shortcut-recorder__item[data-match] .arc-shortcut-recorder__item-inner {
+	background: var(--accent-subtle);
+	box-shadow: none;
+}
+.arc-shortcut-recorder__item[data-match]
+	+ .arc-shortcut-recorder__item
+	.arc-shortcut-recorder__item-inner {
+	box-shadow: none;
+}
+.arc-shortcut-recorder__item-label {
+	min-width: 0;
+	overflow: hidden;
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.arc-shortcut-recorder__item[data-match] .arc-shortcut-recorder__item-label {
+	color: var(--foreground);
+}
+.arc-shortcut-recorder__empty {
+	margin: 0;
+	padding: var(--space-4) 0;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+}
+
+.arc-shortcut-recorder__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arc-shortcut-recorder__kbd,
+	.arc-shortcut-recorder__control,
+	.arc-shortcut-recorder__item-inner {
+		transition-duration: 0ms;
+	}
+	.arc-shortcut-recorder__kbd[data-pressed] {
+		transform: none;
+	}
+	.arc-shortcut-recorder__dot {
+		animation: none;
+	}
+}

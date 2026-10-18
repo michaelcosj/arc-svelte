@@ -1,0 +1,111 @@
+.arc-dialog__overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 50;
+	background: oklch(10% 0 0 / 0.46);
+	backdrop-filter: blur(7px);
+}
+/* Centered with auto margins (like a native modal dialog) so transform stays free for the entrance spring. */
+.arc-dialog__content {
+	position: fixed;
+	z-index: 51;
+	inset: 0;
+	width: min(calc(100vw - var(--space-8)), 440px);
+	height: fit-content;
+	max-height: calc(100vh - var(--space-8));
+	max-height: calc(100dvh - var(--space-8));
+	margin: auto;
+	overflow: auto;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-surface);
+	background: var(--surface-raised);
+	color: var(--foreground);
+	box-shadow: var(--shadow-floating);
+}
+.arc-dialog__content:focus {
+	outline: none;
+}
+/* While the layers leave, clicks pass through, so the trigger can reopen the dialog mid-exit. The outros set data-state="closed" (Svelte also makes leaving nodes inert). */
+.arc-dialog__overlay[data-state='closed'],
+.arc-dialog__content[data-state='closed'] {
+	pointer-events: none !important;
+}
+.arc-dialog__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: var(--space-5);
+	padding: var(--space-6);
+	border-bottom: 1px solid var(--border);
+}
+.arc-dialog__title {
+	margin: 0;
+	font-family: var(--font-body);
+	font-size: var(--text-lg);
+	font-weight: 500;
+	letter-spacing: var(--tracking-body);
+	line-height: var(--leading-body);
+}
+.arc-dialog__description {
+	margin: var(--space-2) 0 0;
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+}
+.arc-dialog__title,
+.arc-dialog__description {
+	position: relative;
+	overflow-wrap: anywhere;
+}
+.arc-dialog__swap {
+	display: block;
+}
+/* Line height sits on the text itself, so a page-level heading reset cannot shrink the title and pull the close button off its line. */
+.arc-dialog__title .arc-dialog__swap {
+	line-height: var(--leading-body);
+}
+/* A compact icon button: quick press, spring release. The negative margin centres it on the title's first line. */
+.arc-dialog__close {
+	flex: 0 0 auto;
+	margin-block: calc((var(--text-lg) * var(--leading-body) - var(--space-8)) / 2);
+	display: grid;
+	place-items: center;
+	width: var(--space-8);
+	height: var(--space-8);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-control);
+	background: color-mix(in oklab, var(--surface-muted) 50%, transparent);
+	color: var(--text-secondary);
+	cursor: pointer;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-dialog__close:hover {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+}
+.arc-dialog__close:active {
+	transform: scale(0.96);
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-instant) var(--ease-standard);
+}
+.arc-dialog__body {
+	padding: var(--space-6);
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-dialog__close,
+	.arc-dialog__close:active {
+		transition: none;
+	}
+	.arc-dialog__close:active {
+		transform: none;
+	}
+}

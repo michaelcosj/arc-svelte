@@ -1,0 +1,171 @@
+.arc-radio-cards {
+	position: relative;
+	display: grid;
+	gap: 10px;
+	color: var(--foreground);
+	font-family: var(--font-body);
+	font-size: var(--text-sm);
+	letter-spacing: var(--tracking-body);
+	line-height: var(--leading-body);
+}
+.arc-radio-cards *,
+.arc-radio-cards *::before,
+.arc-radio-cards *::after {
+	box-sizing: border-box;
+}
+.arc-radio-cards[data-layout='grid'] {
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--min-column, 180px)), 1fr));
+}
+.arc-radio-cards[data-layout='list'] {
+	grid-template-columns: minmax(0, 1fr);
+	gap: 8px;
+}
+.arc-radio-cards__ring {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	border: 1.5px solid var(--control-on);
+	border-radius: 20px;
+	pointer-events: none;
+}
+.arc-radio-cards__card {
+	position: relative;
+	display: grid;
+	min-width: 0;
+	align-items: start;
+	gap: 4px 12px;
+	padding: 14px 16px;
+	border: 1px solid var(--border);
+	border-radius: 20px;
+	background: var(--surface);
+	cursor: pointer;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard);
+}
+.arc-radio-cards[data-layout='grid'] .arc-radio-cards__card {
+	grid-template-areas: 'body indicator' 'meta meta';
+	grid-template-columns: minmax(0, 1fr) auto;
+	grid-template-rows: minmax(0, 1fr) auto;
+}
+.arc-radio-cards[data-layout='list'] .arc-radio-cards__card {
+	grid-template-areas: 'indicator body meta';
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	padding: 13px 16px 13px 14px;
+}
+.arc-radio-cards__card[data-checked] {
+	background: color-mix(in oklab, var(--control-on) 4%, var(--surface));
+}
+.arc-radio-cards__card[aria-disabled='true'] {
+	background: var(--surface-muted);
+	cursor: not-allowed;
+}
+.arc-radio-cards__card[aria-disabled='true'] :is(.arc-radio-cards__label, .arc-radio-cards__meta) {
+	color: var(--text-muted);
+}
+.arc-radio-cards__indicator {
+	display: grid;
+	width: 18px;
+	height: 18px;
+	flex: none;
+	place-items: center;
+	grid-area: indicator;
+	border: 1.5px solid var(--border-strong);
+	border-radius: 50%;
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-radio-cards[data-layout='grid'] .arc-radio-cards__indicator {
+	margin-top: 1px;
+}
+.arc-radio-cards__card[data-checked] .arc-radio-cards__indicator {
+	border-color: var(--control-on);
+	background: var(--control-on);
+}
+.arc-radio-cards__indicator-dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--control-glyph);
+	transition: transform var(--spring-snappy-duration) var(--spring-snappy);
+}
+.arc-radio-cards__card[aria-disabled='true'] .arc-radio-cards__indicator {
+	border-color: var(--border);
+}
+.arc-radio-cards__body {
+	display: grid;
+	min-width: 0;
+	gap: 2px;
+	grid-area: body;
+}
+.arc-radio-cards__label {
+	display: flex;
+	min-width: 0;
+	align-items: center;
+	gap: 8px;
+	font-weight: 500;
+}
+.arc-radio-cards__label-text {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.arc-radio-cards__icon {
+	display: grid;
+	width: 18px;
+	height: 18px;
+	flex: none;
+	place-items: center;
+	color: var(--text-secondary);
+}
+.arc-radio-cards__icon > svg {
+	width: 18px;
+	height: 18px;
+}
+.arc-radio-cards__card[data-checked] .arc-radio-cards__icon {
+	color: var(--foreground);
+}
+.arc-radio-cards__description {
+	color: var(--text-secondary);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+	text-wrap: pretty;
+}
+.arc-radio-cards__meta {
+	grid-area: meta;
+	color: var(--foreground);
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+.arc-radio-cards[data-layout='grid'] .arc-radio-cards__meta {
+	margin-top: 10px;
+	font-size: var(--text-lg);
+}
+.arc-radio-cards[data-layout='list'] .arc-radio-cards__meta {
+	font-weight: 500;
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-radio-cards__card:not([data-checked]):not([aria-disabled='true']):hover {
+		border-color: var(--border-strong);
+	}
+}
+.arc-radio-cards__card:not([data-checked]):not([aria-disabled='true']):active {
+	background: var(--surface-muted);
+}
+.arc-radio-cards__card:focus-visible:not([data-checked]) {
+	border-color: var(--border-strong);
+	background: var(--surface-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-radio-cards__card,
+	.arc-radio-cards__indicator,
+	.arc-radio-cards__indicator-dot {
+		transition: none;
+	}
+}

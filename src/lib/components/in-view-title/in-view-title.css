@@ -1,0 +1,110 @@
+.arc-in-view-title {
+	min-width: 0;
+	color: var(--foreground);
+}
+/* Clips hide the rise; padding with matching negative margins leaves room for descenders and blur without changing layout. */
+.arc-in-view-title__clip {
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: top;
+	padding: 0.08em 0.14em 0.2em;
+	margin: -0.08em -0.14em -0.2em;
+}
+.arc-in-view-title__line-clip {
+	display: block;
+	overflow: hidden;
+	padding: 0.06em 0.12em 0.18em;
+	margin: -0.06em -0.12em -0.18em;
+}
+.arc-in-view-title__clip > span,
+.arc-in-view-title__line-clip > span,
+.arc-in-view-title__blur-word,
+.arc-in-view-title__track-word,
+.arc-in-view-title__track-word > span {
+	display: inline-block;
+}
+.arc-in-view-title__track-word {
+	white-space: nowrap;
+}
+/* The wipe mask is 2.3 times the title's width with a feathered middle, so the soft edge sits fully outside the title at both ends of the sweep.
+   Padding with matching negative margins keeps descenders and overhangs inside the masked box without changing layout. */
+.arc-in-view-title__wipe {
+	padding: 0.1em 0.12em 0.22em;
+	margin: -0.1em -0.12em -0.22em;
+	mask-image: linear-gradient(90deg, #000 44%, transparent 56%);
+	mask-size: 230% 100%;
+	mask-repeat: no-repeat;
+	mask-position: var(--wipe, 0%) 0;
+}
+/* Server rendered titles start hidden. If scripts have not taken over after 2.4s, show them anyway; the class is removed on hydration. */
+.arc-in-view-title__pending .arc-in-view-title__part {
+	animation: arc-in-view-title-settle 0.4s var(--ease-enter) 2.4s forwards;
+}
+@keyframes arc-in-view-title-settle {
+	to {
+		opacity: 1;
+		transform: none;
+		filter: none;
+		--wipe: 0%;
+		mask-image: none;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-in-view-title__part {
+		opacity: 1 !important;
+		transform: none !important;
+		filter: none !important;
+		mask-image: none !important;
+	}
+	.arc-in-view-title__pending .arc-in-view-title__part {
+		animation: none;
+	}
+}
+.arc-in-view-title__part {
+	transition:
+		transform var(--settle) var(--ease-enter) var(--delay),
+		filter var(--blur-time) var(--ease-enter) var(--delay),
+		opacity var(--fade-time) var(--ease-standard) var(--delay);
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__part {
+	opacity: 0;
+	transition-duration: 180ms;
+	transition-delay: 0ms;
+	transition-timing-function: var(--ease-standard);
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__clip > span {
+	transform: translateY(0.9em);
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__line-clip > span {
+	transform: translateY(112%);
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__blur-word {
+	transform: translateY(0.2em);
+	filter: blur(8px);
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__track-word {
+	filter: blur(4px);
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__track-word > span {
+	transform: translateX(var(--letter-x));
+	opacity: 1;
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__wipe {
+	--wipe: 100%;
+	transform: translateX(-0.12em);
+	opacity: 1;
+}
+.arc-in-view-title[data-instant='true'] .arc-in-view-title__part {
+	transition: none;
+}
+
+.arc-in-view-title__wipe {
+	transition:
+		transform var(--settle) var(--ease-enter) var(--delay),
+		mask-position var(--settle) var(--ease-standard) var(--delay);
+}
+.arc-in-view-title[data-visible='false'] .arc-in-view-title__wipe {
+	transition-duration: 180ms;
+	transition-delay: 0ms;
+	transition-timing-function: var(--ease-standard);
+}

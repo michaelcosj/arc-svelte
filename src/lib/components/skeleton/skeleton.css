@@ -1,0 +1,58 @@
+.arc-skeleton {
+	display: flex;
+	width: 100%;
+	min-width: 0;
+	align-items: flex-start;
+	gap: var(--space-4);
+}
+/* A calm, finite pulse: each block dims a beat after the one above it, then rests after about 20 seconds. */
+.arc-skeleton__avatar,
+.arc-skeleton__line {
+	display: block;
+	flex: 0 0 auto;
+	border-radius: var(--radius-control);
+	background: color-mix(in oklab, var(--border-strong) 38%, var(--surface));
+	animation: arc-skeleton-skeleton-pulse 1.8s var(--ease-in-out) calc(var(--index, 0) * 90ms) 11
+		both;
+}
+.arc-skeleton__avatar {
+	width: var(--control-height-md);
+	height: var(--control-height-md);
+	border-radius: var(--radius-pill);
+}
+.arc-skeleton__lines {
+	display: grid;
+	flex: 1;
+	gap: var(--space-3);
+	padding-top: var(--space-1);
+}
+.arc-skeleton__line {
+	width: 100%;
+	height: var(--space-3);
+}
+.arc-skeleton__line:first-child {
+	width: 48%;
+	height: var(--space-4);
+}
+.arc-skeleton__line:last-child {
+	width: 72%;
+}
+.arc-skeleton__frame {
+	position: relative;
+	display: flow-root;
+}
+@keyframes arc-skeleton-skeleton-pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.52;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-skeleton__avatar,
+	.arc-skeleton__line {
+		animation: none;
+	}
+}

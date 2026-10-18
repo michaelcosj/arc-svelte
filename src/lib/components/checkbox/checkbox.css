@@ -1,0 +1,128 @@
+.arc-checkbox {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: 0;
+	min-width: 0;
+}
+.arc-checkbox__box {
+	position: relative;
+	flex: 0 0 auto;
+	display: grid;
+	place-items: center;
+	width: var(--control-height-md);
+	height: var(--control-height-md);
+	border: 0;
+	border-radius: var(--radius-control);
+	padding: 0;
+	background: transparent;
+	color: var(--control-glyph);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+/* The square is the only part that reacts to a press, so the hit area and label never move. */
+.arc-checkbox__visual {
+	position: relative;
+	display: block;
+	width: 18px;
+	height: 18px;
+	border: 1px solid var(--border-strong);
+	border-radius: 5px;
+	background: var(--surface);
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+.arc-checkbox__fill {
+	position: absolute;
+	inset: -1px;
+	border-radius: inherit;
+	background: var(--control-on);
+}
+.arc-checkbox__mark {
+	position: absolute;
+	inset: -1px;
+	width: 18px;
+	height: 18px;
+	overflow: visible;
+}
+.arc-checkbox__box[data-state='checked'] .arc-checkbox__visual,
+.arc-checkbox__box[data-state='indeterminate'] .arc-checkbox__visual {
+	border-color: var(--control-on);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-checkbox__box[data-state='unchecked']:hover:not(:disabled) .arc-checkbox__visual {
+		border-color: var(--text-muted);
+	}
+}
+.arc-checkbox__box:active:not(:disabled) .arc-checkbox__visual {
+	transform: scale(0.95);
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-instant) var(--ease-standard);
+}
+.arc-checkbox__box:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+/* The label's first line centers on the square: (44px box - 19.6px line) / 2. */
+.arc-checkbox__copy {
+	display: grid;
+	gap: 2px;
+	min-width: 0;
+	margin-left: 1px;
+	padding-top: calc((var(--control-height-md) - var(--text-sm) * 1.4) / 2);
+}
+.arc-checkbox__copy label {
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+	cursor: pointer;
+}
+.arc-checkbox__copy span {
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-checkbox__visual,
+	.arc-checkbox__box:active:not(:disabled) .arc-checkbox__visual {
+		transition: none;
+		transform: none;
+	}
+}
+
+/* The fill scales in on the snappy spring and fades (instant on, fast off); the mark draws itself (pathLength) on the same spring. */
+.arc-checkbox__fill {
+	opacity: 0;
+	transform: scale(0.6);
+	transition:
+		opacity var(--duration-fast) var(--ease-standard),
+		transform var(--spring-snappy-duration) var(--spring-snappy);
+}
+.arc-checkbox__mark path {
+	stroke-dasharray: 1 1;
+	stroke-dashoffset: 1;
+	opacity: 0;
+	transition:
+		opacity var(--duration-fast) var(--ease-standard),
+		stroke-dashoffset var(--spring-snappy-duration) var(--spring-snappy);
+}
+.arc-checkbox__box:is([data-state='checked'], [data-state='indeterminate']) .arc-checkbox__fill {
+	opacity: 1;
+	transform: none;
+	transition-duration: var(--duration-instant), var(--spring-snappy-duration);
+}
+.arc-checkbox__box:is([data-state='checked'], [data-state='indeterminate'])
+	.arc-checkbox__mark
+	path {
+	stroke-dashoffset: 0;
+	opacity: 1;
+	transition-duration: var(--duration-instant), var(--spring-snappy-duration);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-checkbox__fill,
+	.arc-checkbox__mark path {
+		transition: none;
+	}
+}

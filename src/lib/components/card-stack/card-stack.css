@@ -1,0 +1,283 @@
+.arc-card-stack__root {
+	--card-height: 19rem;
+	--stack-peek: 24px;
+	display: grid;
+	width: 100%;
+	justify-items: center;
+	gap: var(--space-5);
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+
+/* The stage reserves the top card plus the edges peeking out below it, so nothing reflows as cards come and go. */
+.arc-card-stack__stage {
+	position: relative;
+	isolation: isolate;
+	width: min(100%, 20rem);
+	height: calc(var(--card-height) + var(--stack-peek));
+	outline: none;
+}
+/* Each slot scales from its bottom edge, so the cards behind show a thin, even edge below the one in front. */
+.arc-card-stack__slot {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: var(--card-height);
+	pointer-events: none;
+	transform-origin: 50% 100%;
+}
+.arc-card-stack__card {
+	position: absolute;
+	inset: 0;
+	border-radius: var(--radius-surface);
+	pointer-events: auto;
+	touch-action: pan-y;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+.arc-card-stack__card[data-top] {
+	cursor: grab;
+}
+.arc-card-stack__card[data-dragging] {
+	cursor: grabbing;
+}
+.arc-card-stack__card:not([data-top]) {
+	pointer-events: none;
+}
+/* Resting cards sit flat on their borders; a card in the hand or in flight floats and casts a shadow. */
+.arc-card-stack__card::before {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	box-shadow: var(--shadow-floating);
+	content: '';
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity var(--duration-fast) var(--ease-standard);
+}
+.arc-card-stack__card[data-dragging]::before,
+.arc-card-stack__card[data-flying]::before {
+	opacity: 1;
+}
+.arc-card-stack__face {
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: inherit;
+	background: var(--surface);
+	color: var(--foreground);
+}
+.arc-card-stack__shade {
+	position: absolute;
+	inset: 0;
+	background: oklch(0% 0 0 / 0.035);
+	pointer-events: none;
+}
+:root[data-theme='dark'] .arc-card-stack__shade {
+	background: oklch(0% 0 0 / 0.22);
+}
+
+.arc-card-stack__stamp {
+	position: absolute;
+	top: var(--space-4);
+	display: inline-flex;
+	height: 2rem;
+	align-items: center;
+	gap: 6px;
+	padding: 0 var(--space-3) 0 10px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-pill);
+	background: var(--surface-raised);
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	white-space: nowrap;
+	pointer-events: none;
+}
+.arc-card-stack__stamp[data-side='right'] {
+	left: var(--space-4);
+	border-color: color-mix(in oklab, var(--success) 32%, var(--border));
+	background: color-mix(in oklab, var(--success) 9%, var(--surface-raised));
+}
+.arc-card-stack__stamp[data-side='right'] svg {
+	color: var(--success);
+}
+.arc-card-stack__stamp[data-side='left'] {
+	right: var(--space-4);
+}
+.arc-card-stack__stamp[data-side='left'] svg {
+	color: var(--text-secondary);
+}
+/* Cards returning to the back of the stack carry no verdict. */
+.arc-card-stack__card:not([data-top]):not([data-flying]) .arc-card-stack__stamp {
+	visibility: hidden;
+}
+
+/* Keyboard focus on the stage outlines the top card instead of the whole stage. */
+.arc-card-stack__stage:focus-visible {
+	--focus-outline-width: 0px;
+}
+.arc-card-stack__stage:focus-visible .arc-card-stack__card[data-top],
+.arc-card-stack__stage:focus-visible .arc-card-stack__empty {
+	outline: 2px solid
+		var(--focus-outline, color-mix(in oklab, var(--accent-strong) 72%, transparent));
+	outline-offset: 3px;
+}
+
+.arc-card-stack__empty {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	display: grid;
+	height: var(--card-height);
+	place-content: center;
+	justify-items: center;
+	gap: var(--space-3);
+	padding: var(--space-6);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-surface);
+	background: var(--surface);
+	text-align: center;
+}
+.arc-card-stack__emptyTitle {
+	margin: 0;
+	font-size: var(--text-base);
+	font-weight: 500;
+}
+
+.arc-card-stack__controls {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--space-2);
+}
+.arc-card-stack__control {
+	display: inline-flex;
+	min-height: var(--control-height-md);
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	padding: 0 var(--space-4);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-control);
+	background: var(--surface);
+	color: var(--foreground);
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+	white-space: nowrap;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard);
+}
+.arc-card-stack__control svg {
+	flex: none;
+}
+/* The approving action follows the selected accent. */
+.arc-card-stack__control[data-tone='primary'] {
+	border-color: var(--accent);
+	background: var(--accent);
+	color: var(--accent-foreground);
+}
+.arc-card-stack__control[data-tone='quiet'] {
+	border-color: transparent;
+	background: transparent;
+	color: var(--text-secondary);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-card-stack__control:not([aria-disabled]):hover {
+		background: var(--surface-muted);
+	}
+	.arc-card-stack__control[data-tone='primary']:not([aria-disabled]):hover {
+		border-color: var(--accent-strong);
+		background: var(--accent-strong);
+	}
+	.arc-card-stack__control[data-tone='quiet']:not([aria-disabled]):hover {
+		color: var(--foreground);
+	}
+}
+.arc-card-stack__control:not([aria-disabled]):active {
+	background: var(--surface-muted);
+}
+.arc-card-stack__control[data-tone='primary']:not([aria-disabled]):active {
+	border-color: var(--accent-strong);
+	background: var(--accent-strong);
+}
+.arc-card-stack__control[aria-disabled] {
+	cursor: default;
+	opacity: 0.42;
+}
+
+.arc-card-stack__srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@media (max-width: 26rem) {
+	.arc-card-stack__root {
+		--card-height: 17.5rem;
+		gap: var(--space-4);
+	}
+	.arc-card-stack__controls {
+		flex-wrap: nowrap;
+	}
+	.arc-card-stack__control {
+		padding-inline: var(--space-3);
+	}
+}
+/* On the narrowest screens Undo keeps its icon and its accessible name, so all three controls stay on one row. */
+@media (max-width: 22.5rem) {
+	.arc-card-stack__control[data-tone='quiet'] {
+		width: var(--control-height-md);
+		padding: 0;
+	}
+	.arc-card-stack__control[data-tone='quiet'] .arc-card-stack__controlLabel {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arc-card-stack__card::before,
+	.arc-card-stack__control {
+		transition: none;
+	}
+}
+
+.arc-card-stack__control {
+	scale: 1;
+	transition:
+		scale var(--spring-snappy-duration) var(--spring-snappy),
+		background-color var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard);
+}
+.arc-card-stack__control:not([aria-disabled]):active {
+	scale: 0.97;
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-card-stack__control:not([aria-disabled]):active {
+		scale: 1;
+	}
+	.arc-card-stack__control {
+		transition: none;
+	}
+}

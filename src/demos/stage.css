@@ -1,0 +1,142 @@
+/* The uiarc.dev preview stage (docs canvas + preview shell), so screenshots line up. */
+.stage-page {
+	width: 627.625px;
+	max-width: 100%;
+}
+
+.stage-page[data-wide] {
+	width: min(1180px, 100%);
+}
+
+.stage-name {
+	margin: 0 0 12px 2px;
+	color: var(--shell-muted);
+	font-family: var(--font-body);
+	font-size: 13px;
+	font-weight: 400;
+	letter-spacing: 0;
+}
+
+/* `?compare`: no sidebar, and at the 1280px comparison width the canvas sits exactly where the
+   gallery's does, so text lands on the same subpixels. */
+.stage-page[data-compare] {
+	max-width: calc(100vw - 32px);
+	margin: 0 auto;
+	padding: 344.484375px 0 120px;
+}
+
+@media (min-width: 1280px) {
+	.stage-page[data-compare]:not([data-wide]) {
+		margin-left: 319.1875px;
+	}
+}
+
+.stage-page[data-compare][data-wide] {
+	width: min(1180px, calc(100vw - 32px));
+}
+
+.stage-title {
+	position: absolute;
+	top: 24px;
+	left: 24px;
+	margin: 0;
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+
+.docs-canvas {
+	display: grid;
+	min-height: 520px;
+	place-items: center;
+	min-width: 0;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-panel);
+	padding: clamp(18px, 3.5vw, 44px);
+	background: var(--surface-muted);
+}
+
+.docs-canvas > * {
+	max-width: 100%;
+	min-width: 0;
+}
+
+.docs-canvas:has([data-canvas='top']) {
+	align-items: start;
+}
+
+@media (max-width: 760px) {
+	.docs-canvas {
+		min-height: 480px;
+		padding: 16px;
+	}
+}
+
+.docs-canvas:has([data-canvas='bleed']) {
+	padding: 0;
+	overflow: hidden;
+}
+
+.preview-shell {
+	/* The gallery sets the canvas's inner height inline. */
+	min-height: calc(520px - 2 * clamp(18px, 3.5vw, 44px) - 2px);
+	position: relative;
+	box-sizing: border-box;
+	display: grid;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	grid-template-columns: inherit;
+	place-items: inherit;
+}
+
+.preview-fit {
+	position: relative;
+	z-index: 1;
+	display: grid;
+	width: 100%;
+	min-width: 0;
+	align-self: stretch;
+	grid-template-columns: inherit;
+	place-items: inherit;
+}
+
+.preview-fit > * {
+	max-width: 100%;
+	min-width: 0;
+}
+
+/* Keep the mobile override after the base frame so its minimum height wins. */
+@media (max-width: 760px) {
+	.stage-page[data-compare] {
+		max-width: calc(100vw - 36px);
+	}
+	.preview-shell {
+		min-height: 446px;
+	}
+}
+
+/* Gallery patterns use the block canvas padding and a measured inner stage. */
+.docs-canvas:has([data-canvas='pattern']) {
+	min-height: 0;
+	padding: clamp(16px, 4vw, 54px);
+}
+.docs-canvas:has([data-canvas='pattern']) .preview-shell {
+	min-height: round(down, calc(520px - 2 * clamp(16px, 4vw, 54px) - 2px), 1px);
+}
+@media (max-width: 760px) {
+	.docs-canvas:has([data-canvas='pattern']) {
+		padding: 16px;
+	}
+	.docs-canvas:has([data-canvas='pattern']) .preview-shell {
+		min-height: 486px;
+	}
+}
+
+/* Compact gallery specimens (theme switches): a short canvas with a 130px inner stage. */
+.docs-canvas:has([data-canvas='compact']) {
+	min-height: 220px;
+}
+.docs-canvas:has([data-canvas='compact']) .preview-shell {
+	min-height: 130px;
+}

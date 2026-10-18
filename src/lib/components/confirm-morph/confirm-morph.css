@@ -1,0 +1,344 @@
+/* The root holds the control in the flow of the page; the pill inside it springs between faces. */
+.arc-confirm-morph__root {
+	position: relative;
+	display: inline-flex;
+	min-width: 0;
+	max-width: 100%;
+	vertical-align: middle;
+	color: var(--foreground);
+	font-family: var(--font-body);
+	font-size: var(--text-sm);
+	letter-spacing: var(--tracking-body);
+	line-height: 20px;
+	-webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * One neutral pill for every state. Only its width moves; corners, text and border never scale, so nothing distorts.
+ * Every face sits at its natural width against the pill's leading edge, so text never slides or squeezes: the question
+ * starts where the label was, and the springing edge reveals the rest. The border is an overlay so it never changes a measurement.
+ */
+.arc-confirm-morph__surface {
+	position: relative;
+	display: flex;
+	height: var(--control-height-sm);
+	max-width: 100%;
+	justify-content: flex-start;
+	overflow: clip;
+	border-radius: var(--radius-pill);
+	background: var(--surface-raised);
+	box-shadow: var(--shadow-resting);
+	transition:
+		background-color var(--duration-standard) var(--ease-standard),
+		box-shadow var(--duration-standard) var(--ease-standard);
+}
+.arc-confirm-morph__surface::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border: 1px solid var(--border);
+	border-radius: inherit;
+	pointer-events: none;
+	transition: border-color var(--duration-standard) var(--ease-standard);
+}
+.arc-confirm-morph__root[data-disabled][data-state='idle'] .arc-confirm-morph__surface {
+	box-shadow: none;
+}
+.arc-confirm-morph__root[data-disabled][data-state='idle'] .arc-confirm-morph__surface::after {
+	border-color: var(--border-subtle);
+}
+
+.arc-confirm-morph__face {
+	display: flex;
+	flex: none;
+	height: 100%;
+	align-items: center;
+	gap: 2px;
+	padding: 0 4px;
+	white-space: nowrap;
+}
+.arc-confirm-morph__face[data-face='idle'] {
+	padding: 0;
+}
+/* A leaving face steps out of the flow, exactly where it was, and fades while the pill springs to the next one. */
+.arc-confirm-morph__face[inert] {
+	position: absolute;
+	top: 0;
+	inset-inline-start: 0;
+	pointer-events: none;
+}
+.arc-confirm-morph__part {
+	display: inline-flex;
+	height: 100%;
+	align-items: center;
+}
+
+.arc-confirm-morph__trigger {
+	display: inline-flex;
+	height: 100%;
+	align-items: center;
+	gap: 8px;
+	padding: 0 16px 0 14px;
+	border: 0;
+	border-radius: var(--radius-pill);
+	background: transparent;
+	color: var(--foreground);
+	cursor: pointer;
+	font: inherit;
+	font-weight: 500;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+.arc-confirm-morph__trigger:active:not(:disabled) {
+	background: color-mix(in oklab, var(--foreground) 9%, transparent);
+	transition-duration: 0ms;
+}
+.arc-confirm-morph__trigger:disabled {
+	color: var(--text-muted);
+	cursor: not-allowed;
+}
+.arc-confirm-morph__trigger:disabled .arc-confirm-morph__icon {
+	opacity: 0.7;
+}
+.arc-confirm-morph__icon {
+	display: grid;
+	width: 16px;
+	height: 16px;
+	place-items: center;
+	color: var(--text-secondary);
+}
+.arc-confirm-morph__trigger:disabled .arc-confirm-morph__icon {
+	color: inherit;
+}
+.arc-confirm-morph__icon > svg {
+	width: 16px;
+	height: 16px;
+}
+
+.arc-confirm-morph__prompt {
+	max-width: 16rem;
+	overflow: hidden;
+	padding: 0 8px 0 12px;
+	color: var(--foreground);
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+.arc-confirm-morph__prompt > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.arc-confirm-morph__secondary,
+.arc-confirm-morph__confirm {
+	position: relative;
+	display: inline-flex;
+	flex: none;
+	height: calc(var(--control-height-sm) - 8px);
+	align-items: center;
+	justify-content: center;
+	padding: 0 12px;
+	border: 0;
+	border-radius: var(--radius-pill);
+	cursor: pointer;
+	font: inherit;
+	font-weight: 500;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+	touch-action: manipulation;
+}
+.arc-confirm-morph__secondary {
+	background: transparent;
+	color: var(--text-secondary);
+}
+.arc-confirm-morph__face:is([data-face='done'], [data-face='error']) .arc-confirm-morph__secondary {
+	color: var(--foreground);
+}
+.arc-confirm-morph__secondary:active {
+	background: color-mix(in oklab, var(--foreground) 11%, transparent);
+	color: var(--foreground);
+	transition-duration: 0ms;
+}
+
+/* The only coloured thing in the control: danger for a destructive answer, the accent for a reversible one. */
+.arc-confirm-morph__confirm {
+	overflow: clip;
+	background: color-mix(in oklab, var(--danger) 13%, transparent);
+	color: var(--danger);
+}
+.arc-confirm-morph__confirm:active {
+	background: color-mix(in oklab, var(--danger) 22%, transparent);
+	transition-duration: 0ms;
+}
+.arc-confirm-morph__root[data-tone='neutral'] .arc-confirm-morph__confirm {
+	background: var(--accent);
+	color: var(--accent-foreground);
+}
+.arc-confirm-morph__root[data-tone='neutral'] .arc-confirm-morph__confirm:active {
+	background: var(--accent-strong);
+}
+
+/* Hold: a solid copy of the button, label and all, revealed from the left as the hold fills; the label inverts as the edge passes. */
+.arc-confirm-morph__root[data-mode='hold'] .arc-confirm-morph__confirm {
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+}
+.arc-confirm-morph__fill {
+	position: absolute;
+	inset: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--danger);
+	color: var(--background);
+	pointer-events: none;
+}
+.arc-confirm-morph__root[data-tone='neutral'] .arc-confirm-morph__fill {
+	background: var(--accent-strong);
+	color: var(--accent-foreground);
+}
+
+.arc-confirm-morph__status {
+	gap: 8px;
+	padding: 0 10px 0 12px;
+	color: var(--foreground);
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+.arc-confirm-morph__status > svg {
+	flex: none;
+}
+.arc-confirm-morph__statusText {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.25em;
+}
+.arc-confirm-morph__face[data-face='pending'] .arc-confirm-morph__status {
+	padding-inline: 12px 16px;
+	color: var(--text-secondary);
+}
+.arc-confirm-morph__face[data-face='done']:not(:has(.arc-confirm-morph__secondary))
+	.arc-confirm-morph__status {
+	padding-right: 14px;
+}
+.arc-confirm-morph__face[data-face='counting'] .arc-confirm-morph__status {
+	padding-right: 6px;
+	color: var(--text-secondary);
+}
+.arc-confirm-morph__alert {
+	color: var(--danger);
+}
+.arc-confirm-morph__check {
+	width: 18px;
+	height: 18px;
+}
+.arc-confirm-morph__checkDisc {
+	fill: var(--success);
+}
+.arc-confirm-morph__checkTick {
+	stroke: var(--background);
+}
+.arc-confirm-morph__spinner {
+	animation: arc-confirm-morph-spin 0.7s linear infinite;
+}
+@keyframes arc-confirm-morph-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.arc-confirm-morph__ring {
+	width: 16px;
+	height: 16px;
+}
+.arc-confirm-morph__ringTrack {
+	stroke: var(--border);
+}
+.arc-confirm-morph__ringFill {
+	stroke: var(--danger);
+}
+.arc-confirm-morph__root[data-tone='neutral'] .arc-confirm-morph__ringFill {
+	stroke: var(--accent);
+}
+/* Seconds keep one tabular width while the digits swap. */
+.arc-confirm-morph__seconds {
+	display: inline-grid;
+	min-width: 1ch;
+	color: var(--foreground);
+	font-variant-numeric: tabular-nums;
+}
+.arc-confirm-morph__digit {
+	grid-area: 1 / 1;
+}
+
+/* No focus rings anywhere in the control; keyboard focus reads through fill (below). */
+.arc-confirm-morph__root,
+.arc-confirm-morph__root :focus {
+	outline: none;
+}
+
+.arc-confirm-morph__srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.arc-confirm-morph__trigger:hover:not(:disabled):not(:active) {
+		background: color-mix(in oklab, var(--foreground) 5%, transparent);
+	}
+	.arc-confirm-morph__secondary:hover:not(:active) {
+		background: color-mix(in oklab, var(--foreground) 7%, transparent);
+		color: var(--foreground);
+	}
+	.arc-confirm-morph__confirm:hover:not(:active) {
+		background: color-mix(in oklab, var(--danger) 18%, transparent);
+	}
+	.arc-confirm-morph__root[data-tone='neutral'] .arc-confirm-morph__confirm:hover:not(:active) {
+		background: var(--accent-strong);
+	}
+}
+/* Keyboard focus reads through fill, never a ring. */
+.arc-confirm-morph__trigger:focus-visible {
+	background: color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+.arc-confirm-morph__secondary:focus-visible {
+	background: color-mix(in oklab, var(--foreground) 8%, transparent);
+	color: var(--foreground);
+}
+.arc-confirm-morph__confirm:focus-visible {
+	background: color-mix(in oklab, var(--danger) 20%, transparent);
+}
+.arc-confirm-morph__root[data-tone='neutral'] .arc-confirm-morph__confirm:focus-visible {
+	background: var(--accent-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arc-confirm-morph__surface,
+	.arc-confirm-morph__surface::after,
+	.arc-confirm-morph__trigger,
+	.arc-confirm-morph__secondary,
+	.arc-confirm-morph__confirm {
+		transition-duration: 0ms;
+	}
+	.arc-confirm-morph__spinner {
+		animation-duration: 1.6s;
+	}
+}
+
+@media (prefers-contrast: more) {
+	.arc-confirm-morph__surface::after {
+		border-color: var(--border-strong);
+	}
+	.arc-confirm-morph__confirm {
+		background: color-mix(in oklab, var(--danger) 22%, transparent);
+	}
+}

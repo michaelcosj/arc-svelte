@@ -1,0 +1,91 @@
+.arc-accordion {
+	width: 100%;
+	border-top: 1px solid var(--border);
+}
+.arc-accordion__item {
+	border-bottom: 1px solid var(--border);
+}
+.arc-accordion__header {
+	margin: 0;
+}
+.arc-accordion__trigger {
+	display: flex;
+	width: 100%;
+	min-height: var(--control-height-lg);
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-5);
+	padding: var(--space-2) 0;
+	border: 0;
+	background: transparent;
+	color: var(--foreground);
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+	text-align: left;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-accordion__trigger:hover {
+		color: var(--text-secondary);
+	}
+	.arc-accordion__trigger:hover .arc-accordion__icon {
+		color: var(--foreground);
+	}
+}
+/* Rotation is driven by a spring in AccordionSection.svelte; CSS only handles color. */
+.arc-accordion__icon {
+	display: inline-flex;
+	flex: 0 0 auto;
+	color: var(--text-muted);
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.arc-accordion__trigger[data-state='open'] .arc-accordion__icon {
+	color: var(--foreground);
+}
+.arc-accordion__panel {
+	overflow: hidden;
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+}
+.arc-accordion__panel-inner {
+	overflow-wrap: anywhere;
+	padding: 0 var(--space-8) var(--space-5) 0;
+}
+.arc-accordion--lg .arc-accordion__trigger {
+	min-height: 76px;
+	gap: var(--space-8);
+	padding-block: var(--space-5);
+	font-size: var(--text-lg);
+	letter-spacing: var(--tracking-body);
+}
+.arc-accordion--lg .arc-accordion__panel {
+	font-size: var(--text-base);
+	line-height: 1.65;
+}
+.arc-accordion--lg .arc-accordion__panel-inner {
+	max-width: 62ch;
+	padding: 0 var(--space-12) var(--space-6) 0;
+}
+@media (max-width: 520px) {
+	.arc-accordion--lg .arc-accordion__trigger {
+		min-height: 68px;
+		font-size: var(--text-base);
+	}
+	.arc-accordion--lg .arc-accordion__panel {
+		font-size: var(--text-sm);
+	}
+	.arc-accordion--lg .arc-accordion__panel-inner {
+		padding-right: var(--space-6);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-accordion__trigger,
+	.arc-accordion__icon {
+		transition: none;
+	}
+}

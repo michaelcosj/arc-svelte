@@ -1,0 +1,111 @@
+/* previews-actions-inputs.module.css from the uiarc.dev gallery. */
+.actions-preview {
+	width: min(100%, 620px);
+	display: grid;
+	gap: 16px;
+}
+
+.actions-surface {
+	display: grid;
+	gap: 8px;
+	justify-items: center;
+	padding: 0;
+	background: transparent;
+}
+
+.actions-surface > * {
+	max-width: 100%;
+}
+
+.actions-surface h3,
+.actions-surface p {
+	margin: 0;
+}
+
+.actions-surface h3 {
+	font-size: 13px;
+	letter-spacing: -0.01em;
+}
+
+.actions-status,
+.actions-surface p {
+	color: var(--text-muted, #64748b);
+	font-size: 12px;
+}
+
+.actions-status {
+	min-height: 18px;
+	text-align: center;
+}
+
+.actions-roomy .actions-surface > * {
+	width: min(100%, 540px);
+}
+
+.actions-radio .actions-surface > * {
+	width: min(100%, 380px);
+}
+
+.actions-compact .actions-surface > * {
+	width: min(100%, 340px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.actions-preview *,
+	.actions-preview ::after,
+	.actions-preview ::before {
+		scroll-behavior: auto !important;
+	}
+}
+
+.actions-copy {
+	display: grid;
+	width: min(100%, 400px);
+	gap: var(--space-6);
+}
+
+.actions-copy-field {
+	display: grid;
+	gap: var(--space-2);
+}
+
+.actions-copy-label {
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+}
+
+.actions-copy-value {
+	display: flex;
+	min-width: 0;
+	min-height: var(--control-height-md);
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-pill);
+	padding: 3px 3px 3px var(--space-4);
+	background: var(--surface);
+}
+
+.actions-copy-row code,
+.actions-copy-value code {
+	min-width: 0;
+	overflow: hidden;
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.actions-copy-row {
+	display: flex;
+	min-height: var(--control-height-sm);
+	align-items: center;
+	gap: var(--space-3);
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+}
+
+.actions-copy-row code {
+	flex: 1 1 0%;
+}

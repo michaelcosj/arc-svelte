@@ -1,0 +1,48 @@
+.arc-phone-input-demo__demo {
+	display: grid;
+	justify-items: center;
+	width: min(100%, 380px);
+	min-height: 440px;
+	align-content: start;
+	margin-inline: auto;
+	padding-top: var(--space-10);
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+.arc-phone-input-demo__form {
+	display: grid;
+	width: 100%;
+	gap: var(--space-4);
+}
+.arc-phone-input-demo__foot {
+	display: grid;
+	min-width: 0px;
+}
+.arc-phone-input-demo__submit {
+	width: 100%;
+}
+.arc-phone-input-demo__sent {
+	overflow: hidden;
+	margin: 0px;
+}
+.arc-phone-input-demo__sentInner {
+	display: block;
+	padding-top: var(--space-3);
+	color: var(--success);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+	text-align: center;
+}
+@media (max-width: 420px) {
+	.arc-phone-input-demo__demo {
+		padding-top: var(--space-4);
+	}
+}
+
+.arc-phone-input-demo__canvas {
+	display: grid;
+	place-items: center;
+	width: 100%;
+	min-width: 0;
+	padding: 8px;
+}

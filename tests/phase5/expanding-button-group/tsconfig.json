@@ -1,0 +1,8 @@
+{
+	"extends": "../../../tsconfig.json",
+	"include": [
+		"../../../src/lib/components/expanding-button-group/*.svelte",
+		"../../../src/lib/components/expanding-button-group/*.ts",
+		"./Fixture.svelte"
+	]
+}

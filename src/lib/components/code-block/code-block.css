@@ -1,0 +1,230 @@
+.arc-code-block {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-panel);
+	background: var(--surface);
+}
+.arc-code-block__header {
+	display: flex;
+	min-height: 52px;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	border-bottom: 1px solid var(--border-subtle);
+	padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+	background: var(--surface-raised);
+}
+/* Baseline alignment keeps the smaller mono language label on the file name's baseline; the icon centres on its own. */
+.arc-code-block__file {
+	display: flex;
+	min-width: 0;
+	align-items: baseline;
+	gap: var(--space-2);
+	color: var(--text-secondary);
+	font-family: var(--font-body);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	letter-spacing: var(--tracking-body);
+	line-height: var(--leading-body);
+}
+.arc-code-block__file > svg {
+	flex: none;
+	align-self: center;
+	color: var(--text-muted);
+}
+.arc-code-block__filename {
+	position: relative;
+	min-width: 0;
+	overflow: hidden;
+	color: var(--foreground);
+}
+/* Changing text stacks old and new words in one cell; reserve spans hold the widest label so the cell never snaps. */
+.arc-code-block__swap {
+	display: inline-grid;
+	min-width: 0;
+	white-space: nowrap;
+}
+.arc-code-block__swap > span,
+.arc-code-block__swap-stack > span {
+	grid-area: 1 / 1;
+	min-width: 0;
+}
+.arc-code-block__swap-stack {
+	display: grid;
+	min-width: 0;
+}
+.arc-code-block__swap-text {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.arc-code-block__reserve {
+	visibility: hidden;
+}
+.arc-code-block__sizer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	white-space: nowrap;
+	visibility: hidden;
+	pointer-events: none;
+}
+.arc-code-block__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+.arc-code-block__language {
+	flex: none;
+	color: var(--text-muted);
+	font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+	font-size: var(--text-xs);
+	font-weight: 400;
+}
+.arc-code-block__language::before {
+	content: '·';
+	margin-right: var(--space-2);
+	color: var(--border-strong);
+}
+/* The source area follows its content height on a spring. Before it measures, a collapsed block clips from CSS. */
+.arc-code-block__viewport {
+	--code-collapsed: calc(var(--code-lines, 0) * var(--text-sm) * 1.7 + var(--space-5) * 2);
+	overflow: hidden;
+}
+.arc-code-block__pre {
+	position: relative;
+	overflow: auto;
+	margin: 0;
+	padding: var(--space-5);
+	color: var(--foreground);
+	font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+	font-size: var(--text-sm);
+	font-variant-ligatures: none;
+	line-height: 1.7;
+	tab-size: 2;
+	white-space: pre;
+}
+/* Block so new source can rise in with a transform; inline code ignores transforms. */
+.arc-code-block__code {
+	display: block;
+}
+.arc-code-block__expand {
+	display: flex;
+	width: 100%;
+	min-height: 44px;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2);
+	border: 0;
+	border-top: 1px solid var(--border-subtle);
+	padding: 0 var(--space-4);
+	background: var(--surface-raised);
+	color: var(--text-secondary);
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	cursor: pointer;
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-code-block__chevron {
+	display: grid;
+	flex: none;
+	place-items: center;
+	color: var(--text-muted);
+	transition: rotate var(--spring-snappy-duration) var(--spring-snappy);
+}
+.arc-code-block__chevron[data-expanded] {
+	rotate: 180deg;
+}
+/* Each role has contrast in both themes; color supports, but never replaces, source text. */
+.arc-code-block__comment {
+	color: var(--text-muted);
+	font-style: italic;
+}
+.arc-code-block__string {
+	color: oklch(46% 0.13 150);
+}
+.arc-code-block__number {
+	color: oklch(50% 0.14 55);
+}
+.arc-code-block__keyword {
+	color: oklch(48% 0.15 285);
+}
+.arc-code-block__type {
+	color: oklch(46% 0.13 230);
+}
+.arc-code-block__function {
+	color: oklch(43% 0.12 25);
+}
+.arc-code-block__property {
+	color: oklch(44% 0.12 85);
+}
+.arc-code-block__tag {
+	color: oklch(46% 0.13 230);
+}
+.arc-code-block__punctuation {
+	color: var(--text-secondary);
+}
+:root[data-theme='dark'] .arc-code-block__string {
+	color: oklch(77% 0.15 150);
+}
+:root[data-theme='dark'] .arc-code-block__number {
+	color: oklch(80% 0.14 75);
+}
+:root[data-theme='dark'] .arc-code-block__keyword {
+	color: oklch(78% 0.16 285);
+}
+:root[data-theme='dark'] .arc-code-block__type {
+	color: oklch(79% 0.13 230);
+}
+:root[data-theme='dark'] .arc-code-block__function {
+	color: oklch(80% 0.13 25);
+}
+:root[data-theme='dark'] .arc-code-block__property {
+	color: oklch(79% 0.12 85);
+}
+:root[data-theme='dark'] .arc-code-block__tag {
+	color: oklch(79% 0.13 230);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-code-block__expand:hover {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+	.arc-code-block__expand:hover .arc-code-block__chevron {
+		color: var(--foreground);
+	}
+}
+@media (max-width: 420px) {
+	.arc-code-block__header {
+		padding-left: var(--space-3);
+	}
+	.arc-code-block__header button {
+		width: var(--control-height-sm);
+		padding-inline: 0;
+	}
+	.arc-code-block__header button > span:last-of-type {
+		display: none;
+	}
+	.arc-code-block__viewport {
+		--code-collapsed: calc(var(--code-lines, 0) * var(--text-xs) * 1.7 + var(--space-4) * 2);
+	}
+	.arc-code-block__pre {
+		padding: var(--space-4);
+		font-size: var(--text-xs);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-code-block__expand,
+	.arc-code-block__chevron {
+		transition: none;
+	}
+}

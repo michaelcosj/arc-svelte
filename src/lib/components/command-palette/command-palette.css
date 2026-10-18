@@ -1,0 +1,276 @@
+.arc-command-palette__palette {
+	width: 100%;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-panel);
+	background: var(--surface);
+	box-shadow: var(--shadow-floating);
+	transform-origin: top center;
+}
+.arc-command-palette__search-row {
+	position: relative;
+	display: flex;
+	min-height: 54px;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 14px;
+	border-bottom: 1px solid var(--border-subtle);
+	transition: background var(--duration-fast) var(--ease-standard);
+}
+.arc-command-palette__search-row:focus-within {
+	background: var(--surface-muted);
+}
+.arc-command-palette__search-icon,
+.arc-command-palette__item-icon {
+	display: grid;
+	flex: none;
+	place-items: center;
+	color: var(--text-muted);
+}
+.arc-command-palette__search-icon {
+	width: 22px;
+	height: 22px;
+}
+.arc-command-palette__search-row input {
+	min-width: 0;
+	flex: 1;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	color: var(--foreground);
+	font: inherit;
+	font-size: var(--text-sm);
+}
+.arc-command-palette__search-row input::placeholder {
+	color: var(--text-muted);
+}
+.arc-command-palette__search-row input:focus-visible {
+	outline: none;
+}
+.arc-command-palette__command-key,
+.arc-command-palette__shortcut {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: none;
+	border: 1px solid var(--border);
+	border-radius: 7px;
+	background: var(--surface-muted);
+	color: var(--text-muted);
+	font-family: inherit;
+	font-size: var(--text-xs);
+	font-weight: 500;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+}
+.arc-command-palette__command-key {
+	min-width: 38px;
+	height: 24px;
+	padding: 0 6px;
+	gap: 2px;
+}
+.arc-command-palette__clear-button {
+	display: grid;
+	width: 24px;
+	height: 24px;
+	flex: none;
+	place-items: center;
+	border: 0;
+	border-radius: 7px;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-command-palette__clear-button:hover,
+	.arc-command-palette__close-button:hover {
+		background: var(--surface);
+		color: var(--foreground);
+	}
+}
+.arc-command-palette__clear-button:active,
+.arc-command-palette__close-button:active {
+	background: var(--surface);
+	color: var(--foreground);
+}
+.arc-command-palette__close-button {
+	display: grid;
+	min-width: 27px;
+	height: 24px;
+	flex: none;
+	place-items: center;
+	border: 1px solid var(--border-subtle);
+	border-radius: 7px;
+	background: transparent;
+	color: var(--text-muted);
+	padding: 0 6px;
+	font: inherit;
+	font-size: var(--text-xs);
+	font-weight: 500;
+	line-height: 1;
+	cursor: pointer;
+	transition:
+		color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-command-palette__results-frame {
+	overflow: hidden;
+}
+.arc-command-palette__results {
+	position: relative;
+	max-height: 342px;
+	overflow: auto;
+	padding: 6px 8px;
+}
+.arc-command-palette__highlight {
+	position: absolute;
+	top: 0;
+	right: 8px;
+	left: 8px;
+	border-radius: 8px;
+	background: var(--surface-muted);
+	opacity: 0;
+	pointer-events: none;
+}
+.arc-command-palette__group {
+	position: relative;
+}
+.arc-command-palette__group + .arc-command-palette__group {
+	margin-top: 6px;
+}
+.arc-command-palette__group-heading {
+	display: block;
+	padding: 6px 8px 3px;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	font-weight: 500;
+	line-height: var(--leading-body);
+}
+.arc-command-palette__result {
+	position: relative;
+	display: flex;
+	width: 100%;
+	min-height: 34px;
+	align-items: center;
+	gap: 10px;
+	border: 0;
+	border-radius: 8px;
+	padding: 0 8px;
+	background: transparent;
+	color: var(--foreground);
+	text-align: left;
+	cursor: pointer;
+}
+.arc-command-palette__item-icon {
+	transition: color var(--duration-fast) var(--ease-standard);
+	display: grid;
+	width: 16px;
+	height: 16px;
+	flex: none;
+	place-items: center;
+	color: var(--text-muted);
+}
+.arc-command-palette__item-icon svg {
+	width: 16px;
+	height: 16px;
+}
+.arc-command-palette__result-copy {
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	align-items: baseline;
+	gap: 8px;
+}
+.arc-command-palette__result-copy strong,
+.arc-command-palette__result-copy small {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.arc-command-palette__result-copy strong {
+	flex: none;
+	max-width: 100%;
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+.arc-command-palette__result-copy small {
+	min-width: 0;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+}
+.arc-command-palette__shortcut {
+	min-width: 18px;
+	height: 18px;
+	padding: 0 4px;
+	border-color: transparent;
+	border-radius: 5px;
+	font-size: 11px;
+}
+.arc-command-palette__active-result .arc-command-palette__empty {
+	display: grid;
+	justify-items: center;
+	gap: 4px;
+	padding: 26px 12px 28px;
+	text-align: center;
+}
+.arc-command-palette__empty > span {
+	display: grid;
+	width: 32px;
+	height: 32px;
+	place-items: center;
+	margin-bottom: 5px;
+	color: var(--text-muted);
+}
+.arc-command-palette__empty strong {
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+.arc-command-palette__empty small {
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+}
+.arc-command-palette__visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+@media (max-width: 480px) {
+	.arc-command-palette__search-row {
+		gap: 8px;
+		padding: 8px 11px;
+	}
+	.arc-command-palette__results {
+		padding: 6px;
+	}
+	.arc-command-palette__highlight {
+		right: 6px;
+		left: 6px;
+	}
+	.arc-command-palette__result {
+		gap: 8px;
+	}
+	.arc-command-palette__shortcut,
+	.arc-command-palette__command-key {
+		display: none;
+	}
+}
+@media (max-width: 340px) {
+	.arc-command-palette__result {
+		padding-inline: 6px;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-command-palette__search-row,
+	.arc-command-palette__item-icon,
+	.arc-command-palette__clear-button,
+	.arc-command-palette__close-button {
+		transition: none;
+	}
+}

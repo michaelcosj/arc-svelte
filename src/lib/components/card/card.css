@@ -1,0 +1,267 @@
+.arc-card {
+	position: relative;
+	min-width: 0;
+	overflow: hidden;
+	isolation: isolate;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-panel);
+	background: var(--surface);
+	color: var(--foreground);
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-standard) var(--ease-standard);
+}
+.arc-card[data-hover] {
+	border-color: var(--border-strong);
+	box-shadow: var(--shadow-raised);
+}
+.arc-card:has(.arc-card__trigger:focus-visible) {
+	border-color: var(--border-strong);
+}
+.arc-card[data-covered] {
+	opacity: 0;
+}
+.arc-card__media {
+	position: relative;
+	overflow: hidden;
+	background: var(--surface-muted);
+}
+.arc-card__zoom {
+	display: grid;
+	min-height: 112px;
+	place-items: center;
+}
+.arc-card__content {
+	padding: var(--space-5);
+}
+.arc-card__title {
+	width: fit-content;
+	max-width: 100%;
+	margin: 0;
+	font-size: var(--text-lg);
+	font-weight: 500;
+	letter-spacing: var(--tracking-body);
+	line-height: 1.3;
+	text-wrap: balance;
+}
+.arc-card__trigger {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	letter-spacing: inherit;
+	text-align: inherit;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+.arc-card__trigger::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+}
+.arc-card__trigger:focus-visible {
+	outline: none;
+}
+.arc-card__description {
+	max-width: 34ch;
+	margin: var(--space-2) 0 0;
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+	text-wrap: pretty;
+}
+.arc-card__footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	margin-top: var(--space-5);
+}
+.arc-card__byline {
+	display: flex;
+	flex: 1 1 auto;
+	align-items: center;
+	gap: var(--space-3);
+	min-width: 0;
+}
+.arc-card__avatar {
+	display: grid;
+	flex: none;
+	width: var(--space-8);
+	height: var(--space-8);
+	overflow: hidden;
+	border-radius: var(--radius-pill);
+	background: var(--surface-muted);
+}
+.arc-card__avatar > * {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.arc-card__byline-text {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	min-width: 0;
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+}
+.arc-card__meta {
+	overflow: hidden;
+	color: var(--foreground);
+	font-weight: 500;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.arc-card__status {
+	position: relative;
+	overflow: clip visible;
+	color: var(--text-muted);
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+.arc-card__roll {
+	position: relative;
+	display: block;
+}
+.arc-card__line {
+	display: block;
+	overflow: clip visible;
+	text-overflow: ellipsis;
+}
+.arc-card__word {
+	display: inline-block;
+	white-space: pre;
+}
+.arc-card__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+.arc-card__action {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex: none;
+	flex-wrap: wrap;
+	gap: var(--space-3);
+}
+.arc-card__overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 50;
+	background: oklch(10% 0 0 / 0.46);
+	backdrop-filter: blur(7px);
+}
+.arc-card__overlay[data-state='closed'],
+.arc-card__panel[data-state='closed'] {
+	pointer-events: none !important;
+}
+.arc-card__panel {
+	position: fixed;
+	inset: 0;
+	z-index: 51;
+	width: min(calc(100vw - var(--space-8)), 30rem);
+	height: fit-content;
+	max-height: calc(100dvh - var(--space-8));
+	margin: auto;
+	overflow: hidden auto;
+	overscroll-behavior: contain;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-surface);
+	background: var(--surface-raised);
+	color: var(--foreground);
+	box-shadow: var(--shadow-floating);
+	transition:
+		background-color var(--duration-standard) var(--ease-standard),
+		box-shadow var(--duration-standard) var(--ease-standard);
+}
+.arc-card__panel:focus {
+	outline: none;
+}
+.arc-card__panel[data-returning] {
+	inset: auto;
+	top: var(--landing-top);
+	left: var(--landing-left);
+	width: var(--landing-width);
+	height: var(--landing-height);
+	max-height: none;
+	margin: 0;
+	overflow: hidden;
+	border-color: var(--border);
+	background: var(--surface);
+	box-shadow: none;
+	pointer-events: none !important;
+}
+.arc-card__panel[data-returning] .arc-card__content {
+	padding: var(--space-5);
+}
+.arc-card__panel[data-returning] .arc-card__title {
+	font-size: var(--text-lg);
+}
+.arc-card__panel .arc-card__content {
+	padding: var(--space-6);
+}
+.arc-card__panel .arc-card__title {
+	font-size: var(--text-xl);
+}
+.arc-card__panel .arc-card__description {
+	max-width: var(--card-measure, 34ch);
+}
+.arc-card__close-slot {
+	position: absolute;
+	top: var(--space-4);
+	right: var(--space-4);
+	z-index: 2;
+	display: grid;
+}
+.arc-card__close {
+	display: grid;
+	width: var(--space-8);
+	height: var(--space-8);
+	place-items: center;
+	padding: 0;
+	border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+	border-radius: var(--radius-pill);
+	background: color-mix(in oklab, var(--surface-raised) 74%, transparent);
+	backdrop-filter: blur(12px);
+	color: var(--foreground);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		transform var(--spring-snappy-duration) var(--spring-snappy);
+}
+.arc-card__close:active {
+	transform: scale(0.94);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-card__close:hover {
+		background: var(--surface-raised);
+	}
+}
+.arc-card__details {
+	margin-top: var(--space-6);
+	padding-top: var(--space-5);
+	border-top: 1px solid var(--border);
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+}
+.arc-card__details[data-returning],
+.arc-card__close-slot[data-returning] {
+	opacity: 0;
+	transition: opacity var(--duration-instant);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-card,
+	.arc-card__close {
+		transition-duration: var(--duration-instant);
+	}
+	.arc-card__close:active {
+		transform: none;
+	}
+}

@@ -1,0 +1,433 @@
+/* The root lays out the label and the anchor. The anchor holds the closed trigger's place; the shape floats over it and grows past it when open. */
+.arc-morph-select__root {
+	--ms-h: var(--control-height-md);
+	--ms-trigger-w: 0px;
+	position: relative;
+	display: inline-grid;
+	justify-items: start;
+	gap: var(--space-2);
+	min-width: 0;
+	color: var(--foreground);
+	font-family: var(--font-body);
+	font-size: var(--text-sm);
+	letter-spacing: var(--tracking-body);
+	line-height: var(--leading-body);
+}
+.arc-morph-select__root[data-align='end'] {
+	justify-items: end;
+}
+.arc-morph-select__root[data-open] {
+	z-index: 30;
+}
+.arc-morph-select__label {
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+
+.arc-morph-select__anchor {
+	position: relative;
+	height: var(--ms-h);
+	max-width: 100%;
+}
+
+/* One material for both states. The border is an overlay so it never changes a measurement. */
+.arc-morph-select__shape {
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: clip;
+	background: var(--surface);
+	box-shadow: var(--shadow-resting);
+	transition:
+		box-shadow var(--duration-considered) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-morph-select__shape::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	border: 1px solid var(--border);
+	border-radius: inherit;
+	pointer-events: none;
+	transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.arc-morph-select__root[data-align='end'] .arc-morph-select__shape {
+	right: 0;
+	left: auto;
+}
+.arc-morph-select__root[data-open] .arc-morph-select__shape {
+	background: var(--surface-raised);
+	box-shadow: var(--shadow-floating);
+}
+.arc-morph-select__root[data-disabled] .arc-morph-select__shape {
+	opacity: 0.55;
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-morph-select__root:not([data-open], [data-disabled]) .arc-morph-select__shape:hover {
+		background: var(--surface-muted);
+	}
+	.arc-morph-select__root:not([data-open], [data-disabled]) .arc-morph-select__shape:hover::after {
+		border-color: var(--border-strong);
+	}
+}
+
+/* The lid is the trigger row. It stays at the top of the surface in both states and sits above the list, so a lifted label passes over it. */
+.arc-morph-select__lid {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: var(--ms-h);
+}
+
+.arc-morph-select__trigger {
+	box-sizing: border-box;
+	display: flex;
+	height: var(--ms-h);
+	align-items: center;
+	gap: var(--space-2);
+	padding: 0 36px 0 14px;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	white-space: nowrap;
+}
+.arc-morph-select__lid .arc-morph-select__trigger {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	font-family: inherit;
+	letter-spacing: inherit;
+	text-align: left;
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+}
+.arc-morph-select__lid .arc-morph-select__trigger:disabled {
+	cursor: not-allowed;
+}
+/* An invisible copy that says how wide the closed trigger wants to be. It sits in flow until the first measurement lands, so the server render already has the right size. */
+.arc-morph-select__measure {
+	position: static;
+	visibility: hidden;
+	pointer-events: none;
+	width: max-content;
+	max-width: min(20rem, calc(100vw - 2rem));
+}
+.arc-morph-select__root[data-ready] .arc-morph-select__measure {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.arc-morph-select__root[data-align='end'][data-ready] .arc-morph-select__measure {
+	right: 0;
+	left: auto;
+}
+
+.arc-morph-select__slot {
+	position: relative;
+	display: block;
+	min-width: 0;
+	height: 100%;
+	flex: 1;
+}
+.arc-morph-select__slot[data-hidden] {
+	opacity: 0;
+	transition: opacity var(--duration-instant) var(--ease-standard);
+}
+.arc-morph-select__layer {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	min-width: 0;
+}
+.arc-morph-select__value-text {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.arc-morph-select__placeholder {
+	color: var(--text-muted);
+	font-weight: 400;
+}
+.arc-morph-select__icon {
+	display: grid;
+	width: 20px;
+	height: 20px;
+	flex: none;
+	place-items: center;
+	color: var(--text-secondary);
+}
+.arc-morph-select__icon > svg {
+	width: 16px;
+	height: 16px;
+}
+.arc-morph-select__icon > img {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.arc-morph-select__chevron {
+	position: absolute;
+	top: 50%;
+	right: 12px;
+	display: grid;
+	width: 16px;
+	height: 16px;
+	margin-top: -8px;
+	place-items: center;
+	color: var(--text-muted);
+	pointer-events: none;
+}
+
+/* Search takes the lid's place when the list is long. */
+.arc-morph-select__search-row {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	padding: 0 2px 0 14px;
+}
+.arc-morph-select__search-row[inert] {
+	pointer-events: none;
+}
+.arc-morph-select__search-icon {
+	flex: none;
+	color: var(--text-muted);
+}
+.arc-morph-select__input {
+	min-width: 0;
+	height: 100%;
+	flex: 1;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--foreground);
+	font: inherit;
+	font-size: var(--text-sm);
+	letter-spacing: var(--tracking-body);
+	outline: none;
+}
+.arc-morph-select__input::placeholder {
+	color: var(--text-muted);
+}
+.arc-morph-select__clear {
+	display: grid;
+	width: 24px;
+	height: 24px;
+	flex: none;
+	place-items: center;
+	padding: 0;
+	border: 0;
+	border-radius: var(--radius-pill);
+	background: color-mix(in oklab, var(--foreground) 8%, transparent);
+	color: var(--text-secondary);
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+/* Sits exactly over the shared chevron, so the chevron closes the list in both lid states. */
+.arc-morph-select__close-hit {
+	width: 36px;
+	height: 36px;
+	flex: none;
+	padding: 0;
+	border: 0;
+	border-radius: var(--radius-pill);
+	background: transparent;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition: background-color var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-morph-select__close-hit:hover,
+	.arc-morph-select__clear:hover {
+		background: color-mix(in oklab, var(--foreground) 8%, transparent);
+	}
+	.arc-morph-select__clear:hover {
+		color: var(--foreground);
+	}
+}
+
+/* The list hangs under the lid at its own width, so it measures the same whatever size the surface is mid spring. */
+.arc-morph-select__list-face {
+	position: absolute;
+	top: var(--ms-h);
+	left: 0;
+	box-sizing: border-box;
+	width: max(var(--ms-trigger-w), min(var(--ms-panel-w), calc(100vw - 2rem)));
+	padding: 0 6px 6px;
+}
+.arc-morph-select__root[data-align='end'] .arc-morph-select__list-face {
+	right: 0;
+	left: auto;
+}
+.arc-morph-select__list-face::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 14px;
+	left: 14px;
+	height: 1px;
+	background: var(--border-subtle);
+}
+.arc-morph-select__list-face[inert] {
+	pointer-events: none;
+}
+.arc-morph-select__scroll {
+	max-height: var(--ms-list-max);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding-top: 6px;
+	scrollbar-width: thin;
+}
+.arc-morph-select__options {
+	position: relative;
+	display: grid;
+	gap: 2px;
+}
+.arc-morph-select__highlight {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	border-radius: 16px;
+	background: color-mix(in oklab, var(--foreground) 6.5%, transparent);
+	pointer-events: none;
+}
+
+.arc-morph-select__group {
+	display: grid;
+	gap: 2px;
+}
+.arc-morph-select__group + .arc-morph-select__group {
+	margin-top: 4px;
+}
+.arc-morph-select__group-label {
+	padding: 8px 10px 4px;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	font-weight: 400;
+}
+
+.arc-morph-select__option {
+	position: relative;
+	display: flex;
+	min-height: 36px;
+	box-sizing: border-box;
+	align-items: center;
+	gap: var(--space-2);
+	padding: 0 10px 0 8px;
+	border-radius: 16px;
+	color: var(--text-secondary);
+	cursor: pointer;
+	user-select: none;
+	-webkit-user-select: none;
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.arc-morph-select__option[data-active],
+.arc-morph-select__option[aria-selected='true'] {
+	color: var(--foreground);
+}
+.arc-morph-select__option[aria-disabled='true'] {
+	color: var(--text-muted);
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+/* Lid padding minus list inset, so a lifted label starts exactly level with where it lands. */
+.arc-morph-select__option-value {
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	align-items: center;
+	gap: var(--space-2);
+	font-weight: 500;
+}
+.arc-morph-select__meta {
+	flex: none;
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	font-variant-numeric: tabular-nums;
+}
+.arc-morph-select__check {
+	display: grid;
+	width: 16px;
+	height: 16px;
+	flex: none;
+	place-items: center;
+	color: var(--foreground);
+	opacity: 0;
+	transform: scale(0.6);
+	transition:
+		opacity var(--duration-fast) var(--ease-standard),
+		transform var(--duration-spring) var(--ease-spring);
+}
+.arc-morph-select__check[data-on] {
+	opacity: 1;
+	transform: none;
+}
+.arc-morph-select__empty {
+	margin: 0;
+	padding: 12px 10px 14px;
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+}
+
+.arc-morph-select__sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arc-morph-select__shape,
+	.arc-morph-select__check,
+	.arc-morph-select__slot {
+		transition-duration: 0ms;
+	}
+}
+@media (prefers-contrast: more) {
+	.arc-morph-select__shape::after {
+		border-color: var(--border-strong);
+	}
+}
+
+.arc-morph-select__list-face {
+	transition:
+		opacity 200ms var(--ease-enter),
+		filter 220ms var(--ease-enter),
+		transform var(--spring-smooth-duration) var(--spring-smooth);
+}
+.arc-morph-select__list-face[inert] {
+	transform: translateY(-6px);
+	filter: blur(2px);
+	transition-duration: 100ms;
+}
+.arc-morph-select__search-row {
+	transition:
+		opacity 180ms var(--ease-enter),
+		filter 180ms var(--ease-enter);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-morph-select__list-face,
+	.arc-morph-select__search-row {
+		transition: none;
+		transform: none;
+		filter: none;
+	}
+}

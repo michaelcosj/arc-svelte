@@ -1,0 +1,78 @@
+/* Shared demo canvases from the uiarc.dev gallery (previews-*.module.css). */
+.demo-canvas {
+	width: 100%;
+	min-width: 0;
+	max-width: 580px;
+	min-height: 88px;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	place-items: center;
+	padding: 8px;
+	color: var(--foreground);
+}
+
+.demo-canvas:has(table) {
+	max-width: 760px;
+}
+
+.demo-canvas:has(table) > * {
+	width: 100%;
+	min-width: 0;
+}
+
+.demo-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.demo-counter-button {
+	display: grid;
+	gap: 7px;
+	width: min(100%, 250px);
+	padding: 14px;
+	border: 1px solid var(--border-subtle, #e8e8e8);
+	border-radius: var(--radius-control);
+	text-align: left;
+	color: inherit;
+	background: var(--surface-raised, #fff);
+	cursor: pointer;
+	transition:
+		transform var(--duration-spring) var(--ease-spring),
+		border-color var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.demo-counter-button:hover {
+		border-color: var(--border-strong);
+		box-shadow: var(--shadow-resting);
+	}
+}
+
+.demo-counter-button:active {
+	transform: scale(0.985);
+	transition-duration: var(--duration-instant), var(--duration-fast), var(--duration-fast);
+	transition-timing-function: var(--ease-standard);
+}
+
+.demo-counter-hint {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: var(--text-secondary, #6f6f6f);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+	letter-spacing: var(--tracking-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.demo-counter-button {
+		transition: none;
+	}
+
+	.demo-counter-button:active {
+		transform: none;
+	}
+}

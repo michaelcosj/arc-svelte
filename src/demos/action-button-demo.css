@@ -1,0 +1,28 @@
+.demo-action-button {
+	width: min(100%, 620px);
+	display: grid;
+	gap: 16px;
+}
+.demo-action-button__surface {
+	display: grid;
+	gap: 8px;
+	justify-items: center;
+	padding: 0;
+	background: transparent;
+}
+.demo-action-button__surface > * {
+	max-width: 100%;
+}
+.demo-action-button__solo {
+	display: flex;
+	justify-content: center;
+}
+.demo-action-button__solo > button {
+	width: min(100%, 210px);
+}
+.demo-action-button__status {
+	min-height: 18px;
+	text-align: center;
+	color: var(--text-muted, #64748b);
+	font-size: 12px;
+}

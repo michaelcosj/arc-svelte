@@ -1,0 +1,257 @@
+/* The region only holds the list; it never blocks clicks outside the toasts themselves. */
+.arc-toast-stack__viewport {
+	position: fixed;
+	z-index: 60;
+	bottom: var(--space-6);
+	width: min(22.5rem, calc(100% - var(--space-8)));
+	pointer-events: none;
+}
+.arc-toast-stack__bottom-right {
+	right: var(--space-6);
+}
+.arc-toast-stack__bottom-left {
+	left: var(--space-6);
+}
+.arc-toast-stack__bottom-center {
+	right: 0;
+	left: 0;
+	margin-inline: auto;
+}
+.arc-toast-stack__contained {
+	position: absolute;
+	z-index: 2;
+	bottom: var(--space-4);
+}
+.arc-toast-stack__contained.arc-toast-stack__bottom-right {
+	right: var(--space-4);
+}
+.arc-toast-stack__contained.arc-toast-stack__bottom-left {
+	left: var(--space-4);
+}
+@media (max-width: 30rem) {
+	.arc-toast-stack__viewport:not(.arc-toast-stack__contained) {
+		right: 0;
+		bottom: var(--space-4);
+		left: 0;
+		margin-inline: auto;
+	}
+}
+
+/* Toasts hang from the bottom of the list. Its height covers the gaps between open toasts, so hover survives the space between them. */
+.arc-toast-stack__list {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	pointer-events: auto;
+}
+/* Tucked toasts scale from their top edge, so exactly the peek shows above the toast in front. */
+.arc-toast-stack__item {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	transform-origin: 50% 0;
+}
+.arc-toast-stack__card {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-panel);
+	background: var(--surface-raised);
+	color: var(--foreground);
+	box-shadow: var(--shadow-raised);
+	container-type: inline-size;
+	touch-action: pan-y;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		background-color var(--duration-standard) var(--ease-standard),
+		border-color var(--duration-standard) var(--ease-standard);
+}
+.arc-toast-stack__item[data-front='true'] .arc-toast-stack__card,
+.arc-toast-stack__item[data-expanded='true'] .arc-toast-stack__card {
+	box-shadow: var(--shadow-floating);
+}
+/* Tucked toasts sit a step back in tone as well as scale. */
+.arc-toast-stack__item[data-front='false'][data-expanded='false'] .arc-toast-stack__card {
+	background: var(--surface-muted);
+}
+.arc-toast-stack__card[data-dragging] {
+	cursor: grabbing;
+	user-select: none;
+}
+
+.arc-toast-stack__content {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--space-3);
+	padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+}
+.arc-toast-stack__icon {
+	position: relative;
+	display: grid;
+	width: 18px;
+	height: 20px;
+	flex: none;
+	place-items: center;
+	color: var(--text-muted);
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+.arc-toast-stack__icon[data-type='success'] {
+	color: var(--success);
+}
+.arc-toast-stack__icon[data-type='info'] {
+	color: var(--accent);
+}
+.arc-toast-stack__icon[data-type='warning'] {
+	color: var(--warning);
+}
+.arc-toast-stack__icon[data-type='error'] {
+	color: var(--danger);
+}
+.arc-toast-stack__glyph {
+	grid-area: 1 / 1;
+	display: grid;
+	place-items: center;
+}
+.arc-toast-stack__glyph svg {
+	display: block;
+}
+/* The spinner turns only while something is loading; the icon swap is its stop. */
+.arc-toast-stack__spinner {
+	display: block;
+	width: 15px;
+	height: 15px;
+	border: 1.75px solid currentColor;
+	border-right-color: transparent;
+	border-radius: var(--radius-pill);
+	animation: arc-toast-stack-spin 0.8s linear infinite;
+}
+
+.arc-toast-stack__copy {
+	position: relative;
+	min-width: 0;
+	flex: 1;
+	font-size: var(--text-sm);
+	letter-spacing: var(--tracking-body);
+	line-height: 20px;
+}
+.arc-toast-stack__title {
+	position: relative;
+	display: block;
+	font-weight: 500;
+}
+.arc-toast-stack__line {
+	display: block;
+}
+.arc-toast-stack__description {
+	display: block;
+	margin-top: 2px;
+	color: var(--text-secondary);
+}
+
+/* Clips only while its width folds, so the focus ring stays whole at rest. */
+.arc-toast-stack__actionSlot {
+	display: flex;
+	flex: none;
+	justify-content: flex-end;
+	margin-top: -4px;
+}
+.arc-toast-stack__actionSlot[data-moving='true'] {
+	overflow: hidden;
+}
+.arc-toast-stack__action,
+.arc-toast-stack__close {
+	flex: none;
+	border: 1px solid transparent;
+	font: inherit;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	transition:
+		scale var(--duration-spring) var(--ease-spring),
+		background-color var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
+}
+.arc-toast-stack__action {
+	height: 28px;
+	padding: 0 var(--space-3);
+	border-color: var(--border);
+	border-radius: var(--radius-pill);
+	background: var(--surface);
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	white-space: nowrap;
+}
+.arc-toast-stack__close {
+	display: grid;
+	width: 28px;
+	height: 28px;
+	margin: -4px -2px 0 0;
+	place-items: center;
+	border-radius: var(--radius-pill);
+	background: transparent;
+	color: var(--text-muted);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-toast-stack__action:hover {
+		border-color: var(--border-strong);
+		background: var(--surface-muted);
+	}
+	.arc-toast-stack__close:hover {
+		background: var(--surface-muted);
+		color: var(--foreground);
+	}
+}
+/* Quick press, spring release. */
+.arc-toast-stack__action:active,
+.arc-toast-stack__close:active {
+	scale: 0.96;
+	transition-duration: var(--duration-instant);
+	transition-timing-function: var(--ease-standard);
+}
+/* A narrow toast keeps its copy wide: the action drops under the copy instead of squeezing it. */
+@container (max-width: 21rem) {
+	.arc-toast-stack__content {
+		flex-wrap: wrap;
+		row-gap: var(--space-2);
+	}
+	.arc-toast-stack__actionSlot {
+		order: 1;
+		flex-basis: 100%;
+		justify-content: flex-start;
+		margin-top: 0;
+		padding-left: calc(18px + var(--space-3));
+	}
+}
+.arc-toast-stack__srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@keyframes arc-toast-stack-spin {
+	to {
+		rotate: 360deg;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-toast-stack__card,
+	.arc-toast-stack__icon,
+	.arc-toast-stack__action,
+	.arc-toast-stack__close {
+		transition: none;
+	}
+	.arc-toast-stack__action:active,
+	.arc-toast-stack__close:active {
+		scale: none;
+	}
+	.arc-toast-stack__spinner {
+		animation: none;
+	}
+}

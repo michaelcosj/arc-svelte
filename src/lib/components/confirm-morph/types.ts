@@ -1,0 +1,34 @@
+import type { Snippet } from 'svelte';
+import type { ClassValue } from 'svelte/elements';
+export type ConfirmMorphState = 'idle' | 'confirming' | 'pending' | 'done' | 'error';
+export type ConfirmMorphMode = 'press' | 'hold' | 'countdown';
+export interface ConfirmMorphProps {
+	label: string | number | Snippet;
+	icon?: Snippet;
+	prompt?: string | number | Snippet;
+	confirmLabel?: string;
+	cancelLabel?: string;
+	pendingLabel?: string;
+	doneLabel?: string;
+	errorLabel?: string;
+	retryLabel?: string;
+	undoLabel?: string;
+	undoingLabel?: string;
+	tone?: 'danger' | 'neutral';
+	confirmMode?: ConfirmMorphMode;
+	holdDuration?: number;
+	countdown?: number;
+	countdownLabel?: string;
+	onConfirm?: () => void | Promise<unknown>;
+	onUndo?: () => void | Promise<unknown>;
+	onCancel?: () => void;
+	state?: ConfirmMorphState;
+	defaultState?: ConfirmMorphState;
+	onStateChange?: (state: ConfirmMorphState) => void;
+	confirmTimeout?: number;
+	resultTimeout?: number;
+	cancelOnOutsidePress?: boolean;
+	disabled?: boolean;
+	class?: ClassValue;
+	ref?: HTMLDivElement | null;
+}

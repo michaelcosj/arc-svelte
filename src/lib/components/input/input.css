@@ -1,0 +1,69 @@
+/* No row gap: grid tracks clamp a negative margin at zero, so a closed message row would still pay the gap. Each row carries its own space instead. */
+.arc-input {
+	display: grid;
+	min-width: 0;
+}
+.arc-input__label {
+	margin-bottom: var(--space-2);
+	color: var(--foreground);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: var(--leading-body);
+}
+/* Focus answers with the border colour alone (no rings or halos); the field itself never changes size. */
+.arc-input__input {
+	width: 100%;
+	min-height: var(--control-height-md);
+	padding: 0 var(--space-3);
+	border: 1px solid var(--border-strong);
+	border-radius: var(--radius-control);
+	background: var(--surface);
+	color: var(--foreground);
+	font: inherit;
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+	letter-spacing: var(--tracking-body);
+	outline: none;
+	transition:
+		border-color var(--duration-fast) var(--ease-standard),
+		background-color var(--duration-fast) var(--ease-standard);
+}
+.arc-input__input::placeholder {
+	color: var(--text-muted);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-input__input:hover:not(:disabled, [aria-invalid='true']) {
+		border-color: var(--foreground);
+	}
+}
+.arc-input__input:focus-visible {
+	border-color: var(--foreground);
+}
+.arc-input__input[aria-invalid='true'] {
+	border-color: var(--danger);
+}
+.arc-input__input:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+	background: var(--surface-muted);
+}
+.arc-input__description,
+.arc-input__error {
+	display: block;
+	padding-top: var(--space-2);
+	font-size: var(--text-xs);
+	line-height: var(--leading-body);
+}
+.arc-input__description {
+	color: var(--text-muted);
+}
+.arc-input__error {
+	color: var(--danger);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-input__input {
+		transition-duration: 0.01ms;
+	}
+}
+
+/* The message row, words and rolling digits live in #lib/motion/field-message.css. */

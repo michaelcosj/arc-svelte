@@ -1,0 +1,109 @@
+.arc-confirm-morph-demo__demo {
+	display: grid;
+	min-width: 0;
+	contain: inline-size;
+	justify-items: center;
+	gap: var(--space-4);
+	width: min(100%, 560px);
+	margin-inline: auto;
+	font-family: var(--font-body);
+	letter-spacing: var(--tracking-body);
+}
+.arc-confirm-morph-demo__stage {
+	display: grid;
+	width: 100%;
+	min-height: 260px;
+	place-items: center;
+}
+.arc-confirm-morph-demo__row {
+	display: flex;
+	width: min(100%, 30rem);
+	min-width: 0;
+	align-items: center;
+	gap: var(--space-4);
+}
+.arc-confirm-morph-demo__slot {
+	display: grid;
+	flex: none;
+	min-width: 0;
+	width: 11.5rem;
+	justify-items: end;
+}
+.arc-confirm-morph-demo__empty,
+.arc-confirm-morph-demo__project {
+	grid-area: 1/1;
+	display: inline-flex;
+	min-width: 0;
+	max-width: 100%;
+	align-items: center;
+	gap: 8px;
+	font-size: var(--text-sm);
+}
+.arc-confirm-morph-demo__project {
+	color: var(--foreground);
+}
+.arc-confirm-morph-demo__empty {
+	color: var(--text-muted);
+}
+.arc-confirm-morph-demo__icon {
+	flex: none;
+	color: var(--text-secondary);
+}
+.arc-confirm-morph-demo__name {
+	overflow: hidden;
+	font-weight: 500;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.arc-confirm-morph-demo__controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-2) var(--space-3);
+}
+.arc-confirm-morph-demo__reset {
+	display: inline-flex;
+	height: var(--control-height-sm);
+	align-items: center;
+	gap: 6px;
+	padding: 0 14px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-pill);
+	background: var(--surface-raised);
+	color: var(--foreground);
+	cursor: pointer;
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	transition:
+		background-color var(--duration-fast) var(--ease-standard),
+		transform var(--duration-instant) var(--ease-standard);
+}
+.arc-confirm-morph-demo__reset:active {
+	transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-confirm-morph-demo__reset:hover {
+		background: color-mix(in oklab, var(--foreground) 5%, var(--surface-raised));
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-confirm-morph-demo__reset {
+		transition-duration: 0ms;
+	}
+}
+
+@media (max-width: 420px) {
+	.arc-confirm-morph-demo__row {
+		gap: var(--space-3);
+		width: 100%;
+	}
+	.arc-confirm-morph-demo__slot {
+		width: 8.5rem;
+	}
+	.arc-confirm-morph-demo__row:has([data-tone]:not([data-state='idle']))
+		.arc-confirm-morph-demo__slot {
+		display: none;
+	}
+}

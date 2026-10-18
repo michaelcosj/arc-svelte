@@ -1,0 +1,148 @@
+/* Positioned so an outgoing panel pops out exactly where it was while the next one takes its place. */
+.arc-tabs {
+	position: relative;
+}
+.arc-tabs__list-shell {
+	position: relative;
+	display: inline-flex;
+	max-width: 100%;
+	min-width: 0;
+	align-items: center;
+	isolation: isolate;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-control);
+	background: var(--surface-muted);
+}
+.arc-tabs__viewport {
+	min-width: 0;
+	overflow-x: auto;
+	border-radius: inherit;
+	scrollbar-width: none;
+}
+.arc-tabs__viewport::-webkit-scrollbar {
+	display: none;
+}
+.arc-tabs__list-shell[data-left='true'] .arc-tabs__viewport {
+	mask-image: linear-gradient(to right, transparent, black 35px, black);
+}
+.arc-tabs__list-shell[data-right='true'] .arc-tabs__viewport {
+	mask-image: linear-gradient(to right, black, black calc(100% - 35px), transparent);
+}
+.arc-tabs__list-shell[data-left='true'][data-right='true'] .arc-tabs__viewport {
+	mask-image: linear-gradient(
+		to right,
+		transparent,
+		black 35px,
+		black calc(100% - 35px),
+		transparent
+	);
+}
+/* The list owns the stacking context so the gliding highlight passes under every label, not over earlier ones. */
+.arc-tabs__list {
+	isolation: isolate;
+	display: inline-flex;
+	width: max-content;
+	align-items: center;
+	gap: var(--space-1);
+	padding: var(--space-1);
+}
+.arc-tabs__scroll-button {
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	bottom: 0;
+	display: grid;
+	width: 33px;
+	place-items: center;
+	border: 0;
+	background: var(--surface-muted);
+	color: var(--foreground);
+}
+.arc-tabs__scroll-left {
+	left: 0;
+	border-radius: var(--radius-control) 0 0 var(--radius-control);
+}
+.arc-tabs__scroll-right {
+	right: 0;
+	border-radius: 0 var(--radius-control) var(--radius-control) 0;
+}
+.arc-tabs__scroll-button:disabled {
+	opacity: 0;
+	pointer-events: none;
+}
+.arc-tabs__scroll-button:focus-visible {
+	--focus-outline-offset: -3px;
+}
+.arc-tabs__trigger {
+	position: relative;
+	-webkit-tap-highlight-color: transparent;
+	display: inline-grid;
+	min-width: 5.5rem;
+	place-items: center;
+	flex: 0 0 auto;
+	min-height: var(--control-height-sm);
+	border: 0;
+	border-radius: calc(var(--radius-control) - 3px);
+	padding: 0 var(--space-3);
+	background: transparent;
+	color: var(--text-muted);
+	font: inherit;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: color var(--duration-fast) var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+	.arc-tabs__trigger:hover {
+		color: var(--foreground);
+	}
+}
+.arc-tabs__trigger:active {
+	color: var(--foreground);
+}
+.arc-tabs__trigger[data-state='active'] {
+	color: var(--accent-strong);
+}
+/* One highlight per list, moved to the active trigger's box (motion's layoutId), so it sits in the list rather than in a trigger. */
+.arc-tabs__selection {
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	border: 1px solid var(--border);
+	border-radius: calc(var(--radius-control) - 3px);
+	background: var(--surface);
+	box-shadow: var(--shadow-resting);
+	will-change: transform;
+}
+.arc-tabs__trigger-label {
+	position: relative;
+	z-index: 1;
+}
+.arc-tabs__trigger:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+.arc-tabs__content {
+	margin-top: var(--space-4);
+	color: var(--text-secondary);
+	font-size: var(--text-sm);
+	line-height: var(--leading-body);
+}
+/* The outgoing panel is lifted out of flow by the presence animation; drop its margin so it stays in place and ignore stray clicks. */
+.arc-tabs__content[data-pop] {
+	margin-top: 0;
+}
+.arc-tabs__content[data-state='inactive'] {
+	pointer-events: none;
+}
+.arc-tabs__content:focus-visible {
+	--focus-outline-offset: 3px;
+	border-radius: var(--radius-control);
+}
+@media (prefers-reduced-motion: reduce) {
+	.arc-tabs__trigger {
+		transition: none;
+	}
+}

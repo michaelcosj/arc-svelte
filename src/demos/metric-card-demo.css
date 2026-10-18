@@ -1,0 +1,9 @@
+.demo-metric-card {
+	display: grid;
+	gap: 20px;
+	width: min(100%, 300px);
+	justify-items: center;
+}
+.demo-metric-card > article {
+	width: 100%;
+}
