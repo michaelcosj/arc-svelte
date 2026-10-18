@@ -42,7 +42,7 @@
 			>
 		</div>
 		<div class="arc-resizable-panels-demo__lines" aria-hidden="true">
-			{#each panes[i]!.lines as width}<span
+			{#each panes[i]!.lines as width, index (index)}<span
 					class="arc-resizable-panels-demo__line"
 					style:width={`${width}%`}
 				></span>{/each}

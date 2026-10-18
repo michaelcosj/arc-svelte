@@ -23,6 +23,10 @@ can be cloned into the ignored `reference/arc-library/` directory for comparison
 Never edit that reference. The [browser test guide](./tests/phase5/README.md)
 records the exact revision and isolated dependencies used by the regression suite.
 
+For Svelte changes, run the official autofixer and review its findings. The
+[code quality notes](./docs/CODE_QUALITY.md) include the command, latest pass
+scope and a known TypeScript analysis limitation.
+
 ## Before opening a pull request
 
 ```sh

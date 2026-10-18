@@ -501,15 +501,19 @@
 					onmousedown={(e) => e.preventDefault()}
 				>
 					<div bind:this={trackRef} class="arc-slider__track">
-						{#each ticks as mark}<span class="arc-slider__tick" style:left={`${pct(mark.value)}%`}
+						{#each ticks as mark, index (index)}<span
+								class="arc-slider__tick"
+								style:left={`${pct(mark.value)}%`}
 							></span>{/each}
 						<div class="arc-slider__fill" style:clip-path={clipPath}>
-							{#each ticks as mark}<span class="arc-slider__tick" style:left={`${pct(mark.value)}%`}
+							{#each ticks as mark, index (index)}<span
+									class="arc-slider__tick"
+									style:left={`${pct(mark.value)}%`}
 								></span>{/each}
 						</div>
 					</div>
 					<div bind:this={thumbsRef} class="arc-slider__thumbs">
-						{#each values as item, index}
+						{#each values as item, index (index)}
 							<div
 								class="arc-slider__thumbLayer"
 								style:transform={`translateX(${shown(index) - 100}%)`}
@@ -587,7 +591,7 @@
 				</div>
 				{#if end}<div class="arc-slider__end">{@render end()}</div>{/if}
 				{#if labelled.length > 0}<div class="arc-slider__marks" aria-hidden="true">
-						{#each labelled as mark}<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions (decorative marks supplement keyboard-operable thumbs) --><span
+						{#each labelled as mark, index (index)}<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions (decorative marks supplement keyboard-operable thumbs) --><span
 								class="arc-slider__markLabel"
 								data-on={inRange(mark.value) || undefined}
 								data-edge={mark.value === min ? 'start' : mark.value === max ? 'end' : undefined}
@@ -596,7 +600,7 @@
 							>{/each}
 					</div>{/if}
 			</div>
-			{#if name}{#each values as item}<input
+			{#if name}{#each values as item, index (index)}<input
 						type="hidden"
 						{name}
 						value={item}

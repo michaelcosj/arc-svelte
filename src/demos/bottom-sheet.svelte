@@ -31,7 +31,7 @@
 			<div class="arc-bottom-sheet-demo-wireframe__bar" aria-hidden="true">
 				<span class="arc-bottom-sheet-demo-wireframe__pill arc-bottom-sheet-demo-wireframe__logo"
 				></span><span class="arc-bottom-sheet-demo-wireframe__nav"
-					>{#each [0, 1, 2] as i}<span class="arc-bottom-sheet-demo-wireframe__pill"
+					>{#each [0, 1, 2] as i (i)}<span class="arc-bottom-sheet-demo-wireframe__pill"
 						></span>{/each}</span
 				><span class="arc-bottom-sheet-demo-wireframe__avatar"></span>
 			</div>
@@ -142,7 +142,7 @@
 									<section class="arc-bottom-sheet-demo__section">
 										<h3>Itinerary</h3>
 										<ol class="arc-bottom-sheet-demo__timeline">
-											{#each itinerary as [time, title, detail]}<li>
+											{#each itinerary as [time, title, detail] (time)}<li>
 													<time>{time}</time>
 													<div><strong>{title}</strong><span>{detail}</span></div>
 												</li>{/each}
@@ -151,7 +151,7 @@
 									<section class="arc-bottom-sheet-demo__section">
 										<h3>Travelers</h3>
 										<ul class="arc-bottom-sheet-demo__people">
-											{#each people as person}<li>
+											{#each people as person (person.photo)}<li>
 													<img
 														src={`/media/people/${person.photo}.jpg`}
 														alt=""
@@ -189,7 +189,7 @@
 					</div>
 				</div>
 				<div class="arc-bottom-sheet-demo-wireframe__blocks" aria-hidden="true">
-					{#each [0, 1, 2, 3] as i}<span
+					{#each [0, 1, 2, 3] as i (i)}<span
 							class={[
 								'arc-bottom-sheet-demo-wireframe__block',
 								i === 3 && 'arc-bottom-sheet-demo-wireframe__wide'

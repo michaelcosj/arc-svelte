@@ -16,31 +16,23 @@ This prepares a GitHub source repository. `private: true` in package.json preven
 accidental npm publication; it does not prevent making the GitHub repository public.
 Packaging an npm release or a component registry is separate work.
 
-## Publish the clean branch
+## Public branch
 
-In the originating development checkout, the local history contains old handoff
-reports. A separate
-`github-public` branch is prepared as a clean snapshot with no development-history
-parents. The original `main` branch stays local and retains that history.
-Use the clean branch for publication and future public work. These steps apply
-to the originating checkout; collaborators cloning GitHub can work on its public
-`main` branch normally.
-
-Create an **empty** GitHub repository (without a generated README, license or
-.gitignore), then replace the example owner below with your GitHub username:
+The public repository is [michaelcosj/arc-svelte](https://github.com/michaelcosj/arc-svelte).
+Its default branch is `main`, which starts from a clean snapshot without the
+original development history. Use `main` for future public work:
 
 ```sh
-git switch github-public
-git remote add origin https://github.com/YOUR-USERNAME/arc-svelte.git
-git push --set-upstream origin github-public:main
+git switch main
+git push origin main
 ```
 
-If `origin` already exists, inspect `git remote -v` and use the correct remote
-instead of adding it again. Push the explicit branch above; do not use `--all`
-or `--mirror`, which would also expose local development history. Do not merge
-the local historical `main` branch into the public branch. Fresh collaborators
-can clone GitHub's `main` normally. For subsequent commits from the local
-`github-public` branch, use `git push origin HEAD:main` explicitly.
+In the originating checkout, the old history is retained only on
+`local/development-history`. The `github-public` branch records the initial
+publication snapshot; it is no longer the default branch. Local backup branches
+also remain for recovery. Do not merge historical or backup branches into public
+work, or push with `--all` or `--mirror`, which would expose local development
+history. Fresh collaborators can clone GitHub's `main` normally.
 
 ## Included and excluded files
 
@@ -54,5 +46,5 @@ GitHub Actions runs format/lint/type checks, Svelte checks, unit tests and a bui
 The browser comparison suite needs its separate reference clone and dependencies;
 follow tests/phase5/README.md to run it locally.
 
-After choosing the final repository URL, add that URL to package.json's repository
-metadata if desired. No owner, remote URL or hosted demo URL is guessed here.
+Package and registry releases remain separate work; choose their distribution
+metadata and hosting when preparing those releases.

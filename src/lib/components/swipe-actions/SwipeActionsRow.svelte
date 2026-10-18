@@ -258,8 +258,8 @@
 		fade: { duration: m.duration.instant, delay: 340, easing: m.ease.standard }
 	}}
 >
-	{#each ['leading', 'trailing'] as side}
-		{#each actionsOf(side as Side) as action, index}
+	{#each ['leading', 'trailing'] as side (side)}
+		{#each actionsOf(side as Side) as action, index (index)}
 			{@const count = actionsOf(side as Side).length}
 			<ActionLayer
 				{action}
@@ -326,7 +326,7 @@
 							}
 						}}
 					>
-						{#each menuItems as { action, side, index }, order}<Menu.Item
+						{#each menuItems as { action, side, index }, order (order)}<Menu.Item
 								class="arc-swipe-actions__item"
 								data-tone={action.tone}
 								style="--i: {order}"

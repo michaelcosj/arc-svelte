@@ -425,9 +425,9 @@
 		data-focused={focused || undefined}
 	>
 		<div bind:this={backdrop} class="arc-mention-input__backdrop" aria-hidden="true">
-			{#each mirror as part}{#if part.anchor}<span data-anchor=""></span>{:else if part.kind}<span
-						class="arc-mention-input__token"
-						data-kind={part.kind}>{part.text}</span
+			{#each mirror as part, index (index)}{#if part.anchor}<span data-anchor=""
+					></span>{:else if part.kind}<span class="arc-mention-input__token" data-kind={part.kind}
+						>{part.text}</span
 					>{:else}{part.text}{/if}{/each}{'\u200b'}
 		</div>
 		<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role (The native textarea owns the source combobox's caret and atomic mention editing.) -->
