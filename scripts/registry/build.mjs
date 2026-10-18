@@ -274,8 +274,8 @@ function indexHtml(items) {
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Arc for Svelte registry</title>
 <style>body{font:16px/1.6 system-ui,sans-serif;max-width:70rem;margin:auto;padding:2rem;color:#18181b;background:#fafafa}h1{line-height:1.15}a{color:#4338ca}code{overflow-wrap:anywhere}li{break-inside:avoid;margin:.5rem 0}ul{columns:16rem}input{font:inherit;padding:.5rem;width:min(100%,28rem);box-sizing:border-box}pre{padding:1rem;background:#eee;white-space:pre-wrap}small{color:#52525b}</style></head>
 <body><h1>Arc for Svelte</h1><p>An independent Svelte 5 port of <a href="https://uiarc.dev">Arc UI</a> by Elia Kuratli. MIT licensed.</p>
-<p>Install into a Svelte 5.57.1+ TypeScript project initialized with shadcn-svelte. Components include their CSS, motion helpers and dependencies; no React runtime is installed.</p>
-<pre><code id="install">vp dlx -- shadcn-svelte@1.7.0 add ./r/button.json</code></pre>
+<p>Install into a Svelte 5.57.1+ project with TypeScript. Arc uses plain CSS: Tailwind and a full shadcn setup are not required. The installer only needs a <code>components.json</code> file for installation paths. See the <a href="${homepage}#component-registry">minimal setup guide</a>. Components include their CSS, motion helpers and dependencies.</p>
+<pre><code id="install">vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight ./r/button.json</code></pre>
 <p>Import from your configured lib alias: <code>import { Button } from '$lib/arc/components/button/index.ts';</code></p>
 <p>Entry points load Arc fonts and foundation CSS automatically, including global design tokens. Use <code>data-theme="dark"</code> on the document root for dark mode. Installed code is yours to edit; retain <code>arc/LICENSE.txt</code>.</p>
 <p><a href="${homepage}">Source, demos and verification status</a> · <a href="registry.json">Registry index</a> · <a href="r/all.json">Install all components</a></p>
@@ -286,7 +286,7 @@ function indexHtml(items) {
 				`<li><a href="r/${item.name}.json">${escapeHtml(item.title ?? item.name)}</a> <small>${escapeHtml(item.name)}</small></li>`
 		)
 		.join('')}</ul>
-<script>document.querySelector('#install').textContent='vp dlx -- shadcn-svelte@1.7.0 add '+new URL('r/button.json',location.href).href;document.querySelector('#search').addEventListener('input',event=>{for(const row of document.querySelectorAll('li'))row.hidden=!row.textContent.toLowerCase().includes(event.target.value.toLowerCase())});</script></body></html>\n`;
+<script>document.querySelector('#install').textContent='vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight '+new URL('r/button.json',location.href).href;document.querySelector('#search').addEventListener('input',event=>{for(const row of document.querySelectorAll('li'))row.hidden=!row.textContent.toLowerCase().includes(event.target.value.toLowerCase())});</script></body></html>\n`;
 }
 
 export async function buildRegistry(output = path.join(projectRoot, 'registry-dist')) {

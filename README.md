@@ -60,11 +60,43 @@ vp run registry:build
 vp run registry:preview
 ```
 
-Open `http://localhost:5300` for the component list. In a Svelte 5.57.1+ TypeScript
-project initialized with shadcn-svelte, install an item using its full URL:
+Open `http://localhost:5300` for the component list. Arc requires Svelte 5.57.1+
+and TypeScript. It uses plain CSS; Tailwind and a full shadcn setup are not required.
+The installer needs a `components.json` file to locate your library and stylesheet.
+Keep your existing configuration if you already use shadcn-svelte.
+
+<details>
+<summary>Minimal setup for a project without shadcn-svelte</summary>
+
+Create `components.json` in your project root:
+
+```json
+{
+	"$schema": "https://shadcn-svelte.com/schema.json",
+	"typescript": true,
+	"tailwind": { "css": "src/app.css", "baseColor": "neutral" },
+	"aliases": {
+		"lib": "$lib",
+		"components": "$lib/components",
+		"ui": "$lib/components/ui",
+		"hooks": "$lib/hooks",
+		"utils": "$lib/utils"
+	}
+}
+```
+
+Point `tailwind.css` to an existing stylesheet; despite the CLI's field name,
+this can be ordinary CSS. Match the aliases to your TypeScript configuration
+(SvelteKit provides `$lib` by default). No Tailwind installation is needed.
+
+</details>
+
+Install an item using its full URL. `--skip-preflight` allows installation without
+Tailwind by skipping the CLI's framework checks; the configuration above is still
+required:
 
 ```sh
-vp dlx -- shadcn-svelte@1.7.0 add http://localhost:5300/r/button.json
+vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight http://localhost:5300/r/button.json
 ```
 
 After deployment, replace the local URL with your public site URL. Use
