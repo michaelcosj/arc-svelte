@@ -4,13 +4,13 @@ import type { SpringSpec } from './spring';
 
 /** A Svelte motion clock for discrete targets, preserving the source's physical or duration-defined spring semantics. */
 export class TargetSpring {
+	public spec: SpringSpec;
+	private rest: { delta: number; speed: number } | undefined;
 	#spring: PhysicalSpring;
 	#target = $state(0);
-	constructor(
-		value: number,
-		public spec: SpringSpec,
-		private rest?: { delta: number; speed: number }
-	) {
+	constructor(value: number, spec: SpringSpec, rest?: { delta: number; speed: number }) {
+		this.spec = spec;
+		this.rest = rest;
 		this.#spring = new PhysicalSpring(value, spec, rest);
 		this.#target = value;
 		onDestroy(() => this.destroy());

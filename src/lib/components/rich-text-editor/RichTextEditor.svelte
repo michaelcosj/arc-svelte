@@ -1343,7 +1343,7 @@
 >
 	{#snippet child({ props })}
 		{@const attributes = { ...props, role: undefined, tabindex: undefined }}
-		<!-- svelte-ignore a11y_no_noninteractive_tabindex (Command root semantics are omitted around the native editor.) -->
+		<!-- Command root semantics are omitted around the native editor. -->
 		<div
 			{...attributes}
 			onkeydown={undefined}

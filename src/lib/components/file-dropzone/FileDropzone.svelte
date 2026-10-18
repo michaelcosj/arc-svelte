@@ -360,7 +360,7 @@
 		if (!event.currentTarget.contains(event.relatedTarget as Node | null)) focusWithin = false;
 	}}
 >
-	<!-- svelte-ignore a11y_no_static_element_interactions (File drag events complement the native picker button.) -->
+	<!-- File drag events complement the native picker button. -->
 	<div
 		bind:this={zone}
 		class={[

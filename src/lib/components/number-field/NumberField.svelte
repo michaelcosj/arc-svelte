@@ -521,7 +521,7 @@
 			{/if}{/each}
 	</div>
 	<Message id={hintId ?? `${inputId}-description`} text={description} class="arc-number-field__hint"
-		>{#snippet children()}<Words text={description ?? ''} />{/snippet}</Message
+		><Words text={description ?? ''} /></Message
 	>
 	<span class="arc-number-field__srOnly" aria-live="polite" aria-atomic="true">{announcement}</span>
 </div>

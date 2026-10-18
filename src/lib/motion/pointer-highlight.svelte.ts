@@ -6,11 +6,13 @@ import { motionTokens as m } from './tokens';
 
 /** Fixed box flights use the source spring solution; passive resizes snap unless already travelling. */
 export class PointerHighlight {
+	private options: () => { spec: SpringSpec; reduced?: boolean };
 	#axes = $state.raw<PhysicalSpring[]>([]);
 	#target = $state.raw([0, 0, 0, 0]);
 	readonly opacity = new Tween(0);
 	readonly box: { readonly current: number[]; readonly target: number[] };
-	constructor(private options: () => { spec: SpringSpec; reduced?: boolean }) {
+	constructor(options: () => { spec: SpringSpec; reduced?: boolean }) {
+		this.options = options;
 		this.#axes = [0, 0, 0, 0].map((value) => new PhysicalSpring(value, untrack(options).spec));
 		const current = () => this.#axes.map((axis) => axis.current);
 		const target = () => this.#target;

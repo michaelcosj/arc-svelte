@@ -62,130 +62,129 @@
 										variant="secondary"
 										class="arc-bottom-sheet-demo__trigger">View trip details</Button
 									>{/snippet}
-								{#snippet children()}
-									<section class="arc-bottom-sheet-demo__flight" aria-label="Flight">
-										<div class="arc-bottom-sheet-demo__times">
-											<div><strong>07:45</strong><span>Lisbon, T1</span></div>
-											<div class="arc-bottom-sheet-demo__duration">
-												<span class="arc-bottom-sheet-demo__rule" aria-hidden="true"></span><span
-													>3h 35m</span
-												><span class="arc-bottom-sheet-demo__rule" aria-hidden="true"></span>
-											</div>
-											<div class="arc-bottom-sheet-demo__arrive">
-												<strong>12:20</strong><span>Copenhagen, T3</span>
-											</div>
+
+								<section class="arc-bottom-sheet-demo__flight" aria-label="Flight">
+									<div class="arc-bottom-sheet-demo__times">
+										<div><strong>07:45</strong><span>Lisbon, T1</span></div>
+										<div class="arc-bottom-sheet-demo__duration">
+											<span class="arc-bottom-sheet-demo__rule" aria-hidden="true"></span><span
+												>3h 35m</span
+											><span class="arc-bottom-sheet-demo__rule" aria-hidden="true"></span>
 										</div>
-										<p class="arc-bottom-sheet-demo__onTime">
-											<CircleCheck size={16} strokeWidth={1.75} aria-hidden="true" /><span
-												><strong>On time.</strong> Boarding 07:05 at gate B32.</span
-											>
-										</p>
-									</section>
-									<dl class="arc-bottom-sheet-demo__facts">
+										<div class="arc-bottom-sheet-demo__arrive">
+											<strong>12:20</strong><span>Copenhagen, T3</span>
+										</div>
+									</div>
+									<p class="arc-bottom-sheet-demo__onTime">
+										<CircleCheck size={16} strokeWidth={1.75} aria-hidden="true" /><span
+											><strong>On time.</strong> Boarding 07:05 at gate B32.</span
+										>
+									</p>
+								</section>
+								<dl class="arc-bottom-sheet-demo__facts">
+									<div>
+										<dt>Seat</dt>
+										<dd>14C</dd>
+									</div>
+									<div>
+										<dt>Group</dt>
+										<dd>3</dd>
+									</div>
+									<div>
+										<dt>Bags</dt>
+										<dd>1 × 23 kg</dd>
+									</div>
+								</dl>
+								<div class="arc-bottom-sheet-demo__actions">
+									<Button
+										onclick={() => {
+											if (status === 'open') {
+												status = 'pending';
+												later(() => (status = 'done'), 1100);
+											}
+										}}
+										loading={status === 'pending'}
+										variant={status === 'done' ? 'secondary' : 'primary'}
+										aria-disabled={status === 'done' || undefined}
+										>{#if status === 'done'}<Check
+												size={16}
+												strokeWidth={1.75}
+												aria-hidden="true"
+											/>Checked in{:else}Check in{/if}</Button
+									><Button
+										variant="secondary"
+										onclick={async () => {
+											try {
+												await navigator.clipboard.writeText('K7Q2ZP');
+												copy = 'copied';
+											} catch {
+												copy = 'failed';
+											}
+											later(() => (copy = 'idle'), 1800);
+										}}
+										>{#if copy === 'copied'}<Check
+												size={16}
+												strokeWidth={1.75}
+												aria-hidden="true"
+											/>Copied K7Q2ZP{:else if copy === 'failed'}<TriangleAlert
+												size={16}
+												strokeWidth={1.75}
+												aria-hidden="true"
+											/>Copy failed{:else}<Copy
+												size={16}
+												strokeWidth={1.75}
+												aria-hidden="true"
+											/>Copy booking code{/if}</Button
+									>
+								</div>
+								<p class="arc-bottom-sheet-demo__srOnly" role="status">
+									{status === 'pending' ? 'Checking in…' : status === 'done' ? 'Checked in.' : ''}
+								</p>
+								<section class="arc-bottom-sheet-demo__section">
+									<h3>Itinerary</h3>
+									<ol class="arc-bottom-sheet-demo__timeline">
+										{#each itinerary as [time, title, detail] (time)}<li>
+												<time>{time}</time>
+												<div><strong>{title}</strong><span>{detail}</span></div>
+											</li>{/each}
+									</ol>
+								</section>
+								<section class="arc-bottom-sheet-demo__section">
+									<h3>Travelers</h3>
+									<ul class="arc-bottom-sheet-demo__people">
+										{#each people as person (person.photo)}<li>
+												<img
+													src={`/media/people/${person.photo}.jpg`}
+													alt=""
+													width="36"
+													height="36"
+												/>
+												<div>
+													<strong>{person.name}</strong><span
+														>Seat {person.seat} · {person.bags}</span
+													>
+												</div>
+											</li>{/each}
+									</ul>
+								</section>
+								<section class="arc-bottom-sheet-demo__section">
+									<h3>Booking</h3>
+									<dl class="arc-bottom-sheet-demo__booking">
 										<div>
-											<dt>Seat</dt>
-											<dd>14C</dd>
+											<dt>Reference</dt>
+											<dd>K7Q2ZP</dd>
 										</div>
 										<div>
-											<dt>Group</dt>
-											<dd>3</dd>
+											<dt>Fare</dt>
+											<dd>Classic, €184.20 per person</dd>
 										</div>
 										<div>
-											<dt>Bags</dt>
-											<dd>1 × 23 kg</dd>
+											<dt>Changes</dt>
+											<dd>Free until 22 Oct, 23:59</dd>
 										</div>
 									</dl>
-									<div class="arc-bottom-sheet-demo__actions">
-										<Button
-											onclick={() => {
-												if (status === 'open') {
-													status = 'pending';
-													later(() => (status = 'done'), 1100);
-												}
-											}}
-											loading={status === 'pending'}
-											variant={status === 'done' ? 'secondary' : 'primary'}
-											aria-disabled={status === 'done' || undefined}
-											>{#if status === 'done'}<Check
-													size={16}
-													strokeWidth={1.75}
-													aria-hidden="true"
-												/>Checked in{:else}Check in{/if}</Button
-										><Button
-											variant="secondary"
-											onclick={async () => {
-												try {
-													await navigator.clipboard.writeText('K7Q2ZP');
-													copy = 'copied';
-												} catch {
-													copy = 'failed';
-												}
-												later(() => (copy = 'idle'), 1800);
-											}}
-											>{#if copy === 'copied'}<Check
-													size={16}
-													strokeWidth={1.75}
-													aria-hidden="true"
-												/>Copied K7Q2ZP{:else if copy === 'failed'}<TriangleAlert
-													size={16}
-													strokeWidth={1.75}
-													aria-hidden="true"
-												/>Copy failed{:else}<Copy
-													size={16}
-													strokeWidth={1.75}
-													aria-hidden="true"
-												/>Copy booking code{/if}</Button
-										>
-									</div>
-									<p class="arc-bottom-sheet-demo__srOnly" role="status">
-										{status === 'pending' ? 'Checking in…' : status === 'done' ? 'Checked in.' : ''}
-									</p>
-									<section class="arc-bottom-sheet-demo__section">
-										<h3>Itinerary</h3>
-										<ol class="arc-bottom-sheet-demo__timeline">
-											{#each itinerary as [time, title, detail] (time)}<li>
-													<time>{time}</time>
-													<div><strong>{title}</strong><span>{detail}</span></div>
-												</li>{/each}
-										</ol>
-									</section>
-									<section class="arc-bottom-sheet-demo__section">
-										<h3>Travelers</h3>
-										<ul class="arc-bottom-sheet-demo__people">
-											{#each people as person (person.photo)}<li>
-													<img
-														src={`/media/people/${person.photo}.jpg`}
-														alt=""
-														width="36"
-														height="36"
-													/>
-													<div>
-														<strong>{person.name}</strong><span
-															>Seat {person.seat} · {person.bags}</span
-														>
-													</div>
-												</li>{/each}
-										</ul>
-									</section>
-									<section class="arc-bottom-sheet-demo__section">
-										<h3>Booking</h3>
-										<dl class="arc-bottom-sheet-demo__booking">
-											<div>
-												<dt>Reference</dt>
-												<dd>K7Q2ZP</dd>
-											</div>
-											<div>
-												<dt>Fare</dt>
-												<dd>Classic, €184.20 per person</dd>
-											</div>
-											<div>
-												<dt>Changes</dt>
-												<dd>Free until 22 Oct, 23:59</dd>
-											</div>
-										</dl>
-									</section>
-								{/snippet}</BottomSheet
-							>
+								</section>
+							</BottomSheet>
 						</div>
 					</div>
 				</div>

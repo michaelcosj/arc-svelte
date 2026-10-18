@@ -7,11 +7,13 @@ type Options = { duration?: number; delay?: number; easing?: Easing };
 
 /** A Svelte tween that samples elapsed event time before interruption, rather than restarting from the previous RAF. */
 export class TimedTween<T extends Value> {
+	private initial: T;
 	#clock = $state.raw(new Tween(0));
 	#run = $state.raw<{ from: T; to: T; duration: number; delay: number; easing: Easing }>();
 	#completion = $state.raw<{ end: number; resolve: () => void }>();
 	#started = 0;
-	constructor(private initial: T) {
+	constructor(initial: T) {
+		this.initial = initial;
 		$effect(() => {
 			const completion = this.#completion;
 			if (completion && this.#clock.current >= completion.end)

@@ -3,12 +3,14 @@ import type { ToastStackApi, ToastOptions, ToastRecord, ToastType } from './type
 const durationFor = (type: ToastType, base: number) =>
 	type === 'loading' ? Infinity : type === 'warning' || type === 'error' ? base * 1.6 : base;
 export class ToastQueue implements ToastStackApi {
+	private base: number;
+	private limit: number;
 	toasts = $state<ToastRecord[]>([]);
 	private seq = 0;
-	constructor(
-		private base = 5000,
-		private limit = 12
-	) {}
+	constructor(base = 5000, limit = 12) {
+		this.base = base;
+		this.limit = limit;
+	}
 	update = (id: string, patch: Partial<Omit<ToastOptions, 'id'>>) => {
 		const found = this.toasts.find((item) => item.id === id);
 		if (!found) return;

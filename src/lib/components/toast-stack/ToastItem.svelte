@@ -293,7 +293,7 @@
 	});
 </script>
 
-<!-- svelte-ignore a11y_no_noninteractive_element_interactions (Escape dismisses a notification containing native action buttons) -->
+<!-- Escape dismisses a notification containing native action buttons. -->
 <li
 	bind:this={item}
 	class="arc-toast-stack__item"

@@ -347,7 +347,7 @@
 		if (!event.currentTarget.contains(event.relatedTarget as Node | null)) focusPaused = false;
 	}}
 >
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions, a11y_no_noninteractive_tabindex -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
 		bind:this={viewport}
 		class="arc-carousel__viewport"

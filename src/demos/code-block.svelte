@@ -7,6 +7,6 @@
 	<CodeBlock
 		filename="button.tsx"
 		language="tsx"
-		code={'<Button variant="secondary">Review changes</Button>'}
+		code="<Button variant=&quot;secondary&quot;>Review changes</Button>"
 	/>
 </div>

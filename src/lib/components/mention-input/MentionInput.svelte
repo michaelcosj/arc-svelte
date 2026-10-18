@@ -429,7 +429,7 @@
 						>{part.text}</span
 					>{:else}{part.text}{/if}{/each}{'\u200b'}
 		</div>
-		<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role (The native textarea owns the source combobox's caret and atomic mention editing.) -->
+		<!-- The native textarea owns the source combobox's caret and atomic mention editing. -->
 		<textarea
 			bind:this={area}
 			{id}

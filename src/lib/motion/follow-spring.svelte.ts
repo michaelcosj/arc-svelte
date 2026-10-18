@@ -4,6 +4,7 @@ import type { SpringSpec } from './spring';
 
 /** Analytical spring for a moving target. Retargets coalesce at the next frame without losing the current flight. */
 export class FollowSpring {
+	private spec: SpringSpec;
 	#current = $state(0);
 	#target = $state(0);
 	#flightTarget = 0;
@@ -12,10 +13,8 @@ export class FollowSpring {
 	#started = 0;
 	#pending = false;
 	#sample: ReturnType<typeof springTrajectory> | undefined;
-	constructor(
-		value: number,
-		private spec: SpringSpec
-	) {
+	constructor(value: number, spec: SpringSpec) {
+		this.spec = spec;
 		this.#current = this.#target = value;
 		onDestroy(() => this.destroy());
 	}
