@@ -13,9 +13,9 @@ vp install --frozen-lockfile
 vp run dev
 ```
 
-Use Svelte 5 runes and snippets. Follow the
-[reactivity and lifecycle conventions](./docs/SVELTE_PATTERNS.md); do not translate
-React effects mechanically. Use Bits UI for the project's accessible
+Use Svelte 5 runes and snippets. Follow the reactivity and lifecycle conventions
+in the [porting notes](./docs/PORTING.md); do not translate React effects
+mechanically. Use Bits UI for the project's accessible
 primitives. Keep animation code native to Svelte/browser APIs and the shared
 `src/lib/motion/` helpers. Preserve Arc's design tokens, source behavior and
 reduced-motion support. Record intentional differences in the porting notes.
@@ -25,9 +25,18 @@ can be cloned into the ignored `reference/arc-library/` directory for comparison
 Never edit that reference. The [browser test guide](./tests/phase5/README.md)
 records the exact revision and isolated dependencies used by the regression suite.
 
-For Svelte changes, run the official autofixer and review its findings. The
-[code quality notes](./docs/CODE_QUALITY.md) include the command, latest pass
-scope and a known TypeScript analysis limitation.
+For Svelte changes, run the official autofixer on affected files and review its
+findings in context:
+
+```sh
+vp dlx -- @sveltejs/mcp@0.1.26 svelte-autofixer src/lib/components/slider/Slider.svelte
+```
+
+Generic effect/ref advisories require source review; they are not automatically
+defects. Prefer explicit fields and constructor assignments in `.svelte.ts`
+modules: this version of the autofixer crashes on TypeScript constructor parameter
+properties. Check suppression changes with the current Svelte compiler before
+removing an ignore code.
 
 ## Before opening a pull request
 
@@ -42,8 +51,8 @@ vp run build
 For a UI change, verify the affected demo against the reference at the same
 viewport, including keyboard interaction, reduced motion and interrupted animations.
 Run the relevant existing browser workflow when available. Include useful visual
-evidence and describe any untested cases. Keep component exports, demos, the roadmap and relevant verification notes
-aligned with the actual verification status.
+evidence and describe any untested cases. Keep component exports, demos, the roadmap
+and relevant verification notes aligned with the actual verification status.
 
 Keep local reports under the ignored `handoff/` directory. Do not commit local
 handoffs, dependency directories, environment files, access tokens or generated

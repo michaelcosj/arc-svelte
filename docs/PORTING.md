@@ -19,6 +19,30 @@ Check each component's exported props for its controlled-state contract. In
 components with caller-owned updates, callbacks can reject a proposed value;
 keep that behavior when translating to bindings.
 
+## Reactivity and lifecycle
+
+- Compute values with pure `$derived` / `$derived.by`; use writable derived values
+  for temporary overrides while preserving controlled-update rejection behavior.
+- Handle user input in events and bindings. Expose current context state through
+  getters instead of effects that copy it.
+- Use `onMount` for client setup without reactive dependencies, `onDestroy` for
+  component cleanup, and attachments for resources tied to a DOM element.
+  Prefer existing reactive browser primitives such as `MediaQuery`.
+- Reserve `$effect` for imperative browser/animation work. Capture old layout or
+  animation history with a narrowly scoped `$effect.pre` or setter when needed.
+  Do not mutate history caches while evaluating a derived value or use `untrack`
+  to hide avoidable duplicated state.
+- Editing drafts, previous-value animation history and outgoing presence have
+  their own lifetimes. Preserve incomplete edits, rejected proposals and departing
+  nodes when changing these effects; current props alone cannot represent them.
+
+See Svelte's [`$effect`](https://svelte.dev/docs/svelte/$effect#When-not-to-use-$effect)
+and [`$derived`](https://svelte.dev/docs/svelte/$derived) guidance. The
+[state regression guide](../tests/svelte-state/README.md) covers controlled updates,
+history reversal, context refs and lifecycle cleanup.
+
+## Motion
+
 Animation helpers live in `src/lib/motion/`. Moving pointer targets and fixed-target
 releases need different spring handling; use the existing follow/target/physical
 helpers rather than assuming native spring parameters reproduce Motion's trajectory.

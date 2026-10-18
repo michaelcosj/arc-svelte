@@ -15,6 +15,8 @@ This is a community port, independently maintained and not an official Arc relea
 
 This is a work in progress, distributed as source with a local component gallery.
 It is not yet an npm package or a shadcn-compatible Svelte registry.
+`private: true` in `package.json` prevents accidental npm publication; it does not
+restrict GitHub access.
 
 - 96 components have implementations and demos; verification status varies.
 - Phase 5's 18 pointer and gesture components are verified.
@@ -92,7 +94,6 @@ the separate test dependencies and pinned upstream reference for motion comparis
 | `static/media/`          | Demo photographs and their credits        |
 
 Contributions are welcome; read [CONTRIBUTING.md](./CONTRIBUTING.md).
-Publication instructions are in [PUBLISHING.md](./PUBLISHING.md).
 
 ## License and credit
 

@@ -53,6 +53,6 @@ ChangelogFeed, LoginCentered, ContactSection, PageHeader, SiteHeader and HeroSec
 ## Distribution
 
 The repository currently distributes source and a local gallery. An npm package
-and a shadcn-compatible Svelte registry are not available yet. See
-[publishing](./PUBLISHING.md) for GitHub publication instructions and retained
-license notices.
+and a shadcn-compatible Svelte registry are not available yet. Retain the
+[license and third-party notices](./THIRD_PARTY_NOTICES.md) when redistributing
+source or preparing a release.

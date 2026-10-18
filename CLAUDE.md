@@ -6,6 +6,9 @@ A Svelte 5 port of [arc-library](https://github.com/kuratlielia/arc-library) (Re
 
 Read `ROADMAP.md` for public status and `docs/PORTING.md` for conventions and intentional differences. An optional, gitignored `PORT.md` holds the detailed local checklist; do not require it for contributors or publish it.
 
+Public work belongs on `main`. Keep local history/backup branches private: never
+merge them into public work or push with `--all` or `--mirror`.
+
 ## Setup
 
 - The React source lives in `reference/arc-library` (a git clone, gitignored). Read components there; never edit it.
@@ -105,7 +108,7 @@ When a pattern repeats in two or more components, move it into `src/lib/motion` 
 - Transitions are local by default: when an outer block is removed, the inner element disappears at once with no outro. Keep `{#if}` / `{#key}` directly around the animated element, and use `|global` only when the original animated in that case too.
 - Do not use `untrack` to hide avoidable state synchronization. Derive computed values, use writable derived values for temporary overrides, and update user state in handlers. Reserve `untrack` for incidental reads in imperative browser/animation work or deliberate history snapshots.
 - Keep `$derived` and `$derived.by` pure: do not update previous-value caches or glyph histories while computing a value. Record animation history before the DOM update, using an existing measurement effect when possible.
-- Use `onMount` for client setup with no reactive dependencies and `onDestroy` for component-lifetime cleanup. Prefer attachments for element-lifetime resources and Svelte reactive browser primitives when available. See `docs/SVELTE_PATTERNS.md` for the reviewed examples and retained state machines.
+- Use `onMount` for client setup with no reactive dependencies and `onDestroy` for component-lifetime cleanup. Prefer attachments for element-lifetime resources and Svelte reactive browser primitives when available. See `docs/PORTING.md` for the reactivity conventions.
 - `$effect` runs after the DOM updates, `$effect.pre` before. Measure "before" in `$effect.pre` or a setter, and "after" in `$effect`.
 - Springy easings overshoot past 1. Clamp opacity (`swap` already does this).
 
