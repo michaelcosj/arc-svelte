@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import type { ToastStackProps, ToastTarget, ToastRecord } from './types';
 	import { useToastQueue } from './toast-stack-state.svelte';
@@ -137,7 +137,7 @@
 			heights = Object.fromEntries(Object.entries(heights).filter(([id]) => ids.has(id)));
 		});
 	});
-	$effect(() => {
+	onMount(() => {
 		const change = () => (pageHidden = document.hidden);
 		document.addEventListener('visibilitychange', change);
 		return () => document.removeEventListener('visibilitychange', change);

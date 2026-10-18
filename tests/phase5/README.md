@@ -20,6 +20,11 @@ cd ../../..
 vp run test:phase5
 ```
 
+The release fixture readiness check polls from Node, independently of browser
+frames, with the existing ten-second deadline. Action-clock alignment and motion
+comparison bounds are unchanged. Its readiness regression runs with
+`vp run test:svelte-state`.
+
 The dependency lock pins the oracle's runtime as well as its React source.
 Each workflow closes its browser and Vite server. The runner executes them
 sequentially with a five-minute limit per workflow. Reports and screenshots go

@@ -15,6 +15,9 @@
 
 	const tabs = setTabsState(
 		new TabsState({
+			get root() {
+				return ref;
+			},
 			get value() {
 				return value;
 			},
@@ -24,10 +27,6 @@
 			}
 		})
 	);
-
-	$effect.pre(() => {
-		tabs.root = ref;
-	});
 </script>
 
 <Primitive.Root

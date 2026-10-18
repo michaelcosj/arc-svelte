@@ -39,21 +39,21 @@ Styles: port `<name>.module.css` to a plain `<name>.css` imported by the compone
 
 ## Translating React to Svelte
 
-| React                                         | Svelte                                                                                                 |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `className`                                   | `class` (accept `ClassValue`; pass arrays straight through, Svelte runs clsx on them)                  |
-| `children` / render props                     | `Snippet` props; `{@render children?.()}`                                                              |
-| `asChild`                                     | Bits UI's `child` snippet: `{#snippet child({ props })}<el {...props}>{/snippet}`                      |
-| `forwardRef` / `ref`                          | `ref = $bindable(null)`                                                                                |
-| `value` + `defaultValue` + `onValueChange`    | `value = $bindable(default)` plus an optional `onValueChange` callback                                 |
-| `createContext` / `useContext`                | `createContext` from `svelte` returns `[get, set]`; put shared state in a class in a `.svelte.ts` file |
-| `useId`                                       | `$props.id()`                                                                                          |
-| `useRef` for DOM nodes                        | `let el = $state<HTMLElement>()` + `bind:this={el}`, or an attachment                                  |
-| `useEffect` / `useLayoutEffect`               | `$effect` / `$effect.pre`; wrap writes to state the effect also reads in `untrack`                     |
-| `useMemo` / derived values                    | `$derived` / `$derived.by`                                                                             |
-| `lucide-react` icons                          | `import X from '@lucide/svelte/icons/x'`                                                               |
-| `ArcProvider` link/image                      | the `src/lib/arc-provider.svelte.ts` context, falling back to `<a>` / `<img>`                          |
-| `children` read as a string so it can animate | a `label` prop (see `Badge`); keep `children` for rich, non-animated content                           |
+| React                                         | Svelte                                                                                                                                                         |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `className`                                   | `class` (accept `ClassValue`; pass arrays straight through, Svelte runs clsx on them)                                                                          |
+| `children` / render props                     | `Snippet` props; `{@render children?.()}`                                                                                                                      |
+| `asChild`                                     | Bits UI's `child` snippet: `{#snippet child({ props })}<el {...props}>{/snippet}`                                                                              |
+| `forwardRef` / `ref`                          | `ref = $bindable(null)`                                                                                                                                        |
+| `value` + `defaultValue` + `onValueChange`    | `value = $bindable(default)` plus an optional `onValueChange` callback                                                                                         |
+| `createContext` / `useContext`                | `createContext` from `svelte` returns `[get, set]`; put shared state in a class in a `.svelte.ts` file                                                         |
+| `useId`                                       | `$props.id()`                                                                                                                                                  |
+| `useRef` for DOM nodes                        | `let el = $state<HTMLElement>()` + `bind:this={el}`, or an attachment                                                                                          |
+| `useEffect` / `useLayoutEffect`               | Choose `$derived`, handlers/bindings, lifecycle hooks or attachments by purpose; reserve effects for external synchronization and pre-update animation history |
+| `useMemo` / derived values                    | `$derived` / `$derived.by`                                                                                                                                     |
+| `lucide-react` icons                          | `import X from '@lucide/svelte/icons/x'`                                                                                                                       |
+| `ArcProvider` link/image                      | the `src/lib/arc-provider.svelte.ts` context, falling back to `<a>` / `<img>`                                                                                  |
+| `children` read as a string so it can animate | a `label` prop (see `Badge`); keep `children` for rich, non-animated content                                                                                   |
 
 ## Translating motion
 
@@ -67,7 +67,7 @@ Import tokens as `import { motionTokens as m } from '$lib/motion/tokens'`. Durat
 | `animate(value, …)` to a fixed target                                   | `Tween.set(target, m.spring.morph)` or an ease token                                                                                                            |
 | `animate(element, keyframes)`, `useAnimate`                             | `element.animate(keyframes, { duration, easing: cssEasing(...) })` (Web Animations API)                                                                         |
 | `AnimatePresence` + `initial` / `exit`                                  | `{#if}` / `{#key}` with `in:` / `out:`                                                                                                                          |
-| `AnimatePresence initial={false}`                                       | a `mounted` flag set in `$effect`, passed as `skip: !mounted` (see `Badge`)                                                                                     |
+| `AnimatePresence initial={false}`                                       | the shared `Mounted` helper (`onMount`), passed as `skip: !mounted.current` (see `Badge`)                                                                       |
 | `mode="popLayout"`                                                      | `out:swap={{ ..., pop: true }}` or `popOut(node, box)` inside a custom outro. The parent must be `position: relative`                                           |
 | `useIsPresent` to hide outgoing copies from screen readers              | handled: `popOut` sets `aria-hidden`, and Svelte makes outgoing nodes `inert`                                                                                   |
 | `variants` + `custom`                                                   | transition params (`in:panelIn={{ direction }}`)                                                                                                                |
@@ -103,7 +103,9 @@ When a pattern repeats in two or more components, move it into `src/lib/motion` 
 ## Svelte gotchas
 
 - Transitions are local by default: when an outer block is removed, the inner element disappears at once with no outro. Keep `{#if}` / `{#key}` directly around the animated element, and use `|global` only when the original animated in that case too.
-- An effect that writes state it also reads loops. Read the trigger, then do the work inside `untrack`.
+- Do not use `untrack` to hide avoidable state synchronization. Derive computed values, use writable derived values for temporary overrides, and update user state in handlers. Reserve `untrack` for incidental reads in imperative browser/animation work or deliberate history snapshots.
+- Keep `$derived` and `$derived.by` pure: do not update previous-value caches or glyph histories while computing a value. Record animation history before the DOM update, using an existing measurement effect when possible.
+- Use `onMount` for client setup with no reactive dependencies and `onDestroy` for component-lifetime cleanup. Prefer attachments for element-lifetime resources and Svelte reactive browser primitives when available. See `docs/SVELTE_PATTERNS.md` for the reviewed examples and retained state machines.
 - `$effect` runs after the DOM updates, `$effect.pre` before. Measure "before" in `$effect.pre` or a setter, and "after" in `$effect`.
 - Springy easings overshoot past 1. Clamp opacity (`swap` already does this).
 

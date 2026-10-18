@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
 	import Hash from '@lucide/svelte/icons/hash';
 	import { Highlight as HighlightMotion, swap, motionTokens as m } from '#lib/motion';
@@ -49,10 +49,8 @@
 	const reduced = $derived(!!prefersReducedMotion.current);
 	let inner = $state<MentionValue>(untrack(() => defaultValue ?? EMPTY));
 	const value = $derived(valueProp ?? inner);
-	let live = untrack(() => value);
-	$effect.pre(() => {
-		live = value;
-	});
+	// Keep the optimistic edit until the parent changes the value or rejection reconciles it.
+	let live = $derived(value);
 	let root = $state<HTMLDivElement>();
 	let field = $state<HTMLDivElement>();
 	let area = $state<HTMLTextAreaElement>();
@@ -62,9 +60,7 @@
 	let lastCaret = 0;
 	let pending: Mention | null = null;
 	let caret = $state<number | null>(null),
-		focused = $state(false),
-		dismissed = $state<number | null>(null),
-		active = $state(0);
+		focused = $state(false);
 	const trigger = $derived(
 		caret === null
 			? null
@@ -92,6 +88,17 @@
 			.slice(0, maxSuggestions)
 			.map((entry) => entry.entry);
 	});
+	const queryKey = $derived(trigger ? `${trigger.start}:${trigger.query}` : '');
+	const triggerStart = $derived(trigger?.start);
+	// Navigation overrides last until the query changes; Escape dismissal lasts for this trigger.
+	let active = $derived.by(() => {
+		void queryKey;
+		return 0;
+	});
+	let dismissed = $derived.by<number | null>(() => {
+		void triggerStart;
+		return null;
+	});
 	const open = $derived(
 		focused &&
 			!disabled &&
@@ -100,14 +107,6 @@
 			(suggestions.length > 0 || !trigger.query.includes(' '))
 	);
 	const activeIndex = $derived(Math.min(active, Math.max(0, suggestions.length - 1)));
-	const queryKey = $derived(trigger ? `${trigger.start}:${trigger.query}` : '');
-	$effect.pre(() => {
-		void queryKey;
-		active = 0;
-	});
-	$effect.pre(() => {
-		if (dismissed !== null && trigger?.start !== dismissed) dismissed = null;
-	});
 	function commit(next: MentionValue) {
 		live = next;
 		if (valueProp === undefined) inner = next;
@@ -277,7 +276,7 @@
 			return area ?? null;
 		}
 	};
-	$effect(() => {
+	onMount(() => {
 		ref = handle;
 		return () => {
 			ref = null;

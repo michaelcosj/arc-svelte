@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import { DropdownMenu as Menu } from 'bits-ui';
 	import { Tween, prefersReducedMotion } from 'svelte/motion';
+	import { MediaQuery } from 'svelte/reactivity';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import LogOut from '@lucide/svelte/icons/log-out';
@@ -55,8 +56,10 @@
 	const reduced = $derived(Boolean(prefersReducedMotion.current));
 	const uid = $props.id(),
 		triggerId = `arc-user-menu-${uid}-trigger`;
-	let compact = $state(false),
-		surface = $state<HTMLDivElement>(),
+	const initialized = new Mounted();
+	const compactQuery = new MediaQuery('(max-width: 639px)', false);
+	const compact = $derived(initialized.current && compactQuery.current);
+	let surface = $state<HTMLDivElement>(),
 		root = $state<HTMLSpanElement>();
 	const sheet = $derived(compact);
 	let signingOut = $state(false),
@@ -85,7 +88,6 @@
 	};
 	const alpha = new Tween(0),
 		drag = new TargetSpring(0, { stiffness: 200, damping: 40 }, { delta: 1, speed: 10 });
-	const initialized = new Mounted();
 	let pointer:
 		| {
 				id: number;
@@ -98,14 +100,7 @@
 		| undefined;
 	let typed = '',
 		typeTimer: ReturnType<typeof setTimeout>;
-	$effect(() => {
-		const q = window.matchMedia('(max-width: 639px)');
-		compact = q.matches;
-		const change = () => (compact = q.matches);
-		q.addEventListener('change', change);
-		return () => q.removeEventListener('change', change);
-	});
-	$effect(() => () => {
+	onDestroy(() => {
 		mounted = false;
 		clearTimeout(typeTimer);
 	});

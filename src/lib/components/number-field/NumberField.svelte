@@ -61,8 +61,8 @@
 	const inputRef = $derived(ref);
 	let internal = $state(untrack(() => defaultValue));
 	const current = $derived(value ?? internal);
-	let latest = untrack(() => current),
-		editStart = latest;
+	let latest = $derived(current);
+	let editStart = untrack(() => current);
 	let pushedTimer: number | undefined,
 		underTimer: number | undefined,
 		strainTimer: number | undefined,
@@ -139,12 +139,6 @@
 				direction = next > previous ? 1 : -1;
 				previous = next;
 			}
-		});
-	});
-	$effect(() => {
-		const next = current;
-		untrack(() => {
-			latest = next;
 		});
 	});
 	function cleanup() {

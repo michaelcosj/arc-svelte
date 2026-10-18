@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { flushSync } from 'svelte';
+	import { onMount, flushSync } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { ThemeSwitch, type Theme, type ThemeSwitchVariant } from '#arc/theme-switch';
 	import './theme-switch-demo.css';
@@ -8,7 +8,7 @@
 
 	let theme = $state<Theme>('light');
 	// Follow the page's appearance, which the layout may set just after this mounts.
-	$effect(() => {
+	onMount(() => {
 		const root = document.documentElement;
 		const read = () => (theme = root.dataset.theme === 'dark' ? 'dark' : 'light');
 		read();

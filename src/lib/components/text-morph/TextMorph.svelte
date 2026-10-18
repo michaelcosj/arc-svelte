@@ -31,9 +31,8 @@
 	}
 
 	// The previous label tells which letters are new, so only they stagger, in reading order, however far along the word they sit.
-	let labels = untrack(() => ({ current: text, previous: text }));
+	let labels = $state.raw(untrack(() => ({ current: text, previous: text })));
 	const glyphs = $derived.by(() => {
-		if (labels.current !== text) labels = { current: text, previous: labels.current };
 		const kept = new Set(toGlyphs(labels.previous).map((glyph) => glyph.key));
 		let entering = 0;
 		return toGlyphs(text).map((glyph) => ({
@@ -47,8 +46,9 @@
 	const layout = new PopLayout();
 	let track = $state<HTMLElement>();
 	$effect.pre(() => {
-		void text;
+		const next = text;
 		untrack(() => {
+			if (labels.current !== next) labels = { current: next, previous: labels.current };
 			layout.capture(track);
 			width.changed();
 		});

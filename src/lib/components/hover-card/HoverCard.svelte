@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { LinkPreview } from 'bits-ui';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { motionTokens as m, springCurve } from '#lib/motion';
@@ -49,7 +50,7 @@
 		clearTimeout(pendingClose);
 		pendingClose = window.setTimeout(() => cards.close(id), closeDelay);
 	}
-	$effect(() => {
+	onMount(() => {
 		const unsubscribe = cards.subscribe(() => {
 			instant = cards.instant;
 			open = cards.active === id;

@@ -2,6 +2,7 @@ import { createContext } from 'svelte';
 import { measureBox, type Box } from '#lib/motion';
 
 export interface TabsStateOptions {
+	readonly root: HTMLElement | null;
 	readonly value: string;
 	setValue(value: string): void;
 }
@@ -15,7 +16,9 @@ export class TabsState {
 	direction = $state(1);
 	panelHeight: number | null = null;
 	leaving: { box: Box; rect: DOMRect } | null = null;
-	root: HTMLElement | null = null;
+	get root() {
+		return this.#options.root;
+	}
 	#options: TabsStateOptions;
 
 	constructor(options: TabsStateOptions) {

@@ -98,20 +98,23 @@
 	const monthLabel = $derived(month ? formatter.format(month) : '');
 	const valueKey = $derived(value ? dateKey(value) : '');
 	let last = untrack(() => ({ key: valueKey, date: value }));
-	const handoff = $derived.by(() => {
-		if (last.key === valueKey) return { from: '', to: '', distance: 0 };
-		const days =
-			last.date && value
-				? Math.round((startOfDay(value).getTime() - startOfDay(last.date).getTime()) / 864e5)
-				: 0;
-		const columns = last.date && value ? value.getDay() - last.date.getDay() : 0;
-		const result = {
-			from: last.key,
-			to: valueKey,
-			distance: Math.hypot(columns, (days - columns) / 7)
-		};
-		last = { key: valueKey, date: value };
-		return result;
+	let handoff = $state({ from: '', to: '', distance: 0 });
+	$effect.pre(() => {
+		const key = valueKey,
+			date = value;
+		untrack(() => {
+			if (last.key === key) {
+				if (handoff.distance) handoff = { from: '', to: '', distance: 0 };
+				return;
+			}
+			const days =
+				last.date && date
+					? Math.round((startOfDay(date).getTime() - startOfDay(last.date).getTime()) / 864e5)
+					: 0;
+			const columns = last.date && date ? date.getDay() - last.date.getDay() : 0;
+			handoff = { from: last.key, to: key, distance: Math.hypot(columns, (days - columns) / 7) };
+			last = { key, date };
+		});
 	});
 	function numberDelay(key: string) {
 		if (!handoff.distance || reduced || (key !== handoff.to && key !== handoff.from))

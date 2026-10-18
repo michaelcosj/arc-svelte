@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Countdown, toEpoch } from '#arc/countdown';
 	import { Button } from '#arc/button';
 	import './countdown-demo.css';
@@ -26,7 +27,7 @@
 		{ title: 'Design systems deep dive', offset: 5400000 },
 		{ title: 'Live Q&A with the team', offset: 11700000 }
 	];
-	$effect(() => {
+	onMount(() => {
 		const time = Date.now();
 		for (let day = 2; day < 10; day++) {
 			const p = Object.fromEntries(

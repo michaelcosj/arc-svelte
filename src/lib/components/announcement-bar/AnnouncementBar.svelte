@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
 	import ChevronUp from '@lucide/svelte/icons/chevron-up';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
@@ -80,7 +80,7 @@
 		hovered = $state(false),
 		focused = $state(false),
 		hidden = $state(false);
-	$effect(() => {
+	onMount(() => {
 		const read = () => (hidden = document.visibilityState === 'hidden');
 		document.addEventListener('visibilitychange', read);
 		return () => document.removeEventListener('visibilitychange', read);

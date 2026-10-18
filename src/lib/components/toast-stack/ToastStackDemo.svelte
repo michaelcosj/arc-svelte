@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import Rocket from '@lucide/svelte/icons/rocket';
 	import Upload from '@lucide/svelte/icons/upload';
 	import UserPlus from '@lucide/svelte/icons/user-plus';
@@ -12,7 +13,7 @@
 		timers: ReturnType<typeof setTimeout>[] = [];
 	let version = 2,
 		person = 0;
-	$effect(() => () => timers.forEach(clearTimeout));
+	onDestroy(() => timers.forEach(clearTimeout));
 	const later = (ms: number, fn: () => void) => timers.push(setTimeout(fn, ms));
 	function publish() {
 		const next = `4.${version}`,

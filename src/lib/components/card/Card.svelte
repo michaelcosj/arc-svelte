@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Dialog as Primitive } from 'bits-ui';
 	import X from '@lucide/svelte/icons/x';
-	import { untrack } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { cssEasing, easeOut, motionTokens as m, swap } from '#lib/motion';
 	import CardStatus from './CardStatus.svelte';
@@ -93,7 +93,7 @@
 		});
 	});
 
-	$effect(() => () => {
+	onDestroy(() => {
 		clearTimeout(returnTimer);
 		morph.cancel();
 		photoAnimation?.cancel();

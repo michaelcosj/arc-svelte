@@ -13,7 +13,9 @@ vp install --frozen-lockfile
 vp run dev
 ```
 
-Use Svelte 5 runes and snippets. Use Bits UI for the project's accessible
+Use Svelte 5 runes and snippets. Follow the
+[reactivity and lifecycle conventions](./docs/SVELTE_PATTERNS.md); do not translate
+React effects mechanically. Use Bits UI for the project's accessible
 primitives. Keep animation code native to Svelte/browser APIs and the shared
 `src/lib/motion/` helpers. Preserve Arc's design tokens, source behavior and
 reduced-motion support. Record intentional differences in the porting notes.

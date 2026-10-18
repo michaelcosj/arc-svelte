@@ -49,13 +49,15 @@
 			: `${hour % 12 || 12}:${pad(minute)} ${hour < 12 ? 'AM' : 'PM'}`;
 	}
 	let previous = untrack(() => value);
-	let rollDirection = 1;
-	const direction = $derived.by(() => {
-		if (previous !== value) {
-			rollDirection = toMinutes(value) >= toMinutes(previous) ? 1 : -1;
-			previous = value;
-		}
-		return rollDirection;
+	let direction = $state(1);
+	$effect.pre(() => {
+		const next = value;
+		untrack(() => {
+			if (previous !== next) {
+				direction = toMinutes(next) >= toMinutes(previous) ? 1 : -1;
+				previous = next;
+			}
+		});
 	});
 	function setOpen(next: boolean) {
 		if (!next && open) closedFromOption = !!menu?.contains(document.activeElement);

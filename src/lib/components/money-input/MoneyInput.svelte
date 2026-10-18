@@ -96,13 +96,7 @@
 	});
 	const inputRef = $derived(ref);
 	let pendingCaret: number | null = null;
-	let latest = untrack(() => ({ minor, draft }));
-	$effect(() => {
-		const state = { minor, draft };
-		untrack(() => {
-			latest = state;
-		});
-	});
+	let latest = $derived({ minor, draft });
 	const money = (amount: number | null) =>
 		amount === null ? '' : info.full.format(amount / pow10(info.digits));
 	const display = $derived(displayOf(draft, symbols)),

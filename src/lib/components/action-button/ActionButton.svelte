@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import type { Attachment } from 'svelte/attachments';
 	import ArrowRight from '@lucide/svelte/icons/arrow-right';
@@ -26,7 +27,7 @@
 			state === 'pending' ? pendingLabel : state === 'success' ? successLabel : label
 		),
 		pending = $derived(state === 'pending');
-	$effect(() => () => clearTimeout(timer));
+	onDestroy(() => clearTimeout(timer));
 	async function run() {
 		if (state === 'pending') return;
 		clearTimeout(timer);

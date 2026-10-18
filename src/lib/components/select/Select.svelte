@@ -30,13 +30,15 @@
 	const index = $derived(options.findIndex((option) => option.value === value));
 	const shown = $derived(value ? (options[index]?.label ?? '') : placeholder);
 	let previousIndex = untrack(() => index);
-	let previousDirection = 1;
-	const direction = $derived.by(() => {
-		if (previousIndex !== index) {
-			previousDirection = index > previousIndex ? 1 : -1;
-			previousIndex = index;
-		}
-		return previousDirection;
+	let direction = $state(1);
+	$effect.pre(() => {
+		const next = index;
+		untrack(() => {
+			if (previousIndex !== next) {
+				direction = next > previousIndex ? 1 : -1;
+				previousIndex = next;
+			}
+		});
 	});
 	const mounted = new Mounted();
 	const reduced = $derived(prefersReducedMotion.current);

@@ -1,20 +1,54 @@
 # Code quality checks
 
-## Svelte autofixer pass — 2026-10-18
+Use the standard checks before opening a pull request:
 
-Ran the official `@sveltejs/mcp` autofixer, version `0.1.26`, targeting Svelte 5
-with async compilation disabled, across all 338 `.svelte` and `.svelte.ts` files
-under `src/`. The batch called the package's exported `svelteAutofixer` handler,
-which is also used by its CLI and MCP tool.
+```sh
+vp check
+vp test
+vp run check
+vp run lint
+vp run build
+```
 
-The first pass found 14 missing loop keys in five files. Added explicit keys in
-the BottomSheet and ResizablePanels demos, MentionInput, Slider and SwipeActionsRow.
-Index keys retain the existing positional identity of editable slider thumbs,
-repeated marks, mirror segments and action slots; changing values must not remount
-these elements. Demo records with stable identifiers use those identifiers.
-The second pass reported no remaining missing-key issues.
+The [Svelte state regression](../tests/svelte-state/README.md) adds SSR, immediate
+parent-update/event handling, controlled rejection, history reversal and lifecycle
+checks. The [Phase 5 comparison suite](../tests/phase5/README.md) checks native
+motion against the pinned React source. Both browser workflows need their documented
+Playwright setup; unit tests do not run those workflows automatically.
 
-### Autofixer limitation
+## Validation — 2026-10-18
+
+The standard checks above passed, including 54 unit tests, zero Svelte diagnostics
+and the production build. The new state/lifecycle workflow passed 20 cases, and
+all 16 Phase 5 browser workflows completed, including 60 release runs, 30 CardStack
+scenarios and all 46 gallery cases.
+
+An initial release attempt had two fixture-readiness timeouts before motion
+assertions. Readiness now polls from Node independently of browser frames; its
+ten-second deadline, action-clock alignment and motion bounds are unchanged.
+The full release rerun passed. The exact cause of the original timeouts remains
+unproven; the original reports are retained locally.
+
+## Svelte autofixer
+
+The 2026-10-18 pass used the official `@sveltejs/mcp` autofixer, version `0.1.26`,
+targeting Svelte 5 with async compilation disabled, across all 338 `.svelte` and
+`.svelte.ts` files under `src/`. The batch called the package's exported
+`svelteAutofixer` handler, which is also used by its CLI and MCP tool.
+
+Run a focused check with:
+
+```sh
+vp dlx -- @sveltejs/mcp@0.1.26 svelte-autofixer src/lib/components/slider/Slider.svelte
+```
+
+The tool returns findings and suggested changes; review and apply them, then run
+it again. The initial missing-key findings were resolved. Broad suggestions about
+effect callbacks, DOM refs, ignore comments and literal interpolation still require
+context; neither suppress them wholesale nor treat each as a confirmed defect.
+Keep local raw reports under ignored `handoff/`.
+
+### TypeScript analysis limitation
 
 Five modules trigger an internal autofixer error:
 `Cannot read properties of undefined (reading 'text')`. A minimal reproduction is:
@@ -36,34 +70,17 @@ result. That fallback reported no issues. The original modules were unchanged;
 `svelte-check` validates their TypeScript directly. This workaround does not mean
 the autofixer successfully analyzed the original TypeScript inputs.
 
-### Advisory suggestions
+## Manual reactivity review
 
-The tool also emits suggestions about effect callbacks/state writes, DOM refs,
-ignore comments and literal interpolation. They are not all confirmed defects,
-and this pass is not an exhaustive manual review of those suggestions.
-For example, `PhysicalSpring.set()` is an intentional class method, FileUpload's
-plain Map stores imperative focus refs, and the plain Date read in `today` uses
-an explicit subscription. Effects that coordinate measurement, animation clocks
-and teardown require behavior checks before a derived-state rewrite.
+The [reactivity review](./SVELTE_PATTERNS.md) examined every effect body and library
+`$derived.by` callback, removed avoidable state mirrors and lifecycle effects,
+and moved historical writes out of computed values. New regressions reproduce
+stale-value failures in the pre-review NumberField and MentionInput components.
+The earlier automated checks alone did not establish idiomatic Svelte design.
 
-## Running a focused check
-
-```sh
-vp dlx -- @sveltejs/mcp@0.1.26 svelte-autofixer src/lib/components/slider/Slider.svelte
-```
-
-The tool returns findings and suggested changes; review and apply them, then run
-it again. Keep local raw reports under the ignored `handoff/` directory. Continue
-to run the compiler, lint, unit and relevant browser checks described in
-[contributing](../CONTRIBUTING.md); autofixer output alone does not establish
-behavior or motion parity.
-
-## Validation of the loop-key changes
-
-`vp check`, `vp run check` (zero errors/warnings), `vp run lint` and all 54 unit
-tests passed. The production build also passed. The swipe regression and all 60 slider/bottom-sheet release runs
-passed. The integrated gallery passed 45 of 46 cases on its first run, with a
-normal-motion HoldToConfirm timeout. A focused repeat of the same gallery
-assertions passed both normal and reduced-motion HoldToConfirm cases without
-code changes or timing adjustments. The first failure report is retained locally;
-its exact cause remains unproven. Existing gallery console warnings also remain.
+Some generic suggestions describe deliberate behavior: `PhysicalSpring.set()` is
+a class method, FileUpload's plain Map stores imperative focus refs, and `today`
+reads a plain Date through an explicit subscription. Effects that coordinate
+measurement, animation clocks, editing and teardown need behavior checks before
+a rewrite. The review documents those boundaries and the remaining verification
+scope; see the [roadmap](../ROADMAP.md) for components awaiting further checks.

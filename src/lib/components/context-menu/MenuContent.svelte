@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ContextMenu as Primitive } from 'bits-ui';
-	import { untrack } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import { prefersReducedMotion, Tween } from 'svelte/motion';
 	import Check from '@lucide/svelte/icons/check';
 	import MoreHorizontal from '@lucide/svelte/icons/ellipsis';
@@ -36,7 +36,7 @@
 	let clearTimer: ReturnType<typeof setTimeout> | undefined;
 	let placedKey = 0;
 	const scaleIn = springCurve(m.specs.snappy, 0.04);
-	$effect(() => () => clearTimeout(clearTimer));
+	onDestroy(() => clearTimeout(clearTimer));
 
 	// Keep Bits' content node stable. A re-open leaves an inert visual copy at the old pointer.
 	$effect(() => {

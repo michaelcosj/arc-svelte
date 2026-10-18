@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { TextShimmer } from '#arc/text-shimmer';
 	import { Button } from '#arc/button';
 	import Sparkles from '@lucide/svelte/icons/sparkles';
@@ -29,7 +30,7 @@
 			files = 'working';
 		}
 	}
-	$effect(() => () => clear());
+	onDestroy(() => clear());
 </script>
 
 {#snippet icon(done: boolean, small = false)}

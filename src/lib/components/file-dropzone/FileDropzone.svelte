@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import { SvelteMap } from 'svelte/reactivity';
 	import type { Attachment } from 'svelte/attachments';
 	import { Spring, prefersReducedMotion } from 'svelte/motion';
@@ -84,7 +84,7 @@
 		void listTop.set(items.length && !inside ? 4 : 0, { instant: reduced });
 		void listBottom.set(items.length && inside ? 12 : 0, { instant: reduced });
 	});
-	$effect(() => () => {
+	onDestroy(() => {
 		controllers.forEach((c) => c.abort());
 		ownedPreviews.forEach((url) => URL.revokeObjectURL(url));
 	});

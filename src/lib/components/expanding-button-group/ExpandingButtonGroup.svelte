@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { metrics, type ExpandingButtonGroupProps, type ExpandingButtonGroupItem } from './types';
 	import ExpandingItem from './ExpandingItem.svelte';
@@ -37,7 +38,7 @@
 	const expandedId = $derived(has(intent) ? intent : restId),
 		tabStop = $derived(has(focused) ? focused : restId),
 		metric = $derived(metrics[size]);
-	$effect(() => () => {
+	onDestroy(() => {
 		mounted = false;
 		clearTimeout(timer);
 	});

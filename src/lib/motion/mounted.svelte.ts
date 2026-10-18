@@ -1,3 +1,5 @@
+import { onMount } from 'svelte';
+
 /**
  * `AnimatePresence initial={false}`: `current` is false during the first render and true once the
  * component has mounted. Pass `skip: !mounted.current` to enter transitions so the first render
@@ -7,7 +9,7 @@ export class Mounted {
 	current = $state(false);
 
 	constructor() {
-		$effect(() => {
+		onMount(() => {
 			this.current = true;
 		});
 	}

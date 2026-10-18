@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick, untrack, type Snippet } from 'svelte';
+	import { onMount, onDestroy, tick, untrack, type Snippet } from 'svelte';
 	import { Tween, prefersReducedMotion } from 'svelte/motion';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
@@ -64,7 +64,7 @@
 	const seconds = $derived(Math.max(1, Math.ceil(remaining.current * countdown)));
 	let holding = false,
 		holdRun = 0;
-	$effect(() => () => {
+	onDestroy(() => {
 		run++;
 		holdRun++;
 	});
@@ -185,7 +185,7 @@
 			if (!event.repeat) startHold();
 		} else releaseHold();
 	}
-	$effect(() => {
+	onMount(() => {
 		const change = () => (hidden = document.hidden);
 		document.addEventListener('visibilitychange', change);
 		return () => document.removeEventListener('visibilitychange', change);

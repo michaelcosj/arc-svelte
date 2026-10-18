@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import Moon from '@lucide/svelte/icons/moon';
 	import Sun from '@lucide/svelte/icons/sun';
@@ -24,7 +25,7 @@
 	 * dark mode never spins its switches.
 	 */
 	let settled = $state(false);
-	$effect(() => {
+	onMount(() => {
 		let second = 0;
 		const first = requestAnimationFrame(() => {
 			second = requestAnimationFrame(() => (settled = true));

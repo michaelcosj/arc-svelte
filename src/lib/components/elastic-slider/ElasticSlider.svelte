@@ -205,7 +205,7 @@
 		observer.observe(node);
 		return () => observer.disconnect();
 	});
-	$effect(() => () => clearTimeout(lingerTimer));
+	onDestroy(() => clearTimeout(lingerTimer));
 	$effect(() => {
 		if (reduced)
 			untrack(() => {

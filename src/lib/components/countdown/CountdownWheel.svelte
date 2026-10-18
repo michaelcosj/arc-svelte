@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { Spring } from 'svelte/motion';
 	import { motionTokens as m, wheelGlyphStyle } from '#lib/motion';
 	let {
@@ -10,7 +11,7 @@
 	const position = new Spring(0, { ...m.physics.smooth, precision: 0.001 });
 	const wheel = { digit: 0, target: 0, revealed: false };
 	let timer: ReturnType<typeof setTimeout> | undefined;
-	$effect(() => () => clearTimeout(timer));
+	onDestroy(() => clearTimeout(timer));
 	$effect(() => {
 		const next = digit,
 			radix = base,

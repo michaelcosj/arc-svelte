@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import * as slider from './slider/release.browser.mjs';
 import * as sheet from './bottom-sheet/release.browser.mjs';
+import { waitForFixture } from './fixture-ready.mjs';
 const phase = process.argv[2] ?? 'after';
 const report = { phase, runs: [], errors: [], comparisons: [] };
 let browser;
@@ -31,7 +32,7 @@ try {
 						await page.goto(
 							`http://127.0.0.1:5224/motion-release?ref=${ref}&kind=${kind === 'slider' ? 'slider' : 'sheet'}&case=${scenario}`
 						);
-						await page.waitForFunction(() => window.fixture, {}, { timeout: 10000 });
+						await waitForFixture(page);
 						await page.clock.runFor(1600);
 						await page.evaluate(() => {
 							for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel'])

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import UserRound from '@lucide/svelte/icons/user-round';
 	import Settings from '@lucide/svelte/icons/settings';
 	import CreditCard from '@lucide/svelte/icons/credit-card';
@@ -20,7 +20,7 @@
 	const later = (fn: () => void, ms: number) => {
 		timers.push(setTimeout(fn, ms));
 	};
-	$effect(() => {
+	onMount(() => {
 		if (window.matchMedia('(min-width:640px)').matches) open = true;
 		return () => timers.forEach(clearTimeout);
 	});

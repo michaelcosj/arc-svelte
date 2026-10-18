@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { prefersReducedMotion, Tween } from 'svelte/motion';
 	import UploadCloud from '@lucide/svelte/icons/cloud-upload';
@@ -40,7 +41,7 @@
 	const controllers = new SvelteMap<string, AbortController>();
 	const removeRefs = new Map<string, HTMLButtonElement>();
 	const files = $derived(value ?? internalFiles);
-	$effect(() => () => controllers.forEach((c) => c.abort()));
+	onDestroy(() => controllers.forEach((c) => c.abort()));
 	function update(next: FileUploadItem[]) {
 		if (value === undefined) internalFiles = next;
 		onChange?.(next);

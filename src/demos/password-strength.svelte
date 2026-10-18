@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { PasswordStrength, estimateStrength } from '#arc/password-strength';
 	import { ActionButton } from '#arc/action-button';
 	import { prefersReducedMotion } from 'svelte/motion';
@@ -15,7 +16,7 @@
 		clearInterval(timer);
 		timer = undefined;
 	}
-	$effect(() => () => stop());
+	onDestroy(() => stop());
 	function suggest() {
 		stop();
 		const text = suggestions[index++ % suggestions.length]!;

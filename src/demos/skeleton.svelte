@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Skeleton } from '#arc/skeleton';
 	import { Avatar } from '#arc/avatar';
 	import SwapText from './lib/SwapText.svelte';
@@ -9,7 +10,7 @@
 		loading = true;
 		timer = setTimeout(() => (loading = false), 1600);
 	}
-	$effect(() => {
+	onMount(() => {
 		timer = setTimeout(() => (loading = false), 1600);
 		return () => clearTimeout(timer);
 	});

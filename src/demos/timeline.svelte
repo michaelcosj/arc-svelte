@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import { Timeline, type TimelineEvent } from '#arc/timeline';
 	import Check from '@lucide/svelte/icons/check';
@@ -134,7 +135,7 @@
 	let now = $state(base),
 		count = $state(0);
 	let start: number | null = null;
-	$effect(() => {
+	onMount(() => {
 		start = Date.now();
 		const timer = setInterval(() => (now = base + Date.now() - (start ?? Date.now())), 10000);
 		return () => clearInterval(timer);

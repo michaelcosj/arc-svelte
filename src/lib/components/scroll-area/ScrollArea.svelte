@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import type { ScrollAreaProps, ScrollAreaEdges } from './types';
 	import './scroll-area.css';
 
@@ -96,7 +96,7 @@
 			mutations.disconnect();
 		};
 	});
-	$effect(() => () => clearTimeout(hideTimer));
+	onDestroy(() => clearTimeout(hideTimer));
 	$effect(() => {
 		const node = viewportRef;
 		if (!node || orientation !== 'horizontal' || !wheelToHorizontal) return;

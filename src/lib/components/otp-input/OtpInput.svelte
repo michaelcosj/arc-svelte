@@ -35,16 +35,20 @@
 	};
 
 	// A paste fills several slots in one update; those digits land as a short left to right wave.
-	let fill = untrack(() => ({ value, wave: false }));
-	const wave = $derived.by(() => {
-		if (fill.value !== value) {
+	let previousValue = untrack(() => value);
+	let wave = $state(false);
+	$effect.pre(() => {
+		const next = value,
+			count = length;
+		untrack(() => {
+			if (previousValue === next) return;
 			const changed = Array.from(
-				{ length },
-				(_, index) => (fill.value[index] ?? '') !== (value[index] ?? '')
+				{ length: count },
+				(_, index) => (previousValue[index] ?? '') !== (next[index] ?? '')
 			).filter(Boolean).length;
-			fill = { value, wave: changed > 1 };
-		}
-		return fill.wave;
+			wave = changed > 1;
+			previousValue = next;
+		});
 	});
 
 	$effect(() => {

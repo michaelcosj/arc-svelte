@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { flip } from 'svelte/animate';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
@@ -53,18 +54,18 @@
 			: { scale: 0.6, blur: soft, duration: m.duration.standard, easing: m.ease.standard }
 	);
 
-	let glyphState = createGlyphRun('');
-	const glyphs = $derived.by(() => {
-		glyphState = glyphState.text ? updateGlyphRun(glyphState, text) : createGlyphRun(text);
-		return glyphState.glyphs;
-	});
+	let glyphState = $state.raw(untrack(() => createGlyphRun(text)));
+	const glyphs = $derived(glyphState.glyphs);
 
 	// Outgoing letters pop out of flow where they stood (mode="popLayout"), measured before the swap.
 	const layout = new PopLayout();
 	let glyphRow = $state<HTMLElement>();
 	$effect.pre(() => {
-		void text;
-		if (glyphRow) layout.capture(glyphRow);
+		const next = text;
+		untrack(() => {
+			if (glyphRow) layout.capture(glyphRow);
+			if (glyphState.text !== next) glyphState = updateGlyphRun(glyphState, next);
+		});
 	});
 
 	/** Letters rise about .3em out of a soft blur; the outgoing ones lift away a little faster. */

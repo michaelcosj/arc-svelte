@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { BottomSheet } from '#arc/bottom-sheet';
 	import { Button } from '#arc/button';
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
@@ -9,7 +10,7 @@
 	let status = $state('open'),
 		copy = $state('idle');
 	const timers: ReturnType<typeof setTimeout>[] = [];
-	$effect(() => () => timers.forEach(clearTimeout));
+	onDestroy(() => timers.forEach(clearTimeout));
 	const later = (fn: () => void, ms: number) => timers.push(setTimeout(fn, ms));
 	const itinerary = [
 		['05:50', 'Leave Rua das Flores', 'Taxi to the airport, about 25 min'],

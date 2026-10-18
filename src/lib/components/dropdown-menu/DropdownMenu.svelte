@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { DropdownMenu as Primitive } from 'bits-ui';
 	import { prefersReducedMotion, Tween } from 'svelte/motion';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
@@ -27,7 +28,7 @@
 	let pointer = false;
 	let clearTimer: ReturnType<typeof setTimeout> | undefined;
 
-	$effect(() => () => clearTimeout(clearTimer));
+	onDestroy(() => clearTimeout(clearTimer));
 
 	function show(next: Target | null, instant = false) {
 		highlight = next;

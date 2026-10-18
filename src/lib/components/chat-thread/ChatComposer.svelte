@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack, onDestroy } from 'svelte';
+	import { onMount, untrack, onDestroy } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { flip } from 'svelte/animate';
 	import {
@@ -50,7 +50,7 @@
 		observer.observe(node);
 		return () => observer.disconnect();
 	}
-	$effect(() => {
+	onMount(() => {
 		ref = { focus: () => area?.focus() };
 		return () => {
 			ref = null;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import {
 		HeightMorph,
@@ -47,7 +47,7 @@
 		seen = $state(false),
 		now = $state<number | null>(null);
 	const running = $derived(pageVisible && seen && valid);
-	$effect(() => {
+	onMount(() => {
 		const update = () => (pageVisible = document.visibilityState === 'visible');
 		update();
 		document.addEventListener('visibilitychange', update);

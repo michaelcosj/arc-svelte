@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack, onDestroy } from 'svelte';
+	import { onMount, untrack, onDestroy } from 'svelte';
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { flip } from 'svelte/animate';
@@ -200,7 +200,7 @@
 			behavior: smooth && !reduced ? 'smooth' : 'auto'
 		});
 	}
-	$effect(() => {
+	onMount(() => {
 		ref = { scrollToBottom, focusComposer: () => composerRef?.focus() };
 		return () => {
 			ref = null;
