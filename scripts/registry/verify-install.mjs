@@ -158,7 +158,7 @@ try {
 			(name) => name.startsWith('@fontsource')
 		)
 	);
-	await run('vp', ['install']);
+	await run('vp', ['install', '--no-frozen-lockfile']);
 	await run('vp', ['run', 'check']);
 	await run('vp', ['run', 'build']);
 	console.log('All components build without font packages PASS');
@@ -178,7 +178,7 @@ try {
 		assert(fontPackage.dependencies[`@fontsource-variable/${font}`]);
 	const entry = await readFile(path.join(consumer, 'src/main.ts'), 'utf8');
 	await write('src/main.ts', "import '$library/arc/fonts.css';\n" + entry);
-	await run('vp', ['install']);
+	await run('vp', ['install', '--no-frozen-lockfile']);
 	await run('vp', ['run', 'build']);
 	console.log('Optional Inter/Geist installation and CSS activation PASS');
 	await writeFile(
