@@ -23,6 +23,25 @@ describe('installable registry payloads', () => {
 		expect(core.files!.some((file) => file.target === 'arc/styles.css')).toBe(true);
 	});
 
+	it('keeps fonts out of default installs and provides an explicit opt-in', () => {
+		for (const item of items.filter((item) => item.name !== 'arc-fonts')) {
+			expect(
+				item.dependencies?.some((dependency) => dependency.startsWith('@fontsource')) ?? false
+			).toBe(false);
+			expect(item.registryDependencies ?? []).not.toContain('./arc-fonts.json');
+			for (const file of item.files ?? [])
+				expect(file.content).not.toContain('@fontsource-variable/');
+		}
+		const fonts = items.find((item) => item.name === 'arc-fonts')!;
+		expect(fonts.dependencies).toEqual(
+			expect.arrayContaining([
+				expect.stringMatching(/^@fontsource-variable\/inter@/),
+				expect.stringMatching(/^@fontsource-variable\/geist@/)
+			])
+		);
+		expect(fonts.files!.some((file) => file.target === 'arc/fonts.css')).toBe(true);
+	});
+
 	it('resolves every transplanted import using only that item’s dependency closure', () => {
 		const byName = new Map(items.map((item) => [item.name, item]));
 		// Parse shared files once, but resolve each component's closure independently.

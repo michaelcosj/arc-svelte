@@ -196,14 +196,10 @@ export async function createRegistry() {
 		}
 		if (name === 'arc-core') {
 			dependencies.add(`svelte@${pkg.devDependencies.svelte}`);
-			for (const font of ['inter', 'geist'])
-				dependencies.add(
-					`@fontsource-variable/${font}@${pkg.devDependencies[`@fontsource-variable/${font}`]}`
-				);
 			payload.push({
 				type: 'registry:lib',
 				target: 'arc/styles.css',
-				content: `/* ${banner} */\n@import '@fontsource-variable/inter';\n@import '@fontsource-variable/geist';\n@import './foundation.css';\n`
+				content: `/* ${banner} */\n@import './foundation.css';\n`
 			});
 			const notice = await readFile(path.join(projectRoot, 'LICENSE'), 'utf8');
 			const upstream = await readFile(
@@ -229,16 +225,43 @@ export async function createRegistry() {
 							.join(' '),
 			description:
 				name === 'arc-core'
-					? 'Shared native motion, provider API, design tokens, fonts and MIT notices.'
+					? 'Shared native motion, provider API, design tokens and MIT notices.'
 					: `Arc ${name} for Svelte 5.`,
 			dependencies: [...dependencies].sort(compare),
 			registryDependencies: [...registryDependencies].sort(compare),
 			files: payload,
-			docs: `Requires Svelte >=5.57.1 and TypeScript. Styles and fonts load through the component entry point. ${homepage}`
+			docs: `Requires Svelte >=5.57.1 and TypeScript. Styles load through the component entry point. Fonts are optional. ${homepage}`
 		};
 		registryItemSchema.parse(item);
 		items.push(registryItemSchema.parse(item));
 	}
+	const licenseFile = items
+		.find((item) => item.name === 'arc-core')
+		?.files?.find((file) => file.target === 'arc/LICENSE.txt');
+	if (!licenseFile) throw new Error('Missing Arc license');
+	items.push(
+		registryItemSchema.parse({
+			$schema: schema,
+			name: 'arc-fonts',
+			type: 'registry:lib',
+			title: 'Optional Arc fonts',
+			description: 'Opt into Inter and Geist to match the gallery typography.',
+			registryDependencies: [],
+			dependencies: ['inter', 'geist'].map(
+				(font) =>
+					`@fontsource-variable/${font}@${pkg.devDependencies[`@fontsource-variable/${font}`]}`
+			),
+			files: [
+				licenseFile,
+				{
+					type: 'registry:lib',
+					target: 'arc/fonts.css',
+					content: `/* ${banner} */\n@import '@fontsource-variable/inter';\n@import '@fontsource-variable/geist';\n:root {\n  --font-inter: 'Inter Variable';\n  --font-geist: 'Geist Variable';\n}\n`
+				}
+			],
+			docs: "Optional: import '$lib/arc/fonts.css' once in your root layout (adapt $lib to your configured lib alias) to activate Inter/Geist."
+		})
+	);
 	items.sort((a, b) => a.name.localeCompare(b.name));
 	const all = {
 		$schema: schema,
@@ -277,10 +300,11 @@ function indexHtml(items) {
 <p>Install into a Svelte 5.57.1+ project with TypeScript. Arc uses plain CSS: Tailwind and a full shadcn setup are not required. The installer only needs a <code>components.json</code> file for installation paths. See the <a href="${homepage}#component-registry">minimal setup guide</a>. Components include their CSS, motion helpers and dependencies.</p>
 <pre><code id="install">vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight ./r/button.json</code></pre>
 <p>Import from your configured lib alias: <code>import { Button } from '$lib/arc/components/button/index.ts';</code></p>
-<p>Entry points load Arc fonts and foundation CSS automatically, including global design tokens. Use <code>data-theme="dark"</code> on the document root for dark mode. Installed code is yours to edit; retain <code>arc/LICENSE.txt</code>.</p>
+<p>Entry points load foundation CSS, including global design tokens. No font packages are installed by default. Components use your <code>--font-sans</code> token when available, otherwise system fonts. Use <code>data-theme="dark"</code> on the document root for dark mode. Installed code is yours to edit; retain <code>arc/LICENSE.txt</code>.</p>
 <p><a href="${homepage}">Source, demos and verification status</a> · <a href="registry.json">Registry index</a> · <a href="r/all.json">Install all components</a></p>
+<p>To match the gallery typography, install the optional <a href="r/arc-fonts.json">arc-fonts</a> item, then import <code>'$lib/arc/fonts.css'</code> once in your root layout. It adds Inter and Geist; the <code>all</code> item does not include them.</p>
 <h2>Components</h2><label for="search">Filter components</label><br><input id="search" type="search" placeholder="Search by name"><ul>${items
-		.filter((item) => !['arc-core', 'all'].includes(item.name))
+		.filter((item) => item.type === 'registry:ui')
 		.map(
 			(item) =>
 				`<li><a href="r/${item.name}.json">${escapeHtml(item.title ?? item.name)}</a> <small>${escapeHtml(item.name)}</small></li>`
@@ -308,7 +332,11 @@ export async function buildRegistry(output = path.join(projectRoot, 'registry-di
 	await writeFile(path.join(output, 'registry.json'), JSON.stringify(manifest, null, 2) + '\n');
 	await writeFile(path.join(output, 'index.html'), indexHtml(items));
 	await writeFile(path.join(output, '.nojekyll'), '');
-	return { output, components: items.length - 2, items: items.length };
+	return {
+		output,
+		components: items.filter((item) => item.type === 'registry:ui').length,
+		items: items.length
+	};
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url))

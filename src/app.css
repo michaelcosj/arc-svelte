@@ -3,6 +3,12 @@
  * (the gallery is a Tailwind app, as most shadcn projects are), the site's own body styles, and its
  * global reduced-motion rule. Demo-only: components do not depend on this file.
  */
+:root {
+	/* The gallery explicitly opts into the original fonts; installed components do not. */
+	--font-geist: 'Geist Variable';
+	--font-inter: 'Inter Variable';
+}
+
 @layer base {
 	*,
 	::backdrop,

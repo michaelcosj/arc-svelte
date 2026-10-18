@@ -112,10 +112,28 @@ After deployment, replace the local URL with your public site URL. Use
 ```
 
 Adapt `$lib` if your project uses a different lib alias. Entry points load the
-shared foundation CSS and Inter/Geist fonts automatically. The foundation defines
+shared foundation CSS automatically; default installs (including `all`) add no font
+packages. Components use your `--font-sans` token when available, otherwise system
+fonts. Override `--font-body` and `--font-display` to use a different app font stack.
+The foundation defines
 global design tokens and focus styles; review them alongside your app's theme.
 Set `data-theme="dark"` on the document root for Arc's dark palette. Keep the
 installed `arc/LICENSE.txt` when redistributing the source.
+
+### Optional fonts
+
+To match the gallery typography, install the optional font item:
+
+```sh
+vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight http://localhost:5300/r/arc-fonts.json
+```
+
+Use your public registry URL after deployment. Then import
+`$lib/arc/fonts.css` once in your root layout (adapt `$lib` to your lib alias).
+This explicitly activates Inter and Geist. The gallery opts into those fonts;
+component installs do not require them. Updating registry files does not uninstall
+previously added font packages; remove old imports and unused packages in existing
+apps if you no longer want those fonts.
 
 ### Publish with GitHub Pages
 

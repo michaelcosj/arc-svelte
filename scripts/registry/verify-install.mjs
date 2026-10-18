@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile, mkdtemp } from 'node:fs/promises';
+import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
@@ -151,12 +152,38 @@ try {
 		'src/App.svelte',
 		`<script lang="ts">\n${imports}\nimport { Button } from '$library/arc/components/button/index.ts';\nconst modules=[${components.map((_, index) => `component${index}`).join(',')}];\n</script><h1>Installed {modules.length} Arc components</h1><Button label="Registry works" />\n`
 	);
+	const defaultPackage = JSON.parse(await readFile(path.join(consumer, 'package.json'), 'utf8'));
+	assert(
+		!Object.keys({ ...defaultPackage.dependencies, ...defaultPackage.devDependencies }).some(
+			(name) => name.startsWith('@fontsource')
+		)
+	);
 	await run('vp', ['install']);
 	await run('vp', ['run', 'check']);
 	await run('vp', ['run', 'build']);
+	console.log('All components build without font packages PASS');
+	await run(process.execPath, [
+		cli,
+		'add',
+		`${url}/r/arc-fonts.json`,
+		'--cwd',
+		consumer,
+		'--yes',
+		'--overwrite',
+		'--no-deps-install',
+		'--skip-preflight'
+	]);
+	const fontPackage = JSON.parse(await readFile(path.join(consumer, 'package.json'), 'utf8'));
+	for (const font of ['inter', 'geist'])
+		assert(fontPackage.dependencies[`@fontsource-variable/${font}`]);
+	const entry = await readFile(path.join(consumer, 'src/main.ts'), 'utf8');
+	await write('src/main.ts', "import '$library/arc/fonts.css';\n" + entry);
+	await run('vp', ['install']);
+	await run('vp', ['run', 'build']);
+	console.log('Optional Inter/Geist installation and CSS activation PASS');
 	await writeFile(
 		path.join(base, 'latest.json'),
-		json({ consumer, components: components.length, passed: true })
+		json({ consumer, components: components.length, passed: true, optionalFonts: true })
 	);
 	console.log(
 		`PASS: Button and all ${components.length} components installed with the real CLI; fresh consumer type check and build passed.\nFixture: ${consumer}`
