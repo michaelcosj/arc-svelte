@@ -55,6 +55,14 @@ The registry includes all 96 implemented components, their dependencies and an
 `all` item. Packaging does not change their verification status above. Generated
 files come directly from `src/lib/`; there is no second copy of the components.
 
+Browse and install from the live registry at
+[michaelcosj.github.io/arc-svelte](https://michaelcosj.github.io/arc-svelte/).
+GitHub Pages hosting is free for public repositories on GitHub Free. No custom
+domain or DNS setup is required; a custom domain is optional branding.
+See [GitHub Pages availability](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
+
+To build and preview the registry locally:
+
 ```sh
 vp run registry:build
 vp run registry:preview
@@ -96,11 +104,12 @@ Tailwind by skipping the CLI's framework checks; the configuration above is stil
 required:
 
 ```sh
-vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight http://localhost:5300/r/button.json
+vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight https://michaelcosj.github.io/arc-svelte/r/button.json
 ```
 
-After deployment, replace the local URL with your public site URL. Use
-`/r/all.json` to install every component. The CLI installs under your configured
+Replace `button` with another component name, or use `/r/all.json` to install every
+component. For local testing, use `http://localhost:5300/r/button.json` instead.
+The CLI installs under your configured
 `lib` alias, keeping Arc separate from existing shadcn components:
 
 ```svelte
@@ -125,11 +134,10 @@ installed `arc/LICENSE.txt` when redistributing the source.
 To match the gallery typography, install the optional font item:
 
 ```sh
-vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight http://localhost:5300/r/arc-fonts.json
+vp dlx -- shadcn-svelte@1.7.0 add --skip-preflight https://michaelcosj.github.io/arc-svelte/r/arc-fonts.json
 ```
 
-Use your public registry URL after deployment. Then import
-`$lib/arc/fonts.css` once in your root layout (adapt `$lib` to your lib alias).
+Then import `$lib/arc/fonts.css` once in your root layout (adapt `$lib` to your lib alias).
 This explicitly activates Inter and Geist. The gallery opts into those fonts;
 component installs do not require them. Updating registry files does not uninstall
 previously added font packages; remove old imports and unused packages in existing
@@ -144,7 +152,7 @@ it does not deploy the SvelteKit demo gallery. Generated output is in the ignore
 1. In GitHub **Settings → Pages**, select **GitHub Actions** as the source.
 2. Push the registry commits to `main`, or run **Actions → Publish registry → Run
    workflow** if the workflow is already on GitHub. Later relevant pushes redeploy it.
-3. In Pages settings, add your custom subdomain before setting its DNS record.
+3. Optionally, in Pages settings, add your custom subdomain before setting its DNS record.
    A subdomain such as `ui.example.com` uses a `CNAME` named `ui` pointing to
    `michaelcosj.github.io`. Enable **Enforce HTTPS** once GitHub validates it.
 
