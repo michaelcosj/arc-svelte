@@ -48,6 +48,10 @@ vp run lint
 vp run build
 ```
 
+Registry payloads are generated from source; do not edit `registry-dist/`. Run
+`vp run test:registry` for changes to packaging, imports or dependencies; see the
+[registry guide](./README.md#component-registry).
+
 For a UI change, verify the affected demo against the reference at the same
 viewport, including keyboard interaction, reduced motion and interrupted animations.
 Run the relevant existing browser workflow when available. Include useful visual

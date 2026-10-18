@@ -14,7 +14,8 @@ This is a community port, independently maintained and not an official Arc relea
 ## Project status
 
 This is a work in progress, distributed as source with a local component gallery.
-It is not yet an npm package or a shadcn-compatible Svelte registry.
+A shadcn-svelte-compatible source registry and GitHub Pages deployment workflow
+are included. It is not published as an npm package.
 `private: true` in `package.json` prevents accidental npm publication; it does not
 restrict GitHub access.
 
@@ -48,6 +49,59 @@ For a remote preview, bind the dev server to the network interface:
 vp run dev --host 0.0.0.0 --port 5173
 ```
 
+## Component registry
+
+The registry includes all 96 implemented components, their dependencies and an
+`all` item. Packaging does not change their verification status above. Generated
+files come directly from `src/lib/`; there is no second copy of the components.
+
+```sh
+vp run registry:build
+vp run registry:preview
+```
+
+Open `http://localhost:5300` for the component list. In a Svelte 5.57.1+ TypeScript
+project initialized with shadcn-svelte, install an item using its full URL:
+
+```sh
+vp dlx -- shadcn-svelte@1.7.0 add http://localhost:5300/r/button.json
+```
+
+After deployment, replace the local URL with your public site URL. Use
+`/r/all.json` to install every component. The CLI installs under your configured
+`lib` alias, keeping Arc separate from existing shadcn components:
+
+```svelte
+<script lang="ts">
+	import { Button } from '$lib/arc/components/button/index.ts';
+</script>
+
+<Button label="Save changes" />
+```
+
+Adapt `$lib` if your project uses a different lib alias. Entry points load the
+shared foundation CSS and Inter/Geist fonts automatically. The foundation defines
+global design tokens and focus styles; review them alongside your app's theme.
+Set `data-theme="dark"` on the document root for Arc's dark palette. Keep the
+installed `arc/LICENSE.txt` when redistributing the source.
+
+### Publish with GitHub Pages
+
+The `Publish registry` workflow builds and tests the standalone registry site;
+it does not deploy the SvelteKit demo gallery. Generated output is in the ignored
+`registry-dist/` directory. No hosting URL is embedded in dependency JSON files.
+
+1. In GitHub **Settings → Pages**, select **GitHub Actions** as the source.
+2. Push the registry commits to `main`, or run **Actions → Publish registry → Run
+   workflow** if the workflow is already on GitHub. Later relevant pushes redeploy it.
+3. In Pages settings, add your custom subdomain before setting its DNS record.
+   A subdomain such as `ui.example.com` uses a `CNAME` named `ui` pointing to
+   `michaelcosj.github.io`. Enable **Enforce HTTPS** once GitHub validates it.
+
+Without a custom domain, the project registry can be served at
+`https://michaelcosj.github.io/arc-svelte/`. With your domain, it uses that domain's
+root; dependency URLs and the landing page work in both locations.
+
 ## Use a component in this checkout
 
 The project defines `#arc/<name>` aliases for per-component entry points:
@@ -80,6 +134,10 @@ vp run build
 checker. GitHub Actions runs these checks for pushes and pull requests.
 The [browser regression guide](./tests/phase5/README.md) explains how to install
 the separate test dependencies and pinned upstream reference for motion comparisons.
+Run `vp run test:registry` to install Button and then all 96 components with the
+real CLI in a fresh consumer, followed by its type check and production build.
+This networked check uses a custom lib alias in a separate temporary project and
+records its path under ignored `handoff/registry/`; it also runs before deployment.
 
 ## Repository layout
 

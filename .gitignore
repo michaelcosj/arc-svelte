@@ -39,3 +39,6 @@ reference/
 
 # Local editor/agent overrides
 /.claude/settings.local.json
+
+# Generated static registry site
+/registry-dist/
