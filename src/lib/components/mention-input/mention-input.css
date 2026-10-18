@@ -97,7 +97,6 @@
 
 .arc-mention-input__popover {
 	position: absolute;
-	text-align: left;
 	z-index: 30;
 	width: 272px;
 	max-width: 100%;
